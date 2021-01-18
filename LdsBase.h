@@ -9,8 +9,10 @@ typedef std::string string;
 #define LDS_API _declspec(dllexport)
 #endif
 
-// Dependencies
-#include "../DreamyJSON/DreamyStructures/DataStructures.h"
+// Include structures if needed
+#ifndef LDS_EXCLUDE_DSTRUCT
+#include "DreamyStructures/DataStructures.h"
+#endif
 
 #include "Base/LdsCompatibility.h"
 #include "Base/LdsFormatting.h"
