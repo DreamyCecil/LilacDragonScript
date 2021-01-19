@@ -17,11 +17,18 @@ string SLdsStruct::Print(int iVar) {
   return strVar;
 };
 
-// Variable copying
-SLdsStruct &SLdsStruct::operator=(const CLdsVarMap &map) {
+// Assignment
+SLdsStruct &SLdsStruct::operator=(const SLdsStruct &sOther) {
+  if (this == &sOther) {
+    return *this;
+  }
+
   // copy variable fields
-  mapVars.CopyMap(map);
+  Clear();
   
+  iID = sOther.iID;
+  mapVars = sOther.mapVars;
+
   return *this;
 };
 

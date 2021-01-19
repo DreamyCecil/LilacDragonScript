@@ -178,8 +178,9 @@ void Exec_Binary(void) {
         
         string strVar = val2;
         
-        // NOTE: Had to make a copy, otherwise 'val1 = val1.sStruct' copies an empty struct for some reason.
+        // direct 'val1 = val1.sStruct' empties its own struct before getting a value from it
         SLdsStruct sCopy = val1.sStruct;
+
         if (sCopy.FindIndex(strVar) == -1) {
           LdsThrow(LEX_STRUCTVAR, "Variable '%s' does not exist in the structure at %s", strVar.c_str(), _ca->PrintPos().c_str());
         }
@@ -262,7 +263,7 @@ void Exec_Binary(void) {
           LdsThrow(LEX_BINARY, "Cannot use %s as an array accessor at %s", strType2.c_str(), _ca->PrintPos().c_str());
         }
         
-        // NOTE: Had to make a copy, otherwise 'val1 = val1.aArray' copies an empty array for some reason.
+        // direct 'val1 = val1.aArray' empties its own array before getting a value from it
         CDArray<SLdsValue> aCopy = val1.aArray;
         
         int iArrayIndex = val2;

@@ -21,8 +21,8 @@ struct LDS_API SLdsStruct {
   // Print one variable
   string Print(int iVar);
   
-  // Variable copying
-  SLdsStruct &operator=(const CLdsVarMap &map);
+  // Assignment
+  SLdsStruct &operator=(const SLdsStruct &sOther);
   
   // Structure accessor
   SLdsValue &operator[](const string &strVar);

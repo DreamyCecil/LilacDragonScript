@@ -50,7 +50,7 @@ struct LDS_API SLdsValue {
   SLdsValue(const int &iSetID, const CLdsVarMap &map, const bool &bSetStatic) :
     fValue(0.0f), eType(EVT_STRUCT), sStruct(iSetID)
   {
-    sStruct = map;
+    sStruct.mapVars = map;
     sStruct.bStatic = bSetStatic;
   };
 

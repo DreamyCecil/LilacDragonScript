@@ -89,7 +89,7 @@ SLdsValue &SLdsValue::operator=(const SLdsValue &valOther) {
   }
 
   eType = valOther.eType;
-    
+  
   // clear containers
   aArray.Clear();
   sStruct.Clear();
@@ -100,7 +100,7 @@ SLdsValue &SLdsValue::operator=(const SLdsValue &valOther) {
 
     case EVT_ARRAY:
       fValue = 0.0f;
-      aArray.CopyArray(valOther.aArray);
+      aArray = valOther.aArray;
       break;
 
     case EVT_STRUCT:
