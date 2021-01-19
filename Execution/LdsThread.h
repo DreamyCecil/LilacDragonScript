@@ -31,6 +31,7 @@ class LDS_API CLdsThread {
     EThreadStatus sth_eStatus; // current thread status
     ELdsError sth_eError; // error code for the error status
     
+    void *sth_pReference; // some reference data for the result function
     void (*sth_pResult)(CLdsThread *psth); // function call in the end of the run
     bool sth_bDebugOutput; // debug output for every action
 

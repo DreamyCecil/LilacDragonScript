@@ -20,6 +20,8 @@ struct LDS_API SLdsInlineFunc {
   CLdsInlineArgs in_astrArgs; // list of arguments
   CActionList in_acaFunc; // function actions
 
+  CLdsInFuncMap in_mapInlineFunc; // Inline functions within this function
+
   // Constructors
   SLdsInlineFunc(void) {};
   SLdsInlineFunc(CLdsInlineArgs &astrArgs, CActionList &aca) {

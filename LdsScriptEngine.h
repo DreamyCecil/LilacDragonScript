@@ -22,8 +22,8 @@ class LDS_API CLdsScriptEngine {
     
   // Functions
   public:
-    CLdsFuncMap _mapLdsDefFunc; // Default functions
-    CLdsFuncMap _mapLdsFunctions; // Custom functions
+    CLdsFuncMap _mapLdsDefFunc; // default functions
+    CLdsFuncMap _mapLdsFunctions; // custom functions
     
     // Set default functions
     void SetDefaultFunctions(void);
@@ -37,8 +37,8 @@ class LDS_API CLdsScriptEngine {
     
   // Variables
   public:
-    CLdsVarMap _mapLdsDefVar; // Default variables
-    CLdsVarMap _mapLdsVariables; // Custom variables
+    CLdsVarMap _mapLdsDefVar; // default variables
+    CLdsVarMap _mapLdsVariables; // custom variables
     
     // Set default variables
     void SetDefaultVariables(void);
@@ -64,14 +64,14 @@ class LDS_API CLdsScriptEngine {
     
   // Builder
   private:
-    CBuildNode _bnNode; // Current build node
-    int _iBuildPos; // Current node index
-    int _ctBuildLen; // Amount of nodes
+    CBuildNode _bnNode; // current build node
+    int _iBuildPos; // current node index
+    int _ctBuildLen; // amount of nodes
 
-    bool _bBuildBreak; // Can break
-    bool _bBuildCont; // Can continue
+    bool _bBuildBreak; // can break
+    bool _bBuildCont; // can continue
     
-    CLdsInFuncMap _mapInlineFunc; // Map of inline functions
+    CLdsInFuncMap _mapInlineFunc; // inline functions
     
     // Main builder
     void LdsBuild(bool bExpression);

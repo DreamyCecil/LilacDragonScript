@@ -23,7 +23,7 @@ CLdsThread::CLdsThread(CActionList aca, CLdsScriptEngine *plds) :
   sth_pldsEngine(plds), sth_bQuickRun(false),
   sth_acaActions(aca), sth_iPos(0),
   sth_eStatus(ETS_FINISHED), sth_eError(LER_OK),
-  sth_pResult(NULL), sth_bDebugOutput(false)
+  sth_pReference(NULL), sth_pResult(NULL), sth_bDebugOutput(false)
 {
   
 };
