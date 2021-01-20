@@ -98,7 +98,7 @@ string SLdsValue::Print(void) {
 // Get any number value
 float SLdsValue::GetNumber(void) {
   switch (eType) {
-    case EVT_INDEX: return iValue;
+    case EVT_INDEX: return (float)iValue;
     case EVT_FLOAT: return fValue;
   }
   return 0.0f;

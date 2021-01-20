@@ -155,7 +155,7 @@ void CLdsScriptEngine::CompileAccessors(CBuildNode &bn, CActionList &aca, bool b
   while (pbnCurrentAccess != NULL) {
     // add accessor value (index or variable name)
     CBuildNode *pbnAccessVal = pbnCurrentAccess->bn_abnNodes[1];
-    aca.Add(CCompAction(LCA_VAL, pbnAccessVal->lt_iPos, pbnAccessVal->lt_valValue, -1));
+    Compile(*pbnAccessVal, aca);
 
     // add access action (argument: array or struct accessor)
     aca.Add(CCompAction(LCA_BIN, pbnCurrentAccess->lt_iPos, LOP_ACCESS, bn.lt_iArg));
