@@ -16,8 +16,6 @@ typedef std::string string;
 
 // Special types
 typedef unsigned char LdsFlags; // script flags
-typedef unsigned long LdsHash; // string hash
-typedef unsigned char LdsByte; // 8-bit integer
 
 // Lists
 typedef CDList<struct SLdsValue> CLdsValueList; // value list

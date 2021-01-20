@@ -1,18 +1,6 @@
 #include "LdsCompatibility.h"
 #include "../LdsScriptEngine.h"
 
-// Get simple hash out of a string
-LdsHash GetHash(string str) {
-  char *strData = (char *)str.c_str();
-  LdsHash iHash = 0;
-
-  for (LdsByte *pChar = (LdsByte*)strData; *pChar != '\0'; pChar++) {
-    iHash = 31 * iHash + *pChar;
-  }
-
-  return iHash;
-};
-
 // Throw formatted exception
 void LdsThrow(const ELdsError &eError, const char *strFormat, ...) {
   va_list arg;
