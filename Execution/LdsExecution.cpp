@@ -266,7 +266,7 @@ void Exec_Binary(void) {
         // direct 'val1 = val1.aArray' empties its own array before getting a value from it
         CDArray<SLdsValue> aCopy = val1.aArray;
         
-        int iArrayIndex = val2.iValue;
+        int iArrayIndex = val2.GetNumber();
         int iSize = aCopy.Count();
     
         // out of bounds
@@ -395,7 +395,7 @@ void Exec_Binary(void) {
         
         string strCopy = val1.strValue;
         
-        int iCharIndex = val2.iValue;
+        int iCharIndex = val2.GetNumber();
         int iLength = strCopy.length();
     
         // out of bounds
