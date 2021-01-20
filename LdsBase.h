@@ -14,21 +14,24 @@ typedef std::string string;
 #include "DreamyStructures/DataStructures.h"
 #endif
 
-#include "Base/LdsCompatibility.h"
-#include "Base/LdsFormatting.h"
-
 // Special types
-typedef unsigned char LdsFlags; // Script flags
+typedef unsigned char LdsFlags; // script flags
+typedef unsigned long LdsHash; // string hash
+typedef unsigned char LdsByte; // 8-bit integer
 
 // Lists
-typedef CDList<struct SLdsValue> CLdsValueList; // Value list
-typedef CDMap<string, struct SLdsFunc> CLdsFuncMap; // Functions map
-typedef CDMap<string, struct SLdsInlineFunc> CLdsInFuncMap; // Inline functions map
-typedef CDMap<string, struct SLdsVar> CLdsVarMap; // Variables map
-typedef CDList<class CLdsToken> CTokenList; // Script token list
-typedef CDList<class CBuildNode> CNodeList; // Node list
-typedef CDList<class CBuildNode *> CDynamicNodeList; // Dynamic node list
-typedef CDList<class CCompAction> CActionList; // Action list
+typedef CDList<struct SLdsValue> CLdsValueList; // value list
+typedef CDMap<string, struct SLdsFunc> CLdsFuncMap; // functions map
+typedef CDMap<string, struct SLdsInlineFunc> CLdsInFuncMap; // inline functions map
+typedef CDMap<string, struct SLdsVar> CLdsVarMap; // variables map
+typedef CDList<class CLdsToken> CTokenList; // script token list
+typedef CDList<class CBuildNode> CNodeList; // node list
+typedef CDList<class CBuildNode *> CDynamicNodeList; // dynamic node list
+typedef CDList<class CCompAction> CActionList; // action list
 
 // 64-bit integer
 typedef __int64 LONG64;
+
+// General
+#include "Base/LdsCompatibility.h"
+#include "Base/LdsFormatting.h"

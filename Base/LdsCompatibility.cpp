@@ -1,17 +1,27 @@
 #include "LdsCompatibility.h"
 #include "../LdsScriptEngine.h"
 
+// Get simple hash out of a string
+LdsHash GetHash(string str) {
+  char *strData = (char *)str.c_str();
+  LdsHash iHash = 0;
+
+  for (LdsByte *pChar = (LdsByte*)strData; *pChar != '\0'; pChar++) {
+    iHash = 31 * iHash + *pChar;
+  }
+
+  return iHash;
+};
+
 // Throw formatted exception
 void LdsThrow(const ELdsError &eError, const char *strFormat, ...) {
-  const int ctBufferSize = 256;
-  char strBuffer[ctBufferSize+1];
-
   va_list arg;
   va_start(arg, strFormat);
-  _vsnprintf(strBuffer, ctBufferSize, strFormat, arg);
+
+  string strError = LdsVPrintF(strFormat, arg);
 
   // pair error message with the error code
-  throw SLdsError(eError, strBuffer);
+  throw SLdsError(eError, strError);
 };
 
 // Print out formatted string

@@ -377,6 +377,39 @@ void Exec_Binary(void) {
         val1 = (float)bResult;
       } break;
 
+      // accessor
+      case LOP_ACCESS: {
+        if (_ca->lt_iArg >= 1) {
+          // TODO: Make it search for a certain substring and return amount of them in a string
+          //       Example: "string".str - returns 1; "search for the sea"["sea"] - returns 2
+          LdsThrow(LEX_BINARY, "Cannot use structure accessor on a string at %s", _ca->PrintPos().c_str());
+        }
+
+        if (!bStr1) {
+          LdsThrow(LEX_BINARY, "Cannot apply %s accessor to %s at %s", strType1.c_str(), strType2.c_str(), _ca->PrintPos().c_str());
+        }
+
+        if (eType2 != EVT_FLOAT) {
+          LdsThrow(LEX_BINARY, "Cannot use %s as an string accessor at %s", strType2.c_str(), _ca->PrintPos().c_str());
+        }
+        
+        string strCopy = val1.strValue;
+        
+        int iCharIndex = val2;
+        int iLength = strCopy.length();
+    
+        // out of bounds
+        if (iLength <= 0) {
+          LdsThrow(LEX_ARRAYEMPTY, "Cannot index an empty string at %s", _ca->PrintPos().c_str());
+
+        } else if (iCharIndex < 0 || iCharIndex >= iLength) {
+          LdsThrow(LEX_ARRAYOUT, "Character index '%d' is out of bounds [0, %d] at %s", iCharIndex, iLength-1, _ca->PrintPos().c_str());
+        }
+        
+        // get one character from the string
+        val1 = LdsPrintF("%c", strCopy.c_str()[iCharIndex]);
+      } break;
+
       default: LdsThrow(LEX_BINARY, "Cannot apply operator %d to %s and %s at %s", (int)_ca->lt_valValue, strType1.c_str(), strType2.c_str(), _ca->PrintPos().c_str());
     }
 
@@ -495,6 +528,8 @@ void Exec_GetLocal(void) {
 
   SLdsVar *pvar = &mapLocals.GetValue(iLocal);
   SLdsValue *pvalLocal = &pvar->var_valValue;
+
+  _pldsCurrent->LdsOut("Get: %s - %s\n", strName.c_str(), pvalLocal->Print().c_str());
   
   _pavalStack->Push(SLdsValueRef(*pvalLocal, pvar, NULL, strName, strName, false));
   ThreadOut(true);

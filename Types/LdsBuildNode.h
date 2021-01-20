@@ -7,7 +7,7 @@ enum EBuildNode {
   EBN_VAL,    // value
   EBN_ARRAY,  // array of values (arg: array size)
   EBN_STRUCT, // structure with value fields (arg: amount of variables)
-  EBN_ID,     // identifier (arg: amount of array indeces)
+  EBN_ID,     // identifier
 
   EBN_UN,  // unary operator
   EBN_BIN, // binary operator
