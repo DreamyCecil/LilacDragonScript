@@ -19,7 +19,7 @@ extern CCompAction &SetCurrentAction(CCompAction *pcaCurrent) {
 
 // Get index of a local variable
 int GetLocalVar(void) {
-  string strName = _ca->lt_valValue;
+  string strName = _ca->lt_valValue.strValue;
   
   CLdsVarMap &mapLocals = _psthCurrent->sth_mapLocals;
   int iLocal = -1;
@@ -50,7 +50,7 @@ void Exec_Val(void) {
   int ctValues = _ca->lt_iArg;
   
   if (ctValues >= 0) {
-    int iContainer = int(_ca->lt_valValue);
+    int iContainer = _ca->lt_valValue.iValue;
     
     // array
     if (iContainer == 0) {
@@ -80,9 +80,9 @@ void Exec_Val(void) {
       // get structure variables
       for (int iVar = 0; iVar < ctValues; iVar++) {
         // variable name
-        string strVar = _pavalStack->Pop();
+        string strVar = _pavalStack->Pop().val.strValue;
         // constant variable
-        int iConst = _pavalStack->Pop();
+        int iConst = _pavalStack->Pop().val.iValue;
         // value
         SLdsValue val = _pavalStack->Pop().val;
         
@@ -109,25 +109,25 @@ void Exec_Unary(void) {
   ThreadOut(false);
   SLdsValueRef valRef = _pavalStack->Pop();
 
-  if (valRef.val.eType != EVT_FLOAT) {
+  if (valRef.val.eType > EVT_FLOAT) {
     LdsThrow(LEX_UNARY, "Cannot perform unary operation on a value that isn't a number at %s", _ca->PrintPos().c_str());
   }
 
-  switch ((int)_ca->lt_valValue) {
+  switch (_ca->lt_valValue.iValue) {
     case UOP_NEGATE:
-      valRef.val = -valRef.val.fValue;
+      valRef.val = -valRef.val.GetNumber();
       ThreadOut(true);
       break;
 
     // TODO: Make string inversion
     case UOP_INVERT: {
-      bool bInvert = (valRef.val.fValue >= 0.5f);
+      bool bInvert = (valRef.val.GetNumber() >= 0.5f);
       valRef.val = !bInvert;
       ThreadOut(true);
     } break;
 
     case UOP_BINVERT: {
-      int iInvert = (int)valRef.val.fValue;
+      int iInvert = (int)valRef.val.GetNumber();
       valRef.val = ~iInvert;
       ThreadOut(true);
     } break;
@@ -152,7 +152,7 @@ void Exec_Binary(void) {
   string strType1 = val1.TypeName("a number", "a string", "an array", "a structure");
   string strType2 = val2.TypeName("a number", "a string", "an array", "a structure");
     
-  int iOperation = _ca->lt_valValue.fValue;
+  int iOperation = _ca->lt_valValue.iValue;
   
   // structure operations
   if (eType1 == EVT_STRUCT) {
@@ -176,7 +176,7 @@ void Exec_Binary(void) {
           }
         }
         
-        string strVar = val2;
+        string strVar = val2.strValue;
         
         // direct 'val1 = val1.sStruct' empties its own struct before getting a value from it
         SLdsStruct sCopy = val1.sStruct;
@@ -201,7 +201,7 @@ void Exec_Binary(void) {
         }
       } break;
         
-      default: LdsThrow(LEX_BINARY, "Cannot apply operator %d to %s and %s at %s", (int)_ca->lt_valValue, strType1.c_str(), strType2.c_str(), _ca->PrintPos().c_str());
+      default: LdsThrow(LEX_BINARY, "Cannot apply operator %d to %s and %s at %s", _ca->lt_valValue.iValue, strType1.c_str(), strType2.c_str(), _ca->PrintPos().c_str());
     }
     
     _pavalStack->Push(SLdsValueRef(val1, valRef1.pvar, pvalStructAccess, valRef1.strVar, strStructVar, bConstVar));
@@ -216,22 +216,22 @@ void Exec_Binary(void) {
       // TODO: Add multiplication operator to copy array contents multiple times
       // operators
       case LOP_ADD: {
-        if (eType2 != EVT_FLOAT) {
+        if (eType2 > EVT_FLOAT) {
           LdsThrow(LEX_BINARY, "Cannot add %s to an array at %s", strType2.c_str(), _ca->PrintPos().c_str());
         }
         
         // expand the array
-        int ctResize = (val1.aArray.Count() + val2.fValue);
+        int ctResize = (val1.aArray.Count() + val2.GetNumber());
         val1.aArray.Resize(ctResize);
       } break;
         
       case LOP_SUB: {
-        if (eType2 != EVT_FLOAT) {
+        if (eType2 > EVT_FLOAT) {
           LdsThrow(LEX_BINARY, "Cannot subtract %s from an array at %s", strType2.c_str(), _ca->PrintPos().c_str());
         }
         
         // shrink the array
-        int ctResize = (val1.aArray.Count() - val2.fValue);
+        int ctResize = (val1.aArray.Count() - val2.GetNumber());
         val1.aArray.Resize(ctResize);
       } break;
       
@@ -244,12 +244,12 @@ void Exec_Binary(void) {
         }
         
         switch (iOperation) {
-          case LOP_GT:  val1 = float(val1.aArray.Count() > val2.aArray.Count()); break;
-          case LOP_GOE: val1 = float(val1.aArray.Count() >= val2.aArray.Count()); break;
-          case LOP_LT:  val1 = float(val1.aArray.Count() < val2.aArray.Count()); break;
-          case LOP_LOE: val1 = float(val1.aArray.Count() <= val2.aArray.Count()); break;
-          case LOP_EQ:  val1 = float(val1 == val2); break;
-          case LOP_NEQ: val1 = float(val1 != val2); break;
+          case LOP_GT:  val1 = int(val1.aArray.Count() > val2.aArray.Count()); break;
+          case LOP_GOE: val1 = int(val1.aArray.Count() >= val2.aArray.Count()); break;
+          case LOP_LT:  val1 = int(val1.aArray.Count() < val2.aArray.Count()); break;
+          case LOP_LOE: val1 = int(val1.aArray.Count() <= val2.aArray.Count()); break;
+          case LOP_EQ:  val1 = int(val1 == val2); break;
+          case LOP_NEQ: val1 = int(val1 != val2); break;
         }
         break;
       
@@ -259,14 +259,14 @@ void Exec_Binary(void) {
           LdsThrow(LEX_BINARY, "Cannot use structure accessor on the array at %s", _ca->PrintPos().c_str());
         }
         
-        if (eType2 != EVT_FLOAT) {
+        if (eType2 > EVT_FLOAT) {
           LdsThrow(LEX_BINARY, "Cannot use %s as an array accessor at %s", strType2.c_str(), _ca->PrintPos().c_str());
         }
         
         // direct 'val1 = val1.aArray' empties its own array before getting a value from it
         CDArray<SLdsValue> aCopy = val1.aArray;
         
-        int iArrayIndex = val2;
+        int iArrayIndex = val2.iValue;
         int iSize = aCopy.Count();
     
         // out of bounds
@@ -289,7 +289,7 @@ void Exec_Binary(void) {
         }
       } break;
       
-      default: LdsThrow(LEX_BINARY, "Cannot apply operator %d to %s and %s at %s", (int)_ca->lt_valValue, strType1.c_str(), strType2.c_str(), _ca->PrintPos().c_str());
+      default: LdsThrow(LEX_BINARY, "Cannot apply operator %d to %s and %s at %s", _ca->lt_valValue.iValue, strType1.c_str(), strType2.c_str(), _ca->PrintPos().c_str());
     }
     
     _pavalStack->Push(SLdsValueRef(val1, valRef1.pvar, pvalArrayAccess, valRef1.strVar, valRef1.strRef, valRef1.bConst));
@@ -319,7 +319,7 @@ void Exec_Binary(void) {
 
         string str = val1.strValue;
         int ctStr = strlen(str.c_str());
-        int ctSub = val2.fValue;
+        int ctSub = val2.GetNumber();
 
         val1 = str.substr(0, ctStr - ctSub);
       } break;
@@ -335,7 +335,7 @@ void Exec_Binary(void) {
 
         string strMul = "";
 
-        for (int iCopy = 0; iCopy < val2.fValue; iCopy++) {
+        for (int iCopy = 0; iCopy < val2.GetNumber(); iCopy++) {
           strMul += val1.strValue;
         }
 
@@ -348,16 +348,16 @@ void Exec_Binary(void) {
 
         // compare length
         if (!bStr1 && bStr2) {
-          bResult = int(val1.fValue) == strlen(val2.strValue);
+          bResult = int(val1.GetNumber()) == strlen(val2.strValue);
         } else if (bStr1 && !bStr2) {
-          bResult = int(val2.fValue) == strlen(val1.strValue);
+          bResult = int(val2.GetNumber()) == strlen(val1.strValue);
 
         // compare string contents
         } else {
           bResult = (val1 == val2);
         }
 
-        val1 = (float)bResult;
+        val1 = bResult;
       } break;
 
       case LOP_NEQ: {
@@ -365,16 +365,16 @@ void Exec_Binary(void) {
 
         // compare length
         if (!bStr1 && bStr2) {
-          bResult = int(val1.fValue) != strlen(val2.strValue);
+          bResult = int(val1.GetNumber()) != strlen(val2.strValue);
         } else if (bStr1 && !bStr2) {
-          bResult = int(val2.fValue) != strlen(val1.strValue);
+          bResult = int(val2.GetNumber()) != strlen(val1.strValue);
 
         // compare string contents
         } else {
           bResult = (val1 != val2);
         }
 
-        val1 = (float)bResult;
+        val1 = bResult;
       } break;
 
       // accessor
@@ -389,13 +389,13 @@ void Exec_Binary(void) {
           LdsThrow(LEX_BINARY, "Cannot apply %s accessor to %s at %s", strType1.c_str(), strType2.c_str(), _ca->PrintPos().c_str());
         }
 
-        if (eType2 != EVT_FLOAT) {
+        if (eType2 > EVT_FLOAT) {
           LdsThrow(LEX_BINARY, "Cannot use %s as an string accessor at %s", strType2.c_str(), _ca->PrintPos().c_str());
         }
         
         string strCopy = val1.strValue;
         
-        int iCharIndex = val2;
+        int iCharIndex = val2.iValue;
         int iLength = strCopy.length();
     
         // out of bounds
@@ -410,13 +410,13 @@ void Exec_Binary(void) {
         val1 = LdsPrintF("%c", strCopy.c_str()[iCharIndex]);
       } break;
 
-      default: LdsThrow(LEX_BINARY, "Cannot apply operator %d to %s and %s at %s", (int)_ca->lt_valValue, strType1.c_str(), strType2.c_str(), _ca->PrintPos().c_str());
+      default: LdsThrow(LEX_BINARY, "Cannot apply operator %d to %s and %s at %s", _ca->lt_valValue.iValue, strType1.c_str(), strType2.c_str(), _ca->PrintPos().c_str());
     }
 
   } else {
     // get numbers
-    float fNum1 = val1.fValue;
-    float fNum2 = val2.fValue;
+    float fNum1 = val1.GetNumber();
+    float fNum2 = val2.GetNumber();
 
     switch (iOperation) {
       // operators
@@ -460,7 +460,7 @@ void Exec_Binary(void) {
       case LOP_EQ:  fNum1 = (fNum1 == fNum2); break;
       case LOP_NEQ: fNum1 = (fNum1 != fNum2); break;
       
-      default: LdsThrow(LEX_BINARY, "Cannot apply operator %d at %s", (int)_ca->lt_valValue, _ca->PrintPos().c_str());
+      default: LdsThrow(LEX_BINARY, "Cannot apply operator %d at %s", _ca->lt_valValue.iValue, _ca->PrintPos().c_str());
     }
 
     // assign a number
@@ -474,7 +474,7 @@ void Exec_Binary(void) {
 // Get variable value
 void Exec_Get(void) {
   SLdsVar *pvar = NULL;
-  string strName = _ca->lt_valValue;
+  string strName = _ca->lt_valValue.strValue;
         
   // try to get the value
   if (!_pldsCurrent->LdsVariableValue(strName, pvar)) {
@@ -490,7 +490,7 @@ void Exec_Get(void) {
 // Set variable value
 void Exec_Set(void) {
   SLdsVar *pvar = NULL;
-  string strName = _ca->lt_valValue;
+  string strName = _ca->lt_valValue.strValue;
   
   // try to get the value
   if (!_pldsCurrent->LdsVariableValue(strName, pvar)) {
@@ -524,12 +524,10 @@ void Exec_GetLocal(void) {
   int iLocal = GetLocalVar();
   CLdsVarMap &mapLocals = _psthCurrent->sth_mapLocals;
   
-  string strName = _ca->lt_valValue;
+  string strName = _ca->lt_valValue.strValue;
 
   SLdsVar *pvar = &mapLocals.GetValue(iLocal);
   SLdsValue *pvalLocal = &pvar->var_valValue;
-
-  _pldsCurrent->LdsOut("Get: %s - %s\n", strName.c_str(), pvalLocal->Print().c_str());
   
   _pavalStack->Push(SLdsValueRef(*pvalLocal, pvar, NULL, strName, strName, false));
   ThreadOut(true);
@@ -592,7 +590,7 @@ void Exec_Call(void) {
   CLdsValueList avalArgs = MakeValueList(*_pavalStack, _ca->lt_iArg);
 
   // call the function
-  SLdsValueRef valValue = _pldsCurrent->CallFunction(_ca->lt_valValue, avalArgs);
+  SLdsValueRef valValue = _pldsCurrent->CallFunction(_ca->lt_valValue.strValue, avalArgs);
   
   _pavalStack->Push(valValue);
   ThreadOut(true);

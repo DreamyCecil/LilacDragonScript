@@ -38,7 +38,7 @@ void CLdsScriptEngine::CompileGetter(CBuildNode &bn, CActionList &aca) {
   switch (bn.lt_eType) {
     // iVal
     case EBN_ID: {
-      string strName = bn.lt_valValue;
+      string strName = bn.lt_valValue.strValue;
       
       // custom variables and constants
       if (_mapLdsVariables.FindKeyIndex(strName) != -1) {
@@ -73,7 +73,7 @@ void CLdsScriptEngine::CompileSetter(CBuildNode &bn, CActionList &aca) {
   switch (bn.lt_eType) {
     // iVal
     case EBN_ID: {
-      string strName = bn.lt_valValue;
+      string strName = bn.lt_valValue.strValue;
       bool bLocal = (_mapLdsVariables.FindKeyIndex(strName) == -1);
       
       // custom variables
@@ -221,7 +221,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
 
     // binary operation values
     case EBN_BIN:
-      switch ((int)bn.lt_valValue) {
+      switch (bn.lt_valValue.iValue) {
         case LOP_AND: {
           Compile(*bn.bn_abnNodes[0], aca);
         
@@ -255,7 +255,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
     case EBN_CALL: {
       // verify argument count
       int ctArgs = bn.lt_iArg;
-      string strFunc = bn.lt_valValue;
+      string strFunc = bn.lt_valValue.strValue;
 
       ELdsAction eAction = LCA_CALL;
       
@@ -290,7 +290,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
     // inline function
     case EBN_FUNC: {
       // function name
-      string strFunc = bn.lt_valValue;
+      string strFunc = bn.lt_valValue.strValue;
       
       // compile the function
       CActionList acaFunc;
@@ -310,7 +310,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
     // variable definition
     case EBN_VAR: {
       // variable name
-      string strVar = bn.lt_valValue;
+      string strVar = bn.lt_valValue.strValue;
       
       // global variable redefinition
       if (_mapLdsVariables.FindKeyIndex(strVar) != -1) {
@@ -456,7 +456,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
     
     case EBN_SET: {
       // get the value
-      if ((int)bn.lt_valValue == LOP_SET) {
+      if (bn.lt_valValue.iValue == LOP_SET) {
         Compile(*bn.bn_abnNodes[1], aca);
       
       // get both values then perform an operation

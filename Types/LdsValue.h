@@ -4,10 +4,11 @@
 
 // Script value type
 enum ELdsValueType {
-  EVT_FLOAT,
-  EVT_STRING,
-  EVT_ARRAY,
-  EVT_STRUCT,
+  EVT_INDEX  = 0,
+  EVT_FLOAT  = 1,
+  EVT_STRING = 2,
+  EVT_ARRAY  = 3,
+  EVT_STRUCT = 4,
 };
 
 // Value type name
@@ -18,6 +19,7 @@ struct LDS_API SLdsValue {
   ELdsValueType eType; // value type
 
   union {
+    int iValue; // index value
     float fValue; // float value
     char strValue[256]; // string value
   };
@@ -31,7 +33,8 @@ struct LDS_API SLdsValue {
   //       For example a line like 'entity.m_strName = "this";' would immediately change value in the 'm_strName' variable of this object in memory, not just the structure.
 
   // Constructors
-  SLdsValue(void) : fValue(0.0f), eType(EVT_FLOAT) {};
+  SLdsValue(void) : iValue(0), eType(EVT_INDEX) {};
+  SLdsValue(const int &i) : iValue(i), eType(EVT_INDEX) {};
   SLdsValue(const float &f) : fValue(f), eType(EVT_FLOAT) {};
   SLdsValue(const string &str) : eType(EVT_STRING) { strcpy(strValue, str.c_str()); };
 
@@ -53,11 +56,6 @@ struct LDS_API SLdsValue {
     sStruct.mapVars = map;
     sStruct.bStatic = bSetStatic;
   };
-
-  // Conversions
-  operator int() { return fValue; };
-  operator float() { return fValue; };
-  operator string() { return strValue; };
   
   // Type name
   inline string TypeName(const string &strFloat, const string &strString, const string &strArray, const string &strStruct) {
@@ -66,12 +64,17 @@ struct LDS_API SLdsValue {
   
   // Type assertion (for function arguments)
   SLdsValue &Assert(const ELdsValueType &eDesired);
+  SLdsValue &AssertNumber(void);
   
   // Print the value
   string Print(void);
 
+  // Get any number value
+  inline float GetNumber(void);
+
   // Assignment
   SLdsValue &operator=(const SLdsValue &valOther);
+  SLdsValue &operator=(const int &i);
   SLdsValue &operator=(const float &f);
   SLdsValue &operator=(const string &str);
   
@@ -83,5 +86,5 @@ struct LDS_API SLdsValue {
 
 // Get value of the next function argument
 #define LDS_NEXTARG(_Args) (*_Args++)
-#define LDS_NEXTNUM(_Args) float(LDS_NEXTARG(_Args).Assert(EVT_FLOAT))
-#define LDS_NEXTSTR(_Args) string(LDS_NEXTARG(_Args).Assert(EVT_STRING))
+#define LDS_NEXTNUM(_Args) (LDS_NEXTARG(_Args).AssertNumber().GetNumber())
+#define LDS_NEXTSTR(_Args) (LDS_NEXTARG(_Args).Assert(EVT_STRING).strValue)

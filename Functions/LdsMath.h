@@ -73,7 +73,7 @@ inline LdsReturn LdsLog2(SLdsValue *pArgs) {
   // result of log2(e)
   #define LOG2_OF_E 1.44269504088896340736
 
-  return log(LDS_NEXTNUM(pArgs)) * LOG2_OF_E;
+  return float(log(LDS_NEXTNUM(pArgs)) * LOG2_OF_E);
 };
 
 inline LdsReturn LdsLog10(SLdsValue *pArgs) {
@@ -95,7 +95,7 @@ inline LdsReturn LdsFloor(SLdsValue *pArgs) {
 
 // Other
 inline LdsReturn LdsAbs(SLdsValue *pArgs) {
-  return fabs(LDS_NEXTNUM(pArgs));
+  return (float)fabs(LDS_NEXTNUM(pArgs));
 };
 
 inline LdsReturn LdsMin(SLdsValue *pArgs) {

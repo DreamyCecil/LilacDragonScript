@@ -155,7 +155,7 @@ EThreadStatus CLdsThread::Resume(void) {
             // make a list of arguments
             CLdsValueList avalArgs = MakeValueList(*_pavalStack, ca.lt_iArg);
             
-            _psthCurrent->CallInlineFunction(ca.lt_valValue, avalArgs);
+            _psthCurrent->CallInlineFunction(ca.lt_valValue.strValue, avalArgs);
             
             // reset position to go through the inline function
             iPos = 0;
@@ -176,14 +176,14 @@ EThreadStatus CLdsThread::Resume(void) {
         // Add inline function to the list
         case LCA_FUNC: {
           SLdsInlineFunc &in = ca.ca_inFunc;
-          string strFunc = ca.lt_valValue;
+          string strFunc = ca.lt_valValue.strValue;
           
           sth_mapInlineFunc[strFunc] = in;
         } break;
         
         // Define a local variable
         case LCA_VAR: {
-          string strName = ca.lt_valValue;
+          string strName = ca.lt_valValue.strValue;
           bool bConst = (ca.lt_iArg >= 1);
           
           // add to the list of inline locals
@@ -213,7 +213,7 @@ EThreadStatus CLdsThread::Resume(void) {
           switch (iDirType) {
             // debug context level
             case THD_DEBUGCONTEXT:
-              sth_bDebugOutput = (val.fValue >= 0.5f);
+              sth_bDebugOutput = (val.iValue > 0);
               break;
           }
         } break;

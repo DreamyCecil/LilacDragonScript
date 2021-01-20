@@ -373,17 +373,24 @@ void CLdsScriptEngine::ParseScript(string strScript) {
           
           // save the number
           string strString = str.substr(iStart, iPos - iStart);
-          float fValue = 0.0f;
           
-          if (ubType == 2) {
-            int iHexValue = 0;
-            sscanf(strString.c_str(), "%x", &iHexValue);
-            fValue = iHexValue;
-          } else {
-            fValue = atof(strString.c_str());
-          }
+          switch (ubType) {
+            case 0: { // index
+              int iValue = atoi(strString.c_str());
+              AddLdsToken(LTK_VAL, iPrintPos, iValue);
+            } break;
 
-          AddLdsToken(LTK_VAL, iPrintPos, fValue);
+            case 2: { // hexadecimal index
+              int iHexValue = 0;
+              sscanf(strString.c_str(), "%x", &iHexValue);
+              AddLdsToken(LTK_VAL, iPrintPos, iHexValue);
+            } break;
+
+            default: { // float
+              float fValue = atof(strString.c_str());
+              AddLdsToken(LTK_VAL, iPrintPos, fValue);
+            }
+          }
         
         // start identifier names with an underscore or letters
         } else if (iChar == '_'
@@ -424,10 +431,10 @@ void CLdsScriptEngine::ParseScript(string strScript) {
 
           // constants
           } else if (strName == "true") {
-            AddLdsToken(LTK_VAL, iPrintPos, 1.0f);
+            AddLdsToken(LTK_VAL, iPrintPos, true);
             
           } else if (strName == "false") {
-            AddLdsToken(LTK_VAL, iPrintPos, 0.0f);
+            AddLdsToken(LTK_VAL, iPrintPos, false);
 
           } else if (strName == "pi") {
             AddLdsToken(LTK_VAL, iPrintPos, 3.14159265359f);
@@ -501,6 +508,10 @@ void CLdsScriptEngine::ParseScript(string strScript) {
 // Add expression token
 void CLdsScriptEngine::AddLdsToken(const ELdsToken &eType, const int &iPos) {
   _aetTokens.Add(CLdsToken(eType, iPos, -1));
+};
+
+void CLdsScriptEngine::AddLdsToken(const ELdsToken &eType, const int &iPos, const int &iValue) {
+  _aetTokens.Add(CLdsToken(eType, iPos, iValue, -1));
 };
 
 void CLdsScriptEngine::AddLdsToken(const ELdsToken &eType, const int &iPos, const float &fValue) {

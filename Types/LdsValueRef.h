@@ -26,18 +26,15 @@ struct LDS_API SLdsValueRef {
   
   // Value constructors
   CONSTRUCTOR_TEMP(SLdsValue);
+  CONSTRUCTOR_TEMP(int);
   CONSTRUCTOR_TEMP(float);
   CONSTRUCTOR_TEMP(string);
   
   // Full constructors
   CONSTRUCTOR_FULL(SLdsValue);
+  CONSTRUCTOR_FULL(int);
   CONSTRUCTOR_FULL(float);
   CONSTRUCTOR_FULL(string);
-  
-  // Conversion
-  operator int() { return val.fValue; };
-  operator float() { return val.fValue; };
-  operator string() { return val.strValue; };
 };
 
 // Undefine constructor templates
