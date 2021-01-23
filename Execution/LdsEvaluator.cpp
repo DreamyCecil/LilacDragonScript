@@ -7,7 +7,7 @@ extern CDStack<SLdsValueRef> *_pavalStack;
 extern CCompAction &SetCurrentAction(CCompAction *pcaCurrent);
 
 // Execute the compiled expression
-SLdsValue CLdsScriptEngine::LdsExecute(CActionList &acaActions) {
+CLdsValue CLdsScriptEngine::LdsExecute(CActionList &acaActions) {
   int iPos = 0;
   int ctActions = acaActions.Count();
 
@@ -43,14 +43,14 @@ SLdsValue CLdsScriptEngine::LdsExecute(CActionList &acaActions) {
   // restore previous stack
   _pavalStack = pavalStackPrev;
   
-  SLdsValue valResult = avalStack.Pop().val;
+  CLdsValue valResult = avalStack.Pop().val;
   avalStack.Clear();
   
   return valResult;
 };
 
 // Evaluate the expression
-ELdsError CLdsScriptEngine::LdsEvaluate(string strExpression, SLdsValue &valResult) {
+ELdsError CLdsScriptEngine::LdsEvaluate(string strExpression, CLdsValue &valResult) {
   valResult = 0.0f;
 
   // try to compile
@@ -79,7 +79,7 @@ ELdsError CLdsScriptEngine::LdsEvaluate(string strExpression, SLdsValue &valResu
 };
 
 // Evaluate compiled expression
-ELdsError CLdsScriptEngine::LdsEvaluateCompiled(CActionList acaActions, SLdsValue &valResult) {
+ELdsError CLdsScriptEngine::LdsEvaluateCompiled(CActionList acaActions, CLdsValue &valResult) {
   valResult = 0.0f;
 
   // try to execute

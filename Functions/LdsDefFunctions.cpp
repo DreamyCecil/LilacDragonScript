@@ -4,22 +4,22 @@ extern CLdsScriptEngine *_pldsCurrent;
 extern CLdsThread *_psthCurrent;
 
 // Debug output
-LdsReturn LdsDebugOut(SLdsValue *pArgs) {
-  SLdsValue valPrint = LDS_NEXTARG(pArgs);
+LdsReturn LdsDebugOut(CLdsValue *pArgs) {
+  CLdsValue valPrint = LDS_NEXTARG(pArgs);
   _pldsCurrent->LdsOut("%s\n", valPrint.Print().c_str());
   
   return valPrint;
 };
 
 // Print a hexadecimal number
-LdsReturn LdsPrintHex(SLdsValue *pArgs) {
+LdsReturn LdsPrintHex(CLdsValue *pArgs) {
   float fPrint = LDS_NEXTNUM(pArgs);
   
   return LdsPrintF("%X", (int)fPrint);
 };
 
 // Pause the script execution
-LdsReturn LdsWait(SLdsValue *pArgs) {
+LdsReturn LdsWait(CLdsValue *pArgs) {
   float fWaitTime = LDS_NEXTNUM(pArgs);
   CLdsThread *psth = _pldsCurrent->ThreadPause();
   

@@ -1,13 +1,13 @@
 #include "../LdsTypes.h"
 
 // Clear the structure
-void SLdsStruct::Clear(void) {
+void CLdsStruct::Clear(void) {
   iID = -1;
   mapVars.Clear();
 };
 
 // Print one variable
-string SLdsStruct::Print(int iVar) {
+string CLdsStruct::Print(int iVar) {
   // print value
   string strValue = mapVars.GetValue(iVar).var_valValue.Print();
   
@@ -18,7 +18,7 @@ string SLdsStruct::Print(int iVar) {
 };
 
 // Assignment
-SLdsStruct &SLdsStruct::operator=(const SLdsStruct &sOther) {
+CLdsStruct &CLdsStruct::operator=(const CLdsStruct &sOther) {
   if (this == &sOther) {
     return *this;
   }
@@ -33,11 +33,11 @@ SLdsStruct &SLdsStruct::operator=(const SLdsStruct &sOther) {
 };
 
 // Structure accessor
-SLdsValue &SLdsStruct::operator[](const string &strVar) {
+CLdsValue &CLdsStruct::operator[](const string &strVar) {
   return mapVars[strVar].var_valValue;
 };
 
 // Find variable index
-int SLdsStruct::FindIndex(const string &strVar) {
+int CLdsStruct::FindIndex(const string &strVar) {
   return mapVars.FindKeyIndex(strVar);
 };

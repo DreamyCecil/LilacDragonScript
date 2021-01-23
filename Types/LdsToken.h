@@ -92,7 +92,7 @@ class LDS_API CLdsToken {
     int lt_iPos; // token place
     int lt_iArg; // token argument
     
-    SLdsValue lt_valValue;
+    CLdsValue lt_valValue;
     
     // Constructors
     CLdsToken(void) :
@@ -101,7 +101,7 @@ class LDS_API CLdsToken {
     CLdsToken(const int &iType, const int &iLine, const int &iArg) :
       lt_eType(iType), lt_iPos(iLine), lt_valValue(), lt_iArg(-1) {};
       
-    CLdsToken(const int &iType, const int &iLine, const SLdsValue &val, const int &iArg) :
+    CLdsToken(const int &iType, const int &iLine, const CLdsValue &val, const int &iArg) :
       lt_eType(iType), lt_iPos(iLine), lt_valValue(val), lt_iArg(iArg) {};
 
     // Token position

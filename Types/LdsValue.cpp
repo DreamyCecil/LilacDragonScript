@@ -1,5 +1,10 @@
 #include "../LdsTypes.h"
 
+// Copy constructor
+CLdsValue::CLdsValue(const CLdsValue &valOther) {
+  operator=(valOther);
+};
+
 // Value type name
 inline string TypeName(const ELdsValueType &eType, const string &strFloat, const string &strString, const string &strArray, const string &strStruct) {
   switch (eType) {
@@ -13,7 +18,7 @@ inline string TypeName(const ELdsValueType &eType, const string &strFloat, const
 };
 
 // Type assertion (for function arguments)
-SLdsValue &SLdsValue::Assert(const ELdsValueType &eDesired) {
+CLdsValue &CLdsValue::Assert(const ELdsValueType &eDesired) {
   // type mismatch
   if (eType != eDesired) {
     string strExpected = ::TypeName(eDesired, "a number", "a string", "an array", "a structure");
@@ -25,7 +30,7 @@ SLdsValue &SLdsValue::Assert(const ELdsValueType &eDesired) {
   return *this;
 };
 
-SLdsValue &SLdsValue::AssertNumber(void) {
+CLdsValue &CLdsValue::AssertNumber(void) {
   // type mismatch
   if (eType > EVT_FLOAT) {
     string strGot = TypeName("a number", "a string", "an array", "a structure");
@@ -37,7 +42,7 @@ SLdsValue &SLdsValue::AssertNumber(void) {
 };
   
 // Print the value
-string SLdsValue::Print(void) {
+string CLdsValue::Print(void) {
   switch (eType) {
     case EVT_INDEX: return LdsPrintF("%d", iValue);
     case EVT_FLOAT: return LdsPrintF("%s", LdsFloatStr(fValue).c_str());
@@ -96,7 +101,7 @@ string SLdsValue::Print(void) {
 };
 
 // Get integer value
-int SLdsValue::GetIndex(void) {
+int CLdsValue::GetIndex(void) {
   switch (eType) {
     case EVT_INDEX: return iValue;
     case EVT_FLOAT: return (int)fValue;
@@ -105,7 +110,7 @@ int SLdsValue::GetIndex(void) {
 };
 
 // Get any number value
-float SLdsValue::GetNumber(void) {
+float CLdsValue::GetNumber(void) {
   switch (eType) {
     case EVT_INDEX: return (float)iValue;
     case EVT_FLOAT: return fValue;
@@ -113,8 +118,13 @@ float SLdsValue::GetNumber(void) {
   return 0.0f;
 };
 
+// Get pure string value
+const char *CLdsValue::GetString(void) {
+  return strValue.c_str();
+};
+
 // Assignment
-SLdsValue &SLdsValue::operator=(const SLdsValue &valOther) {
+CLdsValue &CLdsValue::operator=(const CLdsValue &valOther) {
   if (this == &valOther) {
     return *this;
   }
@@ -124,34 +134,17 @@ SLdsValue &SLdsValue::operator=(const SLdsValue &valOther) {
   eType = valOther.eType;
 
   switch (eType) {
-    case EVT_INDEX:
-      iValue = valOther.iValue;
-      break;
-
-    case EVT_FLOAT:
-      fValue = valOther.fValue;
-      break;
-
-    case EVT_STRING:
-      strValue = new char[strlen(valOther.strValue) + 1];
-      strcpy(strValue, valOther.strValue);
-      break;
-
-    case EVT_ARRAY:
-      iValue = 0;
-      aArray = valOther.aArray;
-      break;
-
-    case EVT_STRUCT:
-      iValue = 0;
-      sStruct = valOther.sStruct;
-      break;
+    case EVT_INDEX: iValue = valOther.iValue; break;
+    case EVT_FLOAT: fValue = valOther.fValue; break;
+    case EVT_STRING: strValue = valOther.strValue; break;
+    case EVT_ARRAY: aArray = valOther.aArray; break;
+    case EVT_STRUCT: sStruct = valOther.sStruct; break;
   }
 
   return *this;
 };
 
-SLdsValue &SLdsValue::operator=(const int &i) {
+CLdsValue &CLdsValue::operator=(const int &i) {
   Clear();
   eType = EVT_INDEX;
   iValue = i;
@@ -159,7 +152,7 @@ SLdsValue &SLdsValue::operator=(const int &i) {
   return *this;
 };
 
-SLdsValue &SLdsValue::operator=(const float &f) {
+CLdsValue &CLdsValue::operator=(const float &f) {
   Clear();
   eType = EVT_FLOAT;
   fValue = f;
@@ -167,22 +160,20 @@ SLdsValue &SLdsValue::operator=(const float &f) {
   return *this;
 };
 
-SLdsValue &SLdsValue::operator=(const string &str) {
+CLdsValue &CLdsValue::operator=(const string &str) {
   Clear();
   eType = EVT_STRING;
-
-  strValue = new char[str.length() + 1];
-  strcpy(strValue, str.c_str());
+  strValue = str;
 
   return *this;
 };
   
 // Conditions
-bool SLdsValue::IsTrue(void) {
+bool CLdsValue::IsTrue(void) {
   switch (eType) {
     case EVT_INDEX:  return (iValue > 0);
     case EVT_FLOAT:  return (fValue >= 0.5f);
-    case EVT_STRING: return (strcmp(strValue, "") == 0);
+    case EVT_STRING: return (strValue == "");
     case EVT_ARRAY:  return (aArray.Count() > 0);
     case EVT_STRUCT: return (sStruct.iID != -1);
   }
@@ -190,7 +181,7 @@ bool SLdsValue::IsTrue(void) {
   return false;
 };
   
-bool SLdsValue::operator==(const SLdsValue &valOther) const {
+bool CLdsValue::operator==(const CLdsValue &valOther) const {
   if (eType != valOther.eType) {
     return false;
   }
@@ -198,7 +189,7 @@ bool SLdsValue::operator==(const SLdsValue &valOther) const {
   switch (eType) {
     case EVT_INDEX:  return (iValue == valOther.iValue);
     case EVT_FLOAT:  return (fValue == valOther.fValue);
-    case EVT_STRING: return (strcmp(strValue, valOther.strValue) == 0);
+    case EVT_STRING: return (strValue == valOther.strValue);
     case EVT_ARRAY:  return (aArray.Count() == valOther.aArray.Count());
     case EVT_STRUCT: return (sStruct.iID == valOther.sStruct.iID);
   }
@@ -206,6 +197,6 @@ bool SLdsValue::operator==(const SLdsValue &valOther) const {
   return false;
 };
   
-bool SLdsValue::operator!=(const SLdsValue &valOther) const {
+bool CLdsValue::operator!=(const CLdsValue &valOther) const {
   return !(operator==(valOther));
 };

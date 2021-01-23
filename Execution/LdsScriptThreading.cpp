@@ -30,7 +30,7 @@ CLdsThread *CLdsScriptEngine::ThreadPause(void) {
 };
 
 // Execute the compiled script
-SLdsValue CLdsScriptEngine::ScriptExecute(CActionList acaActions, CLdsVarMap &mapArgs, CLdsInFuncMap *pmapInline) {
+CLdsValue CLdsScriptEngine::ScriptExecute(CActionList acaActions, CLdsVarMap &mapArgs, CLdsInFuncMap *pmapInline) {
   CLdsThread *psth = ThreadCreate(acaActions, mapArgs);
   psth->sth_bQuickRun = true;
   
@@ -39,7 +39,7 @@ SLdsValue CLdsScriptEngine::ScriptExecute(CActionList acaActions, CLdsVarMap &ma
     psth->sth_mapInlineFunc.AddFrom(*pmapInline, true);
   }
   
-  SLdsValue valResult;
+  CLdsValue valResult;
 
   switch (psth->Resume()) {
     case ETS_FINISHED:
@@ -47,7 +47,7 @@ SLdsValue CLdsScriptEngine::ScriptExecute(CActionList acaActions, CLdsVarMap &ma
       break;
     
     case ETS_ERROR:
-      LdsErrorOut("%s (code: 0x%X)\n", psth->sth_valResult.strValue, psth->sth_eError);
+      LdsErrorOut("%s (code: 0x%X)\n", psth->sth_valResult.GetString(), psth->sth_eError);
       break;
     
     default:

@@ -58,7 +58,7 @@ bool CLdsThread::Run(CLdsThread **ppsth) {
       
     // error has occured
     case ETS_ERROR:
-      sth_pldsEngine->LdsErrorOut("%s (code: 0x%X)\n", sth_valResult.strValue, sth_eError);
+      sth_pldsEngine->LdsErrorOut("%s (code: 0x%X)\n", sth_valResult.GetString(), sth_eError);
       break;
   }
   
@@ -208,7 +208,7 @@ EThreadStatus CLdsThread::Resume(void) {
         // Apply a thread directive
         case LCA_DIR: {
           int iDirType = ca.lt_iArg;
-          SLdsValue val = ca.lt_valValue;
+          CLdsValue val = ca.lt_valValue;
           
           switch (iDirType) {
             // debug context level
@@ -225,7 +225,7 @@ EThreadStatus CLdsThread::Resume(void) {
       
         case LCA_JUMPIF: {
           ThreadOut(false);
-          SLdsValue val = _pavalStack->Pop().val;
+          CLdsValue val = _pavalStack->Pop().val;
           
           if (val.IsTrue()) {
             iPos = ca.lt_iArg;
@@ -234,7 +234,7 @@ EThreadStatus CLdsThread::Resume(void) {
     
         case LCA_JUMPUNLESS: {
           ThreadOut(false);
-          SLdsValue val = _pavalStack->Pop().val;
+          CLdsValue val = _pavalStack->Pop().val;
           
           if (!val.IsTrue()) {
             iPos = ca.lt_iArg;
@@ -243,7 +243,7 @@ EThreadStatus CLdsThread::Resume(void) {
       
         case LCA_AND: {
           ThreadOut(false);
-          SLdsValue val = _pavalStack->Top().val;
+          CLdsValue val = _pavalStack->Top().val;
           
           if (val.IsTrue()) {
             _pavalStack->Pop();
@@ -254,7 +254,7 @@ EThreadStatus CLdsThread::Resume(void) {
       
         case LCA_OR: {
           ThreadOut(false);
-          SLdsValue val = _pavalStack->Top().val;
+          CLdsValue val = _pavalStack->Top().val;
           
           if (val.IsTrue()) {
             iPos = ca.lt_iArg;
@@ -266,9 +266,9 @@ EThreadStatus CLdsThread::Resume(void) {
         // Switch block
         case LCA_SWITCH: {
           ThreadOut(false);
-          SLdsValue valCase = _pavalStack->Pop().val;
+          CLdsValue valCase = _pavalStack->Pop().val;
           ThreadOut(false);
-          SLdsValue valDesired = _pavalStack->Top().val;
+          CLdsValue valDesired = _pavalStack->Top().val;
       
           if (valCase == valDesired) {
             _pavalStack->Pop();

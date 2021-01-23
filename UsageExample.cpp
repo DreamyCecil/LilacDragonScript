@@ -12,13 +12,13 @@ void ErrorOutput(const char *strError) {
 };
 
 // Random number function
-LdsReturn LDS_Random(SLdsValue *) {
+LdsReturn LDS_Random(CLdsValue *) {
   return rand();
 };
 
 // Output function
-LdsReturn LDS_Print(SLdsValue *pArgs) {
-  const char *strPrint = LDS_NEXTSTR(pArgs);
+LdsReturn LDS_Print(CLdsValue *pArgs) {
+  const char *strPrint = LDS_NEXTSTR(pArgs).c_str();
   printf("%s\n", strPrint);
 
   return strPrint;
@@ -86,7 +86,7 @@ int main() {
   // compiled OK
   if (eResult == LER_OK) {
     // execute script in quick run mode
-    SLdsValue valResult = _ldsEngine.ScriptExecute(acaActions, CLdsVarMap());
+    CLdsValue valResult = _ldsEngine.ScriptExecute(acaActions, CLdsVarMap());
 
     // print out the result
     printf("[RESULT]: %s\n", valResult.Print().c_str());

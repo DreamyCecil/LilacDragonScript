@@ -69,7 +69,7 @@ class LDS_API CBuildNode : public CLdsToken {
     CBuildNode(void) : CLdsToken() {};
 
     // Value constructor
-    CBuildNode(EBuildNode eType, int iPos, SLdsValue valValue, int iArg, CNodeList *abnNodes = NULL) :
+    CBuildNode(EBuildNode eType, int iPos, CLdsValue valValue, int iArg, CNodeList *abnNodes = NULL) :
       CLdsToken(eType, iPos, valValue, iArg)
     {
       if (abnNodes != NULL) {

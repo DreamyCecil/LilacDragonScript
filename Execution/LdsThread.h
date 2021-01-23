@@ -27,7 +27,7 @@ class LDS_API CLdsThread {
     CLdsVarMap sth_mapLocals; // local variables to this specific thread (script)
     CLdsInFuncMap sth_mapInlineFunc; // inline functions
   
-    SLdsValue sth_valResult; // value or error depending on status
+    CLdsValue sth_valResult; // value or error depending on status
     EThreadStatus sth_eStatus; // current thread status
     ELdsError sth_eError; // error code for the error status
     

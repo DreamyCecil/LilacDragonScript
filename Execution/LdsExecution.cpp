@@ -54,9 +54,9 @@ void Exec_Val(void) {
     
     // array
     if (iContainer == 0) {
-      SLdsValue valArray = SLdsValue(ctValues, 0.0f);
+      CLdsValue valArray = CLdsValue(ctValues, 0.0f);
       
-      CDArray<SLdsValue> avalArray;
+      CLdsArray avalArray;
       avalArray.New(ctValues);
       
       // get array entries
@@ -84,14 +84,14 @@ void Exec_Val(void) {
         // constant variable
         int iConst = _pavalStack->Pop().val.iValue;
         // value
-        SLdsValue val = _pavalStack->Pop().val;
+        CLdsValue val = _pavalStack->Pop().val;
         
         // add the variable
         mapVars[strVar] = SLdsVar(val, (iConst >= 1));
       }
       
       // fill the structure
-      SLdsValue valStruct = SLdsValue(-1, mapVars, (iContainer > 1));
+      CLdsValue valStruct = CLdsValue(-1, mapVars, (iContainer > 1));
       
       _pavalStack->Push(SLdsValueRef(valStruct));
       ThreadOut(true);
@@ -142,8 +142,8 @@ void Exec_Binary(void) {
   SLdsValueRef valRef2 = _pavalStack->Pop();
   SLdsValueRef valRef1 = _pavalStack->Pop();
 
-  SLdsValue val1 = valRef1.val;
-  SLdsValue val2 = valRef2.val;
+  CLdsValue val1 = valRef1.val;
+  CLdsValue val2 = valRef2.val;
   
   // types
   ELdsValueType eType1 = val1.eType;
@@ -156,7 +156,7 @@ void Exec_Binary(void) {
   
   // structure operations
   if (eType1 == EVT_STRUCT) {
-    SLdsValue *pvalStructAccess = NULL;
+    CLdsValue *pvalStructAccess = NULL;
 
     // structure variable properties
     string strStructVar = valRef1.strVar;
@@ -179,7 +179,7 @@ void Exec_Binary(void) {
         string strVar = val2.strValue;
         
         // direct 'val1 = val1.sStruct' empties its own struct before getting a value from it
-        SLdsStruct sCopy = val1.sStruct;
+        CLdsStruct sCopy = val1.sStruct;
 
         if (sCopy.FindIndex(strVar) == -1) {
           LdsThrow(LEX_STRUCTVAR, "Variable '%s' does not exist in the structure at %s", strVar.c_str(), _ca->PrintPos().c_str());
@@ -210,7 +210,7 @@ void Exec_Binary(void) {
 
   // array operations
   if (eType1 == EVT_ARRAY) {
-    SLdsValue *pvalArrayAccess = NULL;
+    CLdsValue *pvalArrayAccess = NULL;
     
     switch (iOperation) {
       // TODO: Add multiplication operator to copy array contents multiple times
@@ -244,9 +244,9 @@ void Exec_Binary(void) {
         }
         
         switch (iOperation) {
-          case LOP_GT:  val1 = int(val1.aArray.Count() > val2.aArray.Count()); break;
+          case LOP_GT:  val1 = int(val1.aArray.Count() >  val2.aArray.Count()); break;
           case LOP_GOE: val1 = int(val1.aArray.Count() >= val2.aArray.Count()); break;
-          case LOP_LT:  val1 = int(val1.aArray.Count() < val2.aArray.Count()); break;
+          case LOP_LT:  val1 = int(val1.aArray.Count() <  val2.aArray.Count()); break;
           case LOP_LOE: val1 = int(val1.aArray.Count() <= val2.aArray.Count()); break;
           case LOP_EQ:  val1 = int(val1 == val2); break;
           case LOP_NEQ: val1 = int(val1 != val2); break;
@@ -264,7 +264,7 @@ void Exec_Binary(void) {
         }
         
         // direct 'val1 = val1.aArray' empties its own array before getting a value from it
-        CDArray<SLdsValue> aCopy = val1.aArray;
+        CLdsArray aCopy = val1.aArray;
         
         int iArrayIndex = val2.GetIndex();
         int iSize = aCopy.Count();
@@ -348,9 +348,9 @@ void Exec_Binary(void) {
 
         // compare length
         if (!bStr1 && bStr2) {
-          bResult = (val1.GetIndex() == strlen(val2.strValue));
+          bResult = (val1.GetIndex() == val2.strValue.length());
         } else if (bStr1 && !bStr2) {
-          bResult = (val2.GetIndex() == strlen(val1.strValue));
+          bResult = (val2.GetIndex() == val1.strValue.length());
 
         // compare string contents
         } else {
@@ -365,9 +365,9 @@ void Exec_Binary(void) {
 
         // compare length
         if (!bStr1 && bStr2) {
-          bResult = (val1.GetIndex() != strlen(val2.strValue));
+          bResult = (val1.GetIndex() != val2.strValue.length());
         } else if (bStr1 && !bStr2) {
-          bResult = (val2.GetIndex() != strlen(val1.strValue));
+          bResult = (val2.GetIndex() != val1.strValue.length());
 
         // compare string contents
         } else {
@@ -480,10 +480,10 @@ void Exec_Get(void) {
         
   // try to get the value
   if (!_pldsCurrent->LdsVariableValue(strName, pvar)) {
-    LdsThrow(LEX_VARIABLE, "Variable '%s' is invalid at %s", _ca->lt_valValue.strValue, _ca->PrintPos().c_str());
+    LdsThrow(LEX_VARIABLE, "Variable '%s' is invalid at %s", _ca->lt_valValue.GetString(), _ca->PrintPos().c_str());
   }
   
-  SLdsValue *pvalRef = &pvar->var_valValue;
+  CLdsValue *pvalRef = &pvar->var_valValue;
   
   _pavalStack->Push(SLdsValueRef(*pvalRef, pvar, NULL, strName, strName, false));
   ThreadOut(true);
@@ -496,7 +496,7 @@ void Exec_Set(void) {
   
   // try to get the value
   if (!_pldsCurrent->LdsVariableValue(strName, pvar)) {
-    LdsThrow(LEX_VARIABLE, "Variable '%s' is invalid at %s", _ca->lt_valValue.strValue, _ca->PrintPos().c_str());
+    LdsThrow(LEX_VARIABLE, "Variable '%s' is invalid at %s", _ca->lt_valValue.GetString(), _ca->PrintPos().c_str());
   }
   
   // check if it's a constant
@@ -529,7 +529,7 @@ void Exec_GetLocal(void) {
   string strName = _ca->lt_valValue.strValue;
 
   SLdsVar *pvar = &mapLocals.GetValue(iLocal);
-  SLdsValue *pvalLocal = &pvar->var_valValue;
+  CLdsValue *pvalLocal = &pvar->var_valValue;
   
   _pavalStack->Push(SLdsValueRef(*pvalLocal, pvar, NULL, strName, strName, false));
   ThreadOut(true);
@@ -543,7 +543,7 @@ void Exec_SetLocal(void) {
   
   // check if it's a constant
   if (pvar->var_bConst > 1) {
-    LdsThrow(LEX_CONST, "Cannot reassign constant variable '%s' at %s", _ca->lt_valValue.strValue, _ca->PrintPos().c_str());
+    LdsThrow(LEX_CONST, "Cannot reassign constant variable '%s' at %s", _ca->lt_valValue.GetString(), _ca->PrintPos().c_str());
   }
   
   ThreadOut(false);

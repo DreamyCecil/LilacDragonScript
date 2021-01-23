@@ -541,7 +541,7 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
         LdsThrow(LEB_VALUE, "Expected a value at %s", etNext.PrintPos().c_str());
       }
       
-      SLdsValue valDir = etNext.lt_valValue;
+      CLdsValue valDir = etNext.lt_valValue;
       
       // assert value type
       int iDesiredVal = -1;

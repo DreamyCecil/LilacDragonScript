@@ -83,7 +83,7 @@ LdsReturn CLdsScriptEngine::CallFunction(string strFunc, CLdsValueList &avalArgs
 
   // make an array of arguments
   int ctArgs = avalArgs.Count();
-  SLdsValue *pvalFuncArgs = new SLdsValue[ctArgs];
+  CLdsValue *pvalFuncArgs = new CLdsValue[ctArgs];
 
   // copy each argument
   for (int iArg = 0; iArg < ctArgs; iArg++) {

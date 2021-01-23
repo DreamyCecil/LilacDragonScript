@@ -8,11 +8,11 @@ typedef CDList<string> CLdsInlineArgs;
 // Global script function
 struct LDS_API SLdsFunc {
   int ef_iArgs; // amount of arguments
-  LdsReturn (*ef_pFunc)(SLdsValue *pArgs); // pointer to the function
+  LdsReturn (*ef_pFunc)(CLdsValue *pArgs); // pointer to the function
 
   // Constructors
   SLdsFunc(void) : ef_iArgs(0), ef_pFunc(NULL) {};
-  SLdsFunc(int ct, void *pFunc) : ef_iArgs(ct), ef_pFunc((LdsReturn (*)(SLdsValue *))pFunc) {};
+  SLdsFunc(int ct, void *pFunc) : ef_iArgs(ct), ef_pFunc((LdsReturn (*)(CLdsValue *))pFunc) {};
 };
 
 // Inline function

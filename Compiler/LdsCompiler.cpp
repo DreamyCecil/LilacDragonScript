@@ -265,7 +265,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
         eAction = LCA_INLINE;
         
         if (ctArgs != ctFuncArgs) {
-          LdsThrow(LEC_FUNCARG, "Inline function '%s' takes %d argument(s) but got %d at %s", bn.lt_valValue.strValue, ctFuncArgs, ctArgs, bn.PrintPos().c_str());
+          LdsThrow(LEC_FUNCARG, "Inline function '%s' takes %d argument(s) but got %d at %s", bn.lt_valValue.GetString(), ctFuncArgs, ctArgs, bn.PrintPos().c_str());
         }
         
       // find the function
@@ -274,11 +274,11 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
         eAction = LCA_CALL;
         
         if (ctArgs != ctFuncArgs) {
-          LdsThrow(LEC_FUNCARG, "Function '%s' takes %d argument(s) but got %d at %s", bn.lt_valValue.strValue, ctFuncArgs, ctArgs, bn.PrintPos().c_str());
+          LdsThrow(LEC_FUNCARG, "Function '%s' takes %d argument(s) but got %d at %s", bn.lt_valValue.GetString(), ctFuncArgs, ctArgs, bn.PrintPos().c_str());
         }
         
       } else {
-        LdsThrow(LEC_NOFUNC, "Unknown function '%s' at %s", bn.lt_valValue.strValue, bn.PrintPos().c_str());
+        LdsThrow(LEC_NOFUNC, "Unknown function '%s' at %s", bn.lt_valValue.GetString(), bn.PrintPos().c_str());
       }
 
       for (int iArg = 0; iArg < ctArgs; iArg++) {

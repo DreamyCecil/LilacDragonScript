@@ -126,11 +126,11 @@ class LDS_API CLdsScriptEngine {
   // Evaluator
   public:
     // Execute the compiled expression
-    SLdsValue LdsExecute(CActionList &acaActions);
+    CLdsValue LdsExecute(CActionList &acaActions);
     // Evalute the expression
-    ELdsError LdsEvaluate(string strExpression, SLdsValue &valResult);
+    ELdsError LdsEvaluate(string strExpression, CLdsValue &valResult);
     // Evaluate compiled expression
-    ELdsError LdsEvaluateCompiled(CActionList acaActions, SLdsValue &valResult);
+    ELdsError LdsEvaluateCompiled(CActionList acaActions, CLdsValue &valResult);
     
   // Threads
   public:
@@ -143,7 +143,7 @@ class LDS_API CLdsScriptEngine {
     // Pause the thread
     CLdsThread *ThreadPause(void);
     // Execute the compiled inline script
-    SLdsValue ScriptExecute(CActionList acaActions, CLdsVarMap &mapArgs, CLdsInFuncMap *pmapInline = NULL);
+    CLdsValue ScriptExecute(CActionList acaActions, CLdsVarMap &mapArgs, CLdsInFuncMap *pmapInline = NULL);
     
   public:
     // Constructor
