@@ -1,0 +1,188 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Base">
+      <UniqueIdentifier>{b3472580-0e04-4d1f-86ad-b1a29129bca3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Functions">
+      <UniqueIdentifier>{03c4e523-fa96-4b6d-849b-409b390f0949}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Types">
+      <UniqueIdentifier>{8b840900-214b-44d1-ae75-02811218c476}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Types">
+      <UniqueIdentifier>{3c0ee906-5d97-4f75-b808-292b75c61615}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Compiler">
+      <UniqueIdentifier>{daefba17-c13b-4533-af4f-58cbc1876d3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Base">
+      <UniqueIdentifier>{07963865-fd6f-4ad0-bb2d-fc841e7f1886}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Functions">
+      <UniqueIdentifier>{c90450a6-d927-43a8-b0ec-f66d05b0355d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Execution">
+      <UniqueIdentifier>{a6c624b7-aa3d-4cbb-bea1-12accfafa8d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Execution">
+      <UniqueIdentifier>{258e2435-3bc3-47ee-9c57-91baa0ae1213}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Dreamy Structures">
+      <UniqueIdentifier>{100b8579-72b0-4754-8d7e-0703d324a21c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="LdsBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LdsHeader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LdsScriptEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LdsTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\LdsCompatibility.h">
+      <Filter>Header Files\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\LdsFormatting.h">
+      <Filter>Header Files\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Functions\LdsDefFunctions.h">
+      <Filter>Header Files\Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="Functions\LdsFunc.h">
+      <Filter>Header Files\Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="Functions\LdsMath.h">
+      <Filter>Header Files\Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\LdsAction.h">
+      <Filter>Header Files\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\LdsBuildNode.h">
+      <Filter>Header Files\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\LdsStruct.h">
+      <Filter>Header Files\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\LdsToken.h">
+      <Filter>Header Files\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\LdsValue.h">
+      <Filter>Header Files\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\LdsValueRef.h">
+      <Filter>Header Files\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Execution\LdsExecution.h">
+      <Filter>Header Files\Execution</Filter>
+    </ClInclude>
+    <ClInclude Include="Execution\LdsHandler.h">
+      <Filter>Header Files\Execution</Filter>
+    </ClInclude>
+    <ClInclude Include="Execution\LdsInlineCall.h">
+      <Filter>Header Files\Execution</Filter>
+    </ClInclude>
+    <ClInclude Include="Execution\LdsThread.h">
+      <Filter>Header Files\Execution</Filter>
+    </ClInclude>
+    <ClInclude Include="Variables\LdsVar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DreamyStructures\DataArray.h">
+      <Filter>Header Files\Dreamy Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="DreamyStructures\DataList.h">
+      <Filter>Header Files\Dreamy Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="DreamyStructures\DataMap.h">
+      <Filter>Header Files\Dreamy Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="DreamyStructures\DataStack.h">
+      <Filter>Header Files\Dreamy Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="DreamyStructures\DataStructures.h">
+      <Filter>Header Files\Dreamy Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="DreamyStructures\DataTemplates.h">
+      <Filter>Header Files\Dreamy Structures</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Base\LdsCompatibility.cpp">
+      <Filter>Source Files\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Base\LdsFormatting.cpp">
+      <Filter>Source Files\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Compiler\LdsBuilder.cpp">
+      <Filter>Source Files\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="Compiler\LdsCompiler.cpp">
+      <Filter>Source Files\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="Compiler\LdsParser.cpp">
+      <Filter>Source Files\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="Types\LdsStruct.cpp">
+      <Filter>Source Files\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Types\LdsValue.cpp">
+      <Filter>Source Files\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Variables\LdsVariables.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Functions\LdsDefFunctions.cpp">
+      <Filter>Source Files\Functions</Filter>
+    </ClCompile>
+    <ClCompile Include="Functions\LdsFunctions.cpp">
+      <Filter>Source Files\Functions</Filter>
+    </ClCompile>
+    <ClCompile Include="Execution\LdsEvaluator.cpp">
+      <Filter>Source Files\Execution</Filter>
+    </ClCompile>
+    <ClCompile Include="Execution\LdsExecution.cpp">
+      <Filter>Source Files\Execution</Filter>
+    </ClCompile>
+    <ClCompile Include="Execution\LdsScriptThreading.cpp">
+      <Filter>Source Files\Execution</Filter>
+    </ClCompile>
+    <ClCompile Include="Execution\LdsThread.cpp">
+      <Filter>Source Files\Execution</Filter>
+    </ClCompile>
+    <ClCompile Include="UsageExample.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DreamyStructures\DataArray.inl">
+      <Filter>Header Files\Dreamy Structures</Filter>
+    </None>
+    <None Include="DreamyStructures\DataList.inl">
+      <Filter>Header Files\Dreamy Structures</Filter>
+    </None>
+    <None Include="DreamyStructures\DataMap.inl">
+      <Filter>Header Files\Dreamy Structures</Filter>
+    </None>
+    <None Include="DreamyStructures\DataStack.inl">
+      <Filter>Header Files\Dreamy Structures</Filter>
+    </None>
+  </ItemGroup>
+</Project>

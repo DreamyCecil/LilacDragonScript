@@ -121,13 +121,13 @@ void Exec_Unary(void) {
 
     // TODO: Make string inversion
     case UOP_INVERT: {
-      bool bInvert = (valRef.val.GetNumber() >= 0.5f);
+      bool bInvert = (valRef.val.GetIndex() > 0);
       valRef.val = !bInvert;
       ThreadOut(true);
     } break;
 
     case UOP_BINVERT: {
-      int iInvert = (int)valRef.val.GetNumber();
+      int iInvert = valRef.val.GetIndex();
       valRef.val = ~iInvert;
       ThreadOut(true);
     } break;
@@ -221,7 +221,7 @@ void Exec_Binary(void) {
         }
         
         // expand the array
-        int ctResize = (val1.aArray.Count() + val2.GetNumber());
+        int ctResize = (val1.aArray.Count() + val2.GetIndex());
         val1.aArray.Resize(ctResize);
       } break;
         
@@ -231,7 +231,7 @@ void Exec_Binary(void) {
         }
         
         // shrink the array
-        int ctResize = (val1.aArray.Count() - val2.GetNumber());
+        int ctResize = (val1.aArray.Count() - val2.GetIndex());
         val1.aArray.Resize(ctResize);
       } break;
       
@@ -266,7 +266,7 @@ void Exec_Binary(void) {
         // direct 'val1 = val1.aArray' empties its own array before getting a value from it
         CDArray<SLdsValue> aCopy = val1.aArray;
         
-        int iArrayIndex = val2.GetNumber();
+        int iArrayIndex = val2.GetIndex();
         int iSize = aCopy.Count();
     
         // out of bounds
@@ -319,7 +319,7 @@ void Exec_Binary(void) {
 
         string str = val1.strValue;
         int ctStr = strlen(str.c_str());
-        int ctSub = val2.GetNumber();
+        int ctSub = val2.GetIndex();
 
         val1 = str.substr(0, ctStr - ctSub);
       } break;
@@ -335,7 +335,7 @@ void Exec_Binary(void) {
 
         string strMul = "";
 
-        for (int iCopy = 0; iCopy < val2.GetNumber(); iCopy++) {
+        for (int iCopy = 0; iCopy < val2.GetIndex(); iCopy++) {
           strMul += val1.strValue;
         }
 
@@ -348,9 +348,9 @@ void Exec_Binary(void) {
 
         // compare length
         if (!bStr1 && bStr2) {
-          bResult = int(val1.GetNumber()) == strlen(val2.strValue);
+          bResult = (val1.GetIndex() == strlen(val2.strValue));
         } else if (bStr1 && !bStr2) {
-          bResult = int(val2.GetNumber()) == strlen(val1.strValue);
+          bResult = (val2.GetIndex() == strlen(val1.strValue));
 
         // compare string contents
         } else {
@@ -365,9 +365,9 @@ void Exec_Binary(void) {
 
         // compare length
         if (!bStr1 && bStr2) {
-          bResult = int(val1.GetNumber()) != strlen(val2.strValue);
+          bResult = (val1.GetIndex() != strlen(val2.strValue));
         } else if (bStr1 && !bStr2) {
-          bResult = int(val2.GetNumber()) != strlen(val1.strValue);
+          bResult = (val2.GetIndex() != strlen(val1.strValue));
 
         // compare string contents
         } else {
@@ -395,7 +395,7 @@ void Exec_Binary(void) {
         
         string strCopy = val1.strValue;
         
-        int iCharIndex = val2.GetNumber();
+        int iCharIndex = val2.GetIndex();
         int iLength = strCopy.length();
     
         // out of bounds
@@ -415,6 +415,8 @@ void Exec_Binary(void) {
 
   } else {
     // get numbers
+    int iNum1 = val1.GetIndex();
+    int iNum2 = val2.GetIndex();
     float fNum1 = val1.GetNumber();
     float fNum2 = val2.GetNumber();
 
@@ -435,23 +437,23 @@ void Exec_Binary(void) {
       
       case LOP_IDIV:
         if (fNum2 != 0.0f) {
-          fNum1 = int(fNum1 / fNum2);
+          fNum1 = iNum1 / iNum2;
         } else {
           fNum1 = 0.0f;
         }
         break;
         
       // bitwise operators
-      case LOP_SH_L: fNum1 = int(fNum1) << int(fNum2); break;
-      case LOP_SH_R: fNum1 = int(fNum1) >> int(fNum2); break;
-      case LOP_B_AND: fNum1 = int(fNum1) & int(fNum2); break;
-      case LOP_B_XOR: fNum1 = int(fNum1) ^ int(fNum2); break;
-      case LOP_B_OR:  fNum1 = int(fNum1) | int(fNum2); break;
+      case LOP_SH_L: fNum1 = iNum1 << iNum2; break;
+      case LOP_SH_R: fNum1 = iNum1 >> iNum2; break;
+      case LOP_B_AND: fNum1 = iNum1 & iNum2; break;
+      case LOP_B_XOR: fNum1 = iNum1 ^ iNum2; break;
+      case LOP_B_OR:  fNum1 = iNum1 | iNum2; break;
 
       // conditional operators
-      case LOP_AND: fNum1 = (fNum1 >= 0.5f) && (fNum2 >= 0.5f); break;
-      case LOP_OR:  fNum1 = (fNum1 >= 0.5f) || (fNum2 >= 0.5f); break;
-      case LOP_XOR: fNum1 = ((fNum1 >= 0.5f) ^ (fNum2 >= 0.5f)) > 0; break;
+      case LOP_AND: fNum1 = (iNum1 > 0) && (iNum2 > 0); break;
+      case LOP_OR:  fNum1 = (iNum1 > 0) || (iNum2 > 0); break;
+      case LOP_XOR: fNum1 = ((iNum1 >= 0) ^ (iNum2 > 0)) > 0; break;
 
       case LOP_GT:  fNum1 = (fNum1 > fNum2); break;
       case LOP_GOE: fNum1 = (fNum1 >= fNum2); break;

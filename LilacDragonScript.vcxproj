@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{66D49482-DA22-43F3-9E65-1EC53F12EB7B}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>LilacDragonScript</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Base\LdsCompatibility.h" />
+    <ClInclude Include="Base\LdsFormatting.h" />
+    <ClInclude Include="DreamyStructures\DataArray.h" />
+    <ClInclude Include="DreamyStructures\DataList.h" />
+    <ClInclude Include="DreamyStructures\DataMap.h" />
+    <ClInclude Include="DreamyStructures\DataStack.h" />
+    <ClInclude Include="DreamyStructures\DataStructures.h" />
+    <ClInclude Include="DreamyStructures\DataTemplates.h" />
+    <ClInclude Include="Execution\LdsExecution.h" />
+    <ClInclude Include="Execution\LdsHandler.h" />
+    <ClInclude Include="Execution\LdsInlineCall.h" />
+    <ClInclude Include="Execution\LdsThread.h" />
+    <ClInclude Include="Functions\LdsDefFunctions.h" />
+    <ClInclude Include="Functions\LdsFunc.h" />
+    <ClInclude Include="Functions\LdsMath.h" />
+    <ClInclude Include="LdsBase.h" />
+    <ClInclude Include="LdsHeader.h" />
+    <ClInclude Include="LdsScriptEngine.h" />
+    <ClInclude Include="LdsTypes.h" />
+    <ClInclude Include="Types\LdsAction.h" />
+    <ClInclude Include="Types\LdsBuildNode.h" />
+    <ClInclude Include="Types\LdsStruct.h" />
+    <ClInclude Include="Types\LdsToken.h" />
+    <ClInclude Include="Types\LdsValue.h" />
+    <ClInclude Include="Types\LdsValueRef.h" />
+    <ClInclude Include="Variables\LdsVar.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Base\LdsCompatibility.cpp" />
+    <ClCompile Include="Base\LdsFormatting.cpp" />
+    <ClCompile Include="Compiler\LdsBuilder.cpp" />
+    <ClCompile Include="Compiler\LdsCompiler.cpp" />
+    <ClCompile Include="Compiler\LdsParser.cpp" />
+    <ClCompile Include="Execution\LdsEvaluator.cpp" />
+    <ClCompile Include="Execution\LdsExecution.cpp" />
+    <ClCompile Include="Execution\LdsScriptThreading.cpp" />
+    <ClCompile Include="Execution\LdsThread.cpp" />
+    <ClCompile Include="Functions\LdsDefFunctions.cpp" />
+    <ClCompile Include="Functions\LdsFunctions.cpp" />
+    <ClCompile Include="Types\LdsStruct.cpp" />
+    <ClCompile Include="Types\LdsValue.cpp" />
+    <ClCompile Include="UsageExample.cpp" />
+    <ClCompile Include="Variables\LdsVariables.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DreamyStructures\DataArray.inl" />
+    <None Include="DreamyStructures\DataList.inl" />
+    <None Include="DreamyStructures\DataMap.inl" />
+    <None Include="DreamyStructures\DataStack.inl" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -95,6 +95,15 @@ string SLdsValue::Print(void) {
   return "<undefined type>";
 };
 
+// Get integer value
+int SLdsValue::GetIndex(void) {
+  switch (eType) {
+    case EVT_INDEX: return iValue;
+    case EVT_FLOAT: return (int)fValue;
+  }
+  return 0;
+};
+
 // Get any number value
 float SLdsValue::GetNumber(void) {
   switch (eType) {
@@ -109,25 +118,32 @@ SLdsValue &SLdsValue::operator=(const SLdsValue &valOther) {
   if (this == &valOther) {
     return *this;
   }
-
-  eType = valOther.eType;
   
-  // clear containers
-  aArray.Clear();
-  sStruct.Clear();
+  // clear other values
+  Clear();
+  eType = valOther.eType;
 
   switch (eType) {
-    case EVT_INDEX: iValue = valOther.iValue; break;
-    case EVT_FLOAT: fValue = valOther.fValue; break;
-    case EVT_STRING: strcpy(strValue, valOther.strValue); break;
+    case EVT_INDEX:
+      iValue = valOther.iValue;
+      break;
+
+    case EVT_FLOAT:
+      fValue = valOther.fValue;
+      break;
+
+    case EVT_STRING:
+      strValue = new char[strlen(valOther.strValue) + 1];
+      strcpy(strValue, valOther.strValue);
+      break;
 
     case EVT_ARRAY:
-      fValue = 0.0f;
+      iValue = 0;
       aArray = valOther.aArray;
       break;
 
     case EVT_STRUCT:
-      fValue = 0.0f;
+      iValue = 0;
       sStruct = valOther.sStruct;
       break;
   }
@@ -136,28 +152,27 @@ SLdsValue &SLdsValue::operator=(const SLdsValue &valOther) {
 };
 
 SLdsValue &SLdsValue::operator=(const int &i) {
-  iValue = i;
+  Clear();
   eType = EVT_INDEX;
-  aArray.Clear();
-  sStruct.Clear();
+  iValue = i;
 
   return *this;
 };
 
 SLdsValue &SLdsValue::operator=(const float &f) {
-  fValue = f;
+  Clear();
   eType = EVT_FLOAT;
-  aArray.Clear();
-  sStruct.Clear();
+  fValue = f;
 
   return *this;
 };
 
 SLdsValue &SLdsValue::operator=(const string &str) {
-  strcpy(strValue, str.c_str());
+  Clear();
   eType = EVT_STRING;
-  aArray.Clear();
-  sStruct.Clear();
+
+  strValue = new char[str.length() + 1];
+  strcpy(strValue, str.c_str());
 
   return *this;
 };

@@ -21,26 +21,25 @@ struct LDS_API SLdsValue {
   union {
     int iValue; // index value
     float fValue; // float value
-    char strValue[256]; // string value
+    char *strValue; // string value
   };
 
   CDArray<SLdsValue> aArray; // array of values
   SLdsStruct sStruct; // structure with value fields
-  
-  // TODO: Each structure would have a unique ID (for example - Serious Sam entity ID) and a function that would be called
-  //       everytime a variable in the structure is changed and sends this variable (its position in the map) and a struct ID
-  //       That would allow hooking onto certain external objects and change them on the spot.
-  //       For example a line like 'entity.m_strName = "this";' would immediately change value in the 'm_strName' variable of this object in memory, not just the structure.
 
   // Constructors
   SLdsValue(void) : iValue(0), eType(EVT_INDEX) {};
   SLdsValue(const int &i) : iValue(i), eType(EVT_INDEX) {};
   SLdsValue(const float &f) : fValue(f), eType(EVT_FLOAT) {};
-  SLdsValue(const string &str) : eType(EVT_STRING) { strcpy(strValue, str.c_str()); };
+
+  SLdsValue(const string &str) : iValue(0), eType(EVT_STRING) {
+    strValue = new char[str.length() + 1];
+    strcpy(strValue, str.c_str());
+  };
 
   // Array constructor
   SLdsValue(const int &ct, SLdsValue valDef) :
-    fValue(0.0f), eType(EVT_ARRAY)
+    fValue(0), eType(EVT_ARRAY)
   {
     aArray.New(ct);
 
@@ -51,10 +50,24 @@ struct LDS_API SLdsValue {
   
   // Structure constructor
   SLdsValue(const int &iSetID, const CLdsVarMap &map, const bool &bSetStatic) :
-    fValue(0.0f), eType(EVT_STRUCT), sStruct(iSetID)
+    fValue(0), eType(EVT_STRUCT), sStruct(iSetID)
   {
     sStruct.mapVars = map;
     sStruct.bStatic = bSetStatic;
+  };
+
+  // Destructor
+  ~SLdsValue(void) {
+    Clear();
+  };
+
+  // Clear the values
+  inline void Clear(void) {
+    switch (eType) {
+      case EVT_STRING: delete[] strValue; break;
+      case EVT_ARRAY: aArray.Clear(); break;
+      case EVT_STRUCT: sStruct.Clear(); break;
+    }
   };
   
   // Type name
@@ -68,8 +81,10 @@ struct LDS_API SLdsValue {
   
   // Print the value
   string Print(void);
-
-  // Get any number value
+  
+  // Get integer value
+  inline int GetIndex(void);
+  // Get float value
   inline float GetNumber(void);
 
   // Assignment
