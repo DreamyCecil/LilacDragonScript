@@ -28,6 +28,8 @@ CLdsValue &CLdsValue::Assert(const ELdsValueType &eDesired) {
   string strGot = TypeName("a number", "a string", "an array", "a structure");
   
   LdsThrow(LER_TYPE, "Expected %s but got %s", strExpected.c_str(), strGot.c_str());
+
+  return *this;
 };
 
 CLdsValue &CLdsValue::AssertNumber(void) {
@@ -38,6 +40,8 @@ CLdsValue &CLdsValue::AssertNumber(void) {
   // type mismatch
   string strGot = TypeName("a number", "a string", "an array", "a structure");
   LdsThrow(LER_TYPE, "Expected a number but got %s", strGot.c_str());
+
+  return *this;
 };
   
 // Print the value
