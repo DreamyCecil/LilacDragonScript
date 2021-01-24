@@ -12,16 +12,8 @@ void ErrorOutput(const char *strError) {
 };
 
 // Random number function
-LdsReturn LDS_Random(CLdsValue *) {
+LdsReturn LDS_Random(LDS_ARGS) {
   return rand();
-};
-
-// Output function
-LdsReturn LDS_Print(CLdsValue *pArgs) {
-  const char *strPrint = LDS_NEXTSTR(pArgs).c_str();
-  printf("%s\n", strPrint);
-
-  return strPrint;
 };
 
 // Initial LDS setup
@@ -32,7 +24,6 @@ void SetupLDS(void) {
   // custom functions
   CLdsFuncMap mapFunc;
   mapFunc["Random"] = SLdsFunc(0, &LDS_Random);
-  mapFunc["Print"] = SLdsFunc(1, &LDS_Print);
 
   _ldsEngine.SetCustomFunctions(mapFunc);
 

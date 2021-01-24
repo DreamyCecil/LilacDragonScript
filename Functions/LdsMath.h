@@ -7,44 +7,44 @@
 #include <math.h>
 
 // Trigonometric functions
-inline LdsReturn LdsSin(CLdsValue *pArgs) {
-  return sinf(LDS_NEXTNUM(pArgs));
+inline LdsReturn LdsSin(LDS_ARGS) {
+  return sinf(LDS_NEXT_NUM);
 };
 
-inline LdsReturn LdsCos(CLdsValue *pArgs) {
-  return cosf(LDS_NEXTNUM(pArgs));
+inline LdsReturn LdsCos(LDS_ARGS) {
+  return cosf(LDS_NEXT_NUM);
 };
 
-inline LdsReturn LdsTan(CLdsValue *pArgs) {
-  return tanf(LDS_NEXTNUM(pArgs));
+inline LdsReturn LdsTan(LDS_ARGS) {
+  return tanf(LDS_NEXT_NUM);
 };
 
-inline LdsReturn LdsASin(CLdsValue *pArgs) {
-  return asinf(LDS_NEXTNUM(pArgs));
+inline LdsReturn LdsASin(LDS_ARGS) {
+  return asinf(LDS_NEXT_NUM);
 };
 
-inline LdsReturn LdsACos(CLdsValue *pArgs) {
-  return acosf(LDS_NEXTNUM(pArgs));
+inline LdsReturn LdsACos(LDS_ARGS) {
+  return acosf(LDS_NEXT_NUM);
 };
 
-inline LdsReturn LdsATan(CLdsValue *pArgs) {
-  return atanf(LDS_NEXTNUM(pArgs));
+inline LdsReturn LdsATan(LDS_ARGS) {
+  return atanf(LDS_NEXT_NUM);
 };
 
-inline LdsReturn LdsATan2(CLdsValue *pArgs) {
-  float fArg1 = LDS_NEXTNUM(pArgs);
-  float fArg2 = LDS_NEXTNUM(pArgs);
+inline LdsReturn LdsATan2(LDS_ARGS) {
+  float fArg1 = LDS_NEXT_NUM;
+  float fArg2 = LDS_NEXT_NUM;
   return atan2f(fArg1, fArg2);
 };
 
 // Power functions
-inline LdsReturn LdsSqrt(CLdsValue *pArgs) {
-  return sqrtf(LDS_NEXTNUM(pArgs));
+inline LdsReturn LdsSqrt(LDS_ARGS) {
+  return sqrtf(LDS_NEXT_NUM);
 };
 
-inline LdsReturn LdsRoot(CLdsValue *pArgs) {
-  float fNum = LDS_NEXTNUM(pArgs);
-  float fBase = LDS_NEXTNUM(pArgs);
+inline LdsReturn LdsRoot(LDS_ARGS) {
+  float fNum = LDS_NEXT_NUM;
+  float fBase = LDS_NEXT_NUM;
 
   // get number sign and turn into positive if needed
   float fSign = (fNum < 0.0f ? -1.0f : 1.0f);
@@ -54,66 +54,66 @@ inline LdsReturn LdsRoot(CLdsValue *pArgs) {
   return powf(fNum, 1.0f / fBase) * fSign;
 };
 
-inline LdsReturn LdsPow(CLdsValue *pArgs) {
-  float fArg1 = LDS_NEXTNUM(pArgs);
-  float fArg2 = LDS_NEXTNUM(pArgs);
+inline LdsReturn LdsPow(LDS_ARGS) {
+  float fArg1 = LDS_NEXT_NUM;
+  float fArg2 = LDS_NEXT_NUM;
   return powf(fArg1, fArg2);
 };
 
 // Exponential functions
-inline LdsReturn LdsExp(CLdsValue *pArgs) {
-  return expf(LDS_NEXTNUM(pArgs));
+inline LdsReturn LdsExp(LDS_ARGS) {
+  return expf(LDS_NEXT_NUM);
 };
 
-inline LdsReturn LdsLog(CLdsValue *pArgs) {
-  return logf(LDS_NEXTNUM(pArgs));
+inline LdsReturn LdsLog(LDS_ARGS) {
+  return logf(LDS_NEXT_NUM);
 };
 
-inline LdsReturn LdsLog2(CLdsValue *pArgs) {
+inline LdsReturn LdsLog2(LDS_ARGS) {
   // result of log2(e)
   #define LOG2_OF_E 1.44269504088896340736
 
-  return float(log(LDS_NEXTNUM(pArgs)) * LOG2_OF_E);
+  return float(log(LDS_NEXT_NUM) * LOG2_OF_E);
 };
 
-inline LdsReturn LdsLog10(CLdsValue *pArgs) {
-  return log10f(LDS_NEXTNUM(pArgs));
+inline LdsReturn LdsLog10(LDS_ARGS) {
+  return log10f(LDS_NEXT_NUM);
 };
 
 // Rounding functions
-inline LdsReturn LdsCeil(CLdsValue *pArgs) {
-  return ceilf(LDS_NEXTNUM(pArgs));
+inline LdsReturn LdsCeil(LDS_ARGS) {
+  return ceilf(LDS_NEXT_NUM);
 };
 
-inline LdsReturn LdsRound(CLdsValue *pArgs) {
-  return floorf(LDS_NEXTNUM(pArgs) + 0.5f);
+inline LdsReturn LdsRound(LDS_ARGS) {
+  return floorf(LDS_NEXT_NUM + 0.5f);
 };
 
-inline LdsReturn LdsFloor(CLdsValue *pArgs) {
-  return floorf(LDS_NEXTNUM(pArgs));
+inline LdsReturn LdsFloor(LDS_ARGS) {
+  return floorf(LDS_NEXT_NUM);
 };
 
 // Other
-inline LdsReturn LdsAbs(CLdsValue *pArgs) {
-  return (float)fabs(LDS_NEXTNUM(pArgs));
+inline LdsReturn LdsAbs(LDS_ARGS) {
+  return (float)fabs(LDS_NEXT_NUM);
 };
 
-inline LdsReturn LdsMin(CLdsValue *pArgs) {
-  float fArg1 = LDS_NEXTNUM(pArgs);
-  float fArg2 = LDS_NEXTNUM(pArgs);
+inline LdsReturn LdsMin(LDS_ARGS) {
+  float fArg1 = LDS_NEXT_NUM;
+  float fArg2 = LDS_NEXT_NUM;
   return (fArg1 > fArg2) ? fArg2 : fArg1;
 };
 
-inline LdsReturn LdsMax(CLdsValue *pArgs) {
-  float fArg1 = LDS_NEXTNUM(pArgs);
-  float fArg2 = LDS_NEXTNUM(pArgs);
+inline LdsReturn LdsMax(LDS_ARGS) {
+  float fArg1 = LDS_NEXT_NUM;
+  float fArg2 = LDS_NEXT_NUM;
   return (fArg1 > fArg2) ? fArg1 : fArg2;
 };
 
-inline LdsReturn LdsClamp(CLdsValue *pArgs) {
-  float fNum = LDS_NEXTNUM(pArgs);
-  float fDown = LDS_NEXTNUM(pArgs);
-  float fUp = LDS_NEXTNUM(pArgs);
+inline LdsReturn LdsClamp(LDS_ARGS) {
+  float fNum = LDS_NEXT_NUM;
+  float fDown = LDS_NEXT_NUM;
+  float fUp = LDS_NEXT_NUM;
   return (fNum >= fDown ? (fNum <= fUp ? fNum : fUp) : fDown);
 };
 

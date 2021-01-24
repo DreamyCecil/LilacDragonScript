@@ -4,23 +4,23 @@ extern CLdsScriptEngine *_pldsCurrent;
 extern CLdsThread *_psthCurrent;
 
 // Debug output
-LdsReturn LdsDebugOut(CLdsValue *pArgs) {
-  CLdsValue valPrint = LDS_NEXTARG(pArgs);
+LdsReturn LdsDebugOut(LDS_ARGS) {
+  CLdsValue valPrint = LDS_NEXT_ARG;
   _pldsCurrent->LdsOut("%s\n", valPrint.Print().c_str());
   
   return valPrint;
 };
 
 // Print a hexadecimal number
-LdsReturn LdsPrintHex(CLdsValue *pArgs) {
-  float fPrint = LDS_NEXTNUM(pArgs);
+LdsReturn LdsPrintHex(LDS_ARGS) {
+  float fPrint = LDS_NEXT_NUM;
   
   return LdsPrintF("%X", (int)fPrint);
 };
 
 // Pause the script execution
-LdsReturn LdsWait(CLdsValue *pArgs) {
-  float fWaitTime = LDS_NEXTNUM(pArgs);
+LdsReturn LdsWait(LDS_ARGS) {
+  float fWaitTime = LDS_NEXT_NUM;
   CLdsThread *psth = _pldsCurrent->ThreadPause();
   
   // current tick and wait ticks

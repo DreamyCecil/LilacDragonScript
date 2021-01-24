@@ -3,10 +3,10 @@
 #include "../LdsScriptEngine.h"
 
 // Debug output
-LdsReturn LdsDebugOut(CLdsValue *pArgs);
+LdsReturn LdsDebugOut(LDS_ARGS);
 
 // Print a hexadecimal number
-LdsReturn LdsPrintHex(CLdsValue *pArgs);
+LdsReturn LdsPrintHex(LDS_ARGS);
 
 // Pause the script execution
-LdsReturn LdsWait(CLdsValue *pArgs);
+LdsReturn LdsWait(LDS_ARGS);

@@ -19,26 +19,25 @@ inline string TypeName(const ELdsValueType &eType, const string &strFloat, const
 
 // Type assertion (for function arguments)
 CLdsValue &CLdsValue::Assert(const ELdsValueType &eDesired) {
-  // type mismatch
-  if (eType != eDesired) {
-    string strExpected = ::TypeName(eDesired, "a number", "a string", "an array", "a structure");
-    string strGot = TypeName("a number", "a string", "an array", "a structure");
-      
-    LdsThrow(LER_TYPE, "Expected %s but got %s", strExpected.c_str(), strGot.c_str());
+  if (eType == eDesired) {
+    return *this;
   }
-    
-  return *this;
+  
+  // type mismatch
+  string strExpected = ::TypeName(eDesired, "a number", "a string", "an array", "a structure");
+  string strGot = TypeName("a number", "a string", "an array", "a structure");
+  
+  LdsThrow(LER_TYPE, "Expected %s but got %s", strExpected.c_str(), strGot.c_str());
 };
 
 CLdsValue &CLdsValue::AssertNumber(void) {
-  // type mismatch
-  if (eType > EVT_FLOAT) {
-    string strGot = TypeName("a number", "a string", "an array", "a structure");
-      
-    LdsThrow(LER_TYPE, "Expected a number but got %s", strGot.c_str());
+  if (eType <= EVT_FLOAT) {
+    return *this;
   }
-    
-  return *this;
+
+  // type mismatch
+  string strGot = TypeName("a number", "a string", "an array", "a structure");
+  LdsThrow(LER_TYPE, "Expected a number but got %s", strGot.c_str());
 };
   
 // Print the value
