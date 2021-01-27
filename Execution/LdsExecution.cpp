@@ -7,7 +7,7 @@ extern CLdsThread *_psthCurrent;
 extern CLdsScriptEngine *_pldsCurrent = NULL;
 
 // Execution stack
-extern CDStack<SLdsValueRef> *_pavalStack = NULL;
+extern CDStack<CLdsValueRef> *_pavalStack = NULL;
 
 // Current action
 static CCompAction *_ca = NULL;
@@ -70,7 +70,7 @@ void Exec_Val(void) {
         valArray.aArray[iArrayVal] = avalArray[iArrayVal];
       }
       
-      _pavalStack->Push(SLdsValueRef(valArray));
+      _pavalStack->Push(CLdsValueRef(valArray));
       ThreadOut(true);
       
     // structure
@@ -93,13 +93,13 @@ void Exec_Val(void) {
       // fill the structure
       CLdsValue valStruct = CLdsValue(-1, mapVars, (iContainer > 1));
       
-      _pavalStack->Push(SLdsValueRef(valStruct));
+      _pavalStack->Push(CLdsValueRef(valStruct));
       ThreadOut(true);
     }
 
   // value
   } else {
-    _pavalStack->Push(SLdsValueRef(_ca->lt_valValue));
+    _pavalStack->Push(CLdsValueRef(_ca->lt_valValue));
     ThreadOut(true);
   }
 };
@@ -107,7 +107,7 @@ void Exec_Val(void) {
 // Unary operations
 void Exec_Unary(void) {
   ThreadOut(false);
-  SLdsValueRef valRef = _pavalStack->Pop();
+  CLdsValueRef valRef = _pavalStack->Pop();
 
   if (valRef.val.eType > EVT_FLOAT) {
     LdsThrow(LEX_UNARY, "Cannot perform unary operation on a value that isn't a number at %s", _ca->PrintPos().c_str());
@@ -139,8 +139,8 @@ void Exec_Unary(void) {
 
 // Binary operations
 void Exec_Binary(void) {
-  SLdsValueRef valRef2 = _pavalStack->Pop();
-  SLdsValueRef valRef1 = _pavalStack->Pop();
+  CLdsValueRef valRef2 = _pavalStack->Pop();
+  CLdsValueRef valRef1 = _pavalStack->Pop();
 
   CLdsValue val1 = valRef1.val;
   CLdsValue val2 = valRef2.val;
@@ -204,7 +204,7 @@ void Exec_Binary(void) {
       default: LdsThrow(LEX_BINARY, "Cannot apply operator %d to %s and %s at %s", _ca->lt_valValue.iValue, strType1.c_str(), strType2.c_str(), _ca->PrintPos().c_str());
     }
     
-    _pavalStack->Push(SLdsValueRef(val1, valRef1.pvar, pvalStructAccess, valRef1.strVar, strStructVar, bConstVar));
+    _pavalStack->Push(CLdsValueRef(val1, valRef1.pvar, pvalStructAccess, valRef1.strVar, strStructVar, bConstVar));
     return;
   }
 
@@ -292,7 +292,7 @@ void Exec_Binary(void) {
       default: LdsThrow(LEX_BINARY, "Cannot apply operator %d to %s and %s at %s", _ca->lt_valValue.iValue, strType1.c_str(), strType2.c_str(), _ca->PrintPos().c_str());
     }
     
-    _pavalStack->Push(SLdsValueRef(val1, valRef1.pvar, pvalArrayAccess, valRef1.strVar, valRef1.strRef, valRef1.bConst));
+    _pavalStack->Push(CLdsValueRef(val1, valRef1.pvar, pvalArrayAccess, valRef1.strVar, valRef1.strRef, valRef1.bConst));
     ThreadOut(true);
     return;
   }
@@ -469,7 +469,7 @@ void Exec_Binary(void) {
     val1 = fNum1;
   }
   
-  _pavalStack->Push(SLdsValueRef(val1));
+  _pavalStack->Push(CLdsValueRef(val1));
   ThreadOut(true);
 };
 
@@ -485,7 +485,7 @@ void Exec_Get(void) {
   
   CLdsValue *pvalRef = &pvar->var_valValue;
   
-  _pavalStack->Push(SLdsValueRef(*pvalRef, pvar, NULL, strName, strName, false));
+  _pavalStack->Push(CLdsValueRef(*pvalRef, pvar, NULL, strName, strName, false));
   ThreadOut(true);
 };
 
@@ -505,7 +505,7 @@ void Exec_Set(void) {
   }
   
   ThreadOut(false);
-  SLdsValueRef valRef = _pavalStack->Pop();
+  CLdsValueRef valRef = _pavalStack->Pop();
   
   // check for an array accessor
   if (valRef.pvalAccess != NULL && pvar == valRef.pvar) {
@@ -531,7 +531,7 @@ void Exec_GetLocal(void) {
   SLdsVar *pvar = &mapLocals.GetValue(iLocal);
   CLdsValue *pvalLocal = &pvar->var_valValue;
   
-  _pavalStack->Push(SLdsValueRef(*pvalLocal, pvar, NULL, strName, strName, false));
+  _pavalStack->Push(CLdsValueRef(*pvalLocal, pvar, NULL, strName, strName, false));
   ThreadOut(true);
 };
 
@@ -547,7 +547,7 @@ void Exec_SetLocal(void) {
   }
   
   ThreadOut(false);
-  SLdsValueRef valRef = _pavalStack->Pop();
+  CLdsValueRef valRef = _pavalStack->Pop();
   
   // check for an array accessor
   if (valRef.pvalAccess != NULL && pvar == valRef.pvar) {
@@ -565,7 +565,7 @@ void Exec_SetLocal(void) {
 
 // Set variable through the accessor
 void Exec_SetAccessor(void) {
-  SLdsValueRef valRef = _pavalStack->Pop();
+  CLdsValueRef valRef = _pavalStack->Pop();
   
   // check for an array accessor
   if (valRef.pvalAccess == NULL) {
@@ -592,7 +592,7 @@ void Exec_Call(void) {
   CLdsValueList avalArgs = MakeValueList(*_pavalStack, _ca->lt_iArg);
 
   // call the function
-  SLdsValueRef valValue = _pldsCurrent->CallFunction(_ca->lt_valValue.strValue, avalArgs);
+  CLdsValueRef valValue = _pldsCurrent->CallFunction(_ca->lt_valValue.strValue, avalArgs);
   
   _pavalStack->Push(valValue);
   ThreadOut(true);

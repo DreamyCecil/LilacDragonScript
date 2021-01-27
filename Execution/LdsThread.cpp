@@ -3,7 +3,7 @@
 #include "../LdsScriptEngine.h"
 
 extern CLdsScriptEngine *_pldsCurrent;
-extern CDStack<SLdsValueRef> *_pavalStack;
+extern CDStack<CLdsValueRef> *_pavalStack;
 extern CCompAction &SetCurrentAction(CCompAction *pcaCurrent);
 
 // Currently active thread
@@ -20,10 +20,10 @@ static const char *_astrActionNames[] = {
 
 // Constructor
 CLdsThread::CLdsThread(CActionList aca, CLdsScriptEngine *plds) :
-  sth_pldsEngine(plds), sth_bQuickRun(false),
+  sth_pldsEngine(plds), sth_bQuickRun(false), sth_bDebugOutput(false),
   sth_acaActions(aca), sth_iPos(0),
   sth_eStatus(ETS_FINISHED), sth_eError(LER_OK),
-  sth_pReference(NULL), sth_pResult(NULL), sth_bDebugOutput(false)
+  sth_pReference(NULL), sth_pPreRun(NULL), sth_pResult(NULL)
 {
   
 };
@@ -87,10 +87,15 @@ EThreadStatus CLdsThread::Resume(void) {
     return ETS_FINISHED;
   }
 
+  // call the pre-run function
+  if (sth_pPreRun != NULL) {
+    sth_pPreRun(this);
+  }
+
   // remember previous thread
   CLdsScriptEngine *pldsPrev = _pldsCurrent;
   CLdsThread *psthPrev = _psthCurrent;
-  CDStack<SLdsValueRef> *pavalPrev = _pavalStack;
+  CDStack<CLdsValueRef> *pavalPrev = _pavalStack;
   
   _pldsCurrent = sth_pldsEngine;
   _psthCurrent = this;
@@ -295,7 +300,7 @@ EThreadStatus CLdsThread::Resume(void) {
       // return from an inline function
       if (iPos == iLen && sth_aicCalls.Count() > 0) {
         // return value
-        SLdsValueRef valRefResult = GetResult();
+        CLdsValueRef valRefResult = GetResult();
         
         // restore position
         iPos = ReturnFromInline();
@@ -341,8 +346,8 @@ EThreadStatus CLdsThread::Resume(void) {
 };
 
 // Get thread result
-SLdsValueRef CLdsThread::GetResult(void) {
-  CDStack<SLdsValueRef> *paval = &sth_avalStack;
+CLdsValueRef CLdsThread::GetResult(void) {
+  CDStack<CLdsValueRef> *paval = &sth_avalStack;
   
   // get inline stack
   if (sth_aicCalls.Count() > 0) {
@@ -350,7 +355,7 @@ SLdsValueRef CLdsThread::GetResult(void) {
   }
   
   if (paval->Count() <= 0) {
-    return SLdsValueRef(0.0f);
+    return CLdsValueRef(0.0f);
   }
   
   ThreadOut(false);
@@ -430,7 +435,7 @@ int CLdsThread::ReturnFromInline(void) {
 };
 
 // Fill a value list with values from the stack
-CLdsValueList MakeValueList(CDStack<SLdsValueRef> &avalStack, int ctValues) {
+CLdsValueList MakeValueList(CDStack<CLdsValueRef> &avalStack, int ctValues) {
   // make a list of values
   CLdsValueList aval;
   aval.New(ctValues);

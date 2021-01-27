@@ -6,7 +6,7 @@
 struct SLdsInlineCall {
   string strFunc; // inline function name
   CDList<string> astrLocals; // inline function locals 
-  CDStack<SLdsValueRef> avalStack; // stack of inline values
+  CDStack<CLdsValueRef> avalStack; // stack of inline values
   
   CActionList acaReturn; // actions to return
   int iPos; // position to return to

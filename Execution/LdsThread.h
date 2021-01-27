@@ -16,13 +16,14 @@ class LDS_API CLdsThread {
   public:
     class CLdsScriptEngine *sth_pldsEngine; // engine this thread belongs to
     bool sth_bQuickRun; // the whole thread is being executed in one run (via ScriptExecute)
+    bool sth_bDebugOutput; // debug output for every action
     
     CActionList sth_acaActions; // compiled actions
     int sth_iPos; // current position in the thread
     
     CDStack<SLdsInlineCall> sth_aicCalls; // inline function calls
   
-    CDStack<SLdsValueRef> sth_avalStack; // stack of values
+    CDStack<CLdsValueRef> sth_avalStack; // stack of values
     CDStack<int> sth_aiJumpStack; // stack of actions to jump to
     CLdsVarMap sth_mapLocals; // local variables to this specific thread (script)
     CLdsInFuncMap sth_mapInlineFunc; // inline functions
@@ -30,10 +31,10 @@ class LDS_API CLdsThread {
     CLdsValue sth_valResult; // value or error depending on status
     EThreadStatus sth_eStatus; // current thread status
     ELdsError sth_eError; // error code for the error status
-    
-    void *sth_pReference; // some reference data for the result function
+
+    void *sth_pReference; // some reference data for the functions
+    void (*sth_pPreRun)(CLdsThread *psth); // function call before running the thread
     void (*sth_pResult)(CLdsThread *psth); // function call in the end of the run
-    bool sth_bDebugOutput; // debug output for every action
 
     // Constructor & destructor
     CLdsThread(CActionList aca, CLdsScriptEngine *plds);
@@ -49,7 +50,7 @@ class LDS_API CLdsThread {
     EThreadStatus Resume(void);
     
     // Get thread result
-    SLdsValueRef GetResult(void);
+    CLdsValueRef GetResult(void);
     
     // Call the inline function
     void CallInlineFunction(string strFunc, CLdsValueList &avalArgs);
@@ -63,7 +64,7 @@ class LDS_API CLdsThread {
 };
 
 // Fill a value list with values from the stack
-CLdsValueList MakeValueList(CDStack<SLdsValueRef> &avalStack, int ctValues);
+CLdsValueList MakeValueList(CDStack<CLdsValueRef> &avalStack, int ctValues);
 
 // TEMP
 void ThreadOut(bool bPush);
