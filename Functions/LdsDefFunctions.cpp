@@ -13,9 +13,9 @@ LdsReturn LdsDebugOut(LDS_ARGS) {
 
 // Print a hexadecimal number
 LdsReturn LdsPrintHex(LDS_ARGS) {
-  float fPrint = LDS_NEXT_NUM;
+  int iPrint = LDS_NEXT_INT;
   
-  return LdsPrintF("%X", (int)fPrint);
+  return LdsPrintF("%X", iPrint);
 };
 
 // Pause the script execution

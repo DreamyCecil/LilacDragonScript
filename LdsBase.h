@@ -20,6 +20,7 @@ typedef unsigned char LdsFlags; // script flags
 // Lists
 typedef CDArray<class CLdsValue> CLdsArray; // value array
 typedef CDList<class CLdsValue> CLdsValueList; // value list
+typedef CDMap<string, class CLdsValue> CLdsValueMap; // value map
 typedef CDMap<string, struct SLdsFunc> CLdsFuncMap; // functions map
 typedef CDMap<string, struct SLdsInlineFunc> CLdsInFuncMap; // inline functions map
 typedef CDMap<string, struct SLdsVar> CLdsVarMap; // variables map

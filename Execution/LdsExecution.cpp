@@ -422,51 +422,48 @@ void Exec_Binary(void) {
 
     switch (iOperation) {
       // operators
-      case LOP_ADD: fNum1 += fNum2; break;
-      case LOP_SUB: fNum1 -= fNum2; break;
-      case LOP_MUL: fNum1 *= fNum2; break;
-      case LOP_DIV: fNum1 /= fNum2; break;
+      case LOP_ADD: val1 = (fNum1 + fNum2); break;
+      case LOP_SUB: val1 = (fNum1 - fNum2); break;
+      case LOP_MUL: val1 = (fNum1 * fNum2); break;
+      case LOP_DIV: val1 = (fNum1 / fNum2); break;
     
       case LOP_FMOD:
         if (fNum2 != 0.0f) {
-          fNum1 = fmodf(fNum1, fNum2);
+          val1 = fmodf(fNum1, fNum2);
         } else {
-          fNum1 = 0.0f;
+          val1 = 0.0f;
         }
         break;
       
       case LOP_IDIV:
-        if (fNum2 != 0.0f) {
-          fNum1 = iNum1 / iNum2;
+        if (iNum2 != 0) {
+          val1 = (iNum1 / iNum2);
         } else {
-          fNum1 = 0.0f;
+          val1 = 0;
         }
         break;
         
       // bitwise operators
-      case LOP_SH_L: fNum1 = iNum1 << iNum2; break;
-      case LOP_SH_R: fNum1 = iNum1 >> iNum2; break;
-      case LOP_B_AND: fNum1 = iNum1 & iNum2; break;
-      case LOP_B_XOR: fNum1 = iNum1 ^ iNum2; break;
-      case LOP_B_OR:  fNum1 = iNum1 | iNum2; break;
+      case LOP_SH_L:  val1 = (iNum1 << iNum2); break;
+      case LOP_SH_R:  val1 = (iNum1 >> iNum2); break;
+      case LOP_B_AND: val1 = (iNum1 &  iNum2); break;
+      case LOP_B_XOR: val1 = (iNum1 ^  iNum2); break;
+      case LOP_B_OR:  val1 = (iNum1 |  iNum2); break;
 
       // conditional operators
-      case LOP_AND: fNum1 = (iNum1 > 0) && (iNum2 > 0); break;
-      case LOP_OR:  fNum1 = (iNum1 > 0) || (iNum2 > 0); break;
-      case LOP_XOR: fNum1 = ((iNum1 >= 0) ^ (iNum2 > 0)) > 0; break;
+      case LOP_AND: val1 = (iNum1 > 0) && (iNum2 > 0); break;
+      case LOP_OR:  val1 = (iNum1 > 0) || (iNum2 > 0); break;
+      case LOP_XOR: val1 = ((iNum1 >= 0) ^ (iNum2 > 0)) > 0; break;
 
-      case LOP_GT:  fNum1 = (fNum1 > fNum2); break;
-      case LOP_GOE: fNum1 = (fNum1 >= fNum2); break;
-      case LOP_LT:  fNum1 = (fNum1 < fNum2); break;
-      case LOP_LOE: fNum1 = (fNum1 <= fNum2); break;
-      case LOP_EQ:  fNum1 = (fNum1 == fNum2); break;
-      case LOP_NEQ: fNum1 = (fNum1 != fNum2); break;
+      case LOP_GT:  val1 = (fNum1 >  fNum2); break;
+      case LOP_GOE: val1 = (fNum1 >= fNum2); break;
+      case LOP_LT:  val1 = (fNum1 <  fNum2); break;
+      case LOP_LOE: val1 = (fNum1 <= fNum2); break;
+      case LOP_EQ:  val1 = (fNum1 == fNum2); break;
+      case LOP_NEQ: val1 = (fNum1 != fNum2); break;
       
       default: LdsThrow(LEX_BINARY, "Cannot apply operator %d at %s", _ca->lt_valValue.iValue, _ca->PrintPos().c_str());
     }
-
-    // assign a number
-    val1 = fNum1;
   }
   
   _pavalStack->Push(CLdsValueRef(val1));

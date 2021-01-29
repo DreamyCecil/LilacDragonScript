@@ -51,9 +51,15 @@ class LDS_API CLdsScriptEngine {
     bool LdsVariableValue(const string &strVar, SLdsVar *&pvar);
   
   // Parser
-  private:
-    CTokenList _aetTokens; // Tokens from the script
+  public:
+    CLdsValueMap _mapLdsConstants; // custom constants
     
+    // Set custom constants
+    void SetParserConstants(CLdsValueMap &mapFrom);
+    
+  private:
+    CTokenList _aetTokens; // tokens from the script
+
     // Parse the script
     void ParseScript(string strScript);
 
@@ -62,6 +68,7 @@ class LDS_API CLdsScriptEngine {
     void AddLdsToken(const ELdsToken &eType, const int &iPos, const int &iValue);
     void AddLdsToken(const ELdsToken &eType, const int &iPos, const float &fValue);
     void AddLdsToken(const ELdsToken &eType, const int &iPos, const string &strValue);
+    void AddLdsToken(const ELdsToken &eType, const int &iPos, const CLdsValue &valValue);
     
   // Builder
   private:

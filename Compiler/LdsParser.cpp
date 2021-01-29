@@ -1,6 +1,15 @@
 #include "../LdsScriptEngine.h"
 #include <math.h>
 
+// Set custom constants from the map
+void CLdsScriptEngine::SetParserConstants(CLdsValueMap &mapFrom) {
+  // reset the map
+  _mapLdsConstants.Clear();
+  
+  // add custom constants
+  _mapLdsConstants.AddFrom(mapFrom, true);
+};
+
 // Clamp the value
 inline float Clamp(const float &fNum, const float &fDown, const float &fUp) {
   return (fNum >= fDown ? (fNum <= fUp ? fNum : fUp) : fDown);
@@ -491,6 +500,10 @@ void CLdsScriptEngine::ParseScript(string strScript) {
           } else if (strName == "function") {
             AddLdsToken(LTK_FUNC, iPrintPos);
 
+          // custom constants
+          } else if (_mapLdsConstants.FindKeyIndex(strName) != -1) {
+            AddLdsToken(LTK_VAL, iPrintPos, _mapLdsConstants[strName]);
+
           } else {
             AddLdsToken(LTK_ID, iPrintPos, strName);
           }
@@ -520,4 +533,8 @@ void CLdsScriptEngine::AddLdsToken(const ELdsToken &eType, const int &iPos, cons
 
 void CLdsScriptEngine::AddLdsToken(const ELdsToken &eType, const int &iPos, const string &strValue) {
   _aetTokens.Add(CLdsToken(eType, iPos, strValue, -1));
+};
+
+void CLdsScriptEngine::AddLdsToken(const ELdsToken &eType, const int &iPos, const CLdsValue &valValue) {
+  _aetTokens.Add(CLdsToken(eType, iPos, valValue, -1));
 };
