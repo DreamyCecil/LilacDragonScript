@@ -11,8 +11,8 @@ void CLdsScriptEngine::SetParserConstants(CLdsValueMap &mapFrom) {
 };
 
 // Clamp the value
-inline float Clamp(const float &fNum, const float &fDown, const float &fUp) {
-  return (fNum >= fDown ? (fNum <= fUp ? fNum : fUp) : fDown);
+inline int Clamp(const int &iNum, const int &iDown, const int &iUp) {
+  return (iNum >= iDown ? (iNum <= iUp ? iNum : iUp) : iDown);
 };
 
 // Parse the script

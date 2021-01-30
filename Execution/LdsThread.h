@@ -65,6 +65,3 @@ class LDS_API CLdsThread {
 
 // Fill a value list with values from the stack
 CLdsValueList MakeValueList(CDStack<CLdsValueRef> &avalStack, int ctValues);
-
-// TEMP
-void ThreadOut(bool bPush);

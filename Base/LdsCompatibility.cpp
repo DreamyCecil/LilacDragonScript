@@ -12,19 +12,27 @@ void LdsThrow(const ELdsError &eError, const char *strFormat, ...) {
   throw SLdsError(eError, strError);
 };
 
+// Set output printing functions
+void CLdsScriptEngine::LdsOutputFunctions(void *pPrint, void *pError) {
+  // reset to standard printing function
+  if (pPrint == NULL) {
+    pPrint = printf;
+  }
+  _pLdsPrintFunction = (void (*)(const char *))pPrint;
+
+  // copy print function if no error function
+  if (pError == NULL) {
+    pError = pPrint;
+  }
+  _pLdsErrorFunction = (void (*)(const char *))pError;
+};
+
 // Print out formatted string
 void CLdsScriptEngine::LdsOut(const char *strFormat, ...) {
   va_list arg;
   va_start(arg, strFormat);
 
   string strOut = LdsVPrintF(strFormat, arg);
-
-  // no output function
-  if (_pLdsPrintFunction == NULL) {
-    printf(strOut.c_str());
-    return;
-  }
-
   _pLdsPrintFunction(strOut.c_str());
 };
 
@@ -34,18 +42,5 @@ void CLdsScriptEngine::LdsErrorOut(const char *strFormat, ...) {
   va_start(arg, strFormat);
 
   string strOut = LdsVPrintF(strFormat, arg);
-
-  // check the error function
-  if (_pLdsErrorFunction == NULL) {
-    // check the print function
-    if (_pLdsPrintFunction == NULL) {
-      printf(strOut.c_str());
-      return;
-    }
-
-    _pLdsPrintFunction(strOut.c_str());
-    return;
-  }
-
   _pLdsErrorFunction(strOut.c_str());
 };

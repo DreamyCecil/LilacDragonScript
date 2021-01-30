@@ -207,7 +207,7 @@ EThreadStatus CLdsThread::Resume(void) {
             }
           }
           
-          sth_mapLocals[strName] = SLdsVar(0.0f, bConst);
+          sth_mapLocals[strName] = SLdsVar(0, bConst);
         } break;
         
         // Apply a thread directive
@@ -229,7 +229,6 @@ EThreadStatus CLdsThread::Resume(void) {
         } break;
       
         case LCA_JUMPIF: {
-          ThreadOut(false);
           CLdsValue val = _pavalStack->Pop().val;
           
           if (val.IsTrue()) {
@@ -238,7 +237,6 @@ EThreadStatus CLdsThread::Resume(void) {
         } break;
     
         case LCA_JUMPUNLESS: {
-          ThreadOut(false);
           CLdsValue val = _pavalStack->Pop().val;
           
           if (!val.IsTrue()) {
@@ -247,7 +245,6 @@ EThreadStatus CLdsThread::Resume(void) {
         } break;
       
         case LCA_AND: {
-          ThreadOut(false);
           CLdsValue val = _pavalStack->Top().val;
           
           if (val.IsTrue()) {
@@ -258,7 +255,6 @@ EThreadStatus CLdsThread::Resume(void) {
         } break;
       
         case LCA_OR: {
-          ThreadOut(false);
           CLdsValue val = _pavalStack->Top().val;
           
           if (val.IsTrue()) {
@@ -270,9 +266,7 @@ EThreadStatus CLdsThread::Resume(void) {
     
         // Switch block
         case LCA_SWITCH: {
-          ThreadOut(false);
           CLdsValue valCase = _pavalStack->Pop().val;
-          ThreadOut(false);
           CLdsValue valDesired = _pavalStack->Top().val;
       
           if (valCase == valDesired) {
@@ -284,15 +278,9 @@ EThreadStatus CLdsThread::Resume(void) {
         // Finish execution
         case LCA_RETURN: iPos = iLen; break;
         // Discard the last entry
-        case LCA_DISCARD:
-          ThreadOut(false);
-          _pavalStack->Pop();
-          break;
+        case LCA_DISCARD: _pavalStack->Pop(); break;
         // Duplicate the last entry
-        case LCA_DUP:
-          _pavalStack->Push(_pavalStack->Top());
-          ThreadOut(true);
-          break;
+        case LCA_DUP: _pavalStack->Push(_pavalStack->Top()); break;
       
         default: LdsThrow(LEX_ACTION, "Can't run action %s at %s", strAction, ca.PrintPos().c_str());
       }
@@ -358,7 +346,6 @@ CLdsValueRef CLdsThread::GetResult(void) {
     return CLdsValueRef(0.0f);
   }
   
-  ThreadOut(false);
   return paval->Pop();
 };
 
@@ -441,39 +428,8 @@ CLdsValueList MakeValueList(CDStack<CLdsValueRef> &avalStack, int ctValues) {
   aval.New(ctValues);
 
   while (ctValues-- > 0) {
-    ThreadOut(false);
     aval[ctValues] = avalStack.Pop().val;
   }
   
   return aval;
-};
-
-// TEMP
-void ThreadOut(bool bPush) {
-  // no print function
-  /*if (_pldsCurrent == NULL || _pldsCurrent->_pLdsPrintFunction == NULL) {
-    return;
-  }
-  
-  // no stack
-  if (_pavalStack == NULL) {
-    return;
-  }
-  
-  // stack values
-  int ct = _pavalStack->Count();
-  string strVal = "Stack is empty"; 
-  if (ct > 0) {
-    strVal = "'"+_pavalStack->Top().Print()+"'";
-  }
-
-  string strOut = "";
-  
-  if (bPush) {
-    strOut = LdsPrintF("^cff7f00[STACK Push] ^caaaaaa%s (%d)\n", strVal.c_str(), ct);
-  } else {
-    strOut = LdsPrintF("^c00ffff[STACK Pop]  ^caaaaaa%s (%d)\n", strVal.c_str(), ct);
-  }
-  
-  _pldsCurrent->_pLdsPrintFunction(strOut.c_str());*/
 };

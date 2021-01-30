@@ -19,7 +19,7 @@ LdsReturn LDS_Random(LDS_ARGS) {
 // Initial LDS setup
 void SetupLDS(void) {
   // hook the error output function
-  _ldsEngine._pLdsErrorFunction = (void (*)(const char *))ErrorOutput;
+  _ldsEngine.LdsOutputFunctions(NULL, ErrorOutput);
 
   // custom functions
   CLdsFuncMap mapFunc;
@@ -58,7 +58,7 @@ int main() {
           strRandom += strHello[Random() % 13];
         }
 
-        Print((MAX_COUNT-ctRepeat) + ": " + strRandom);
+        Print((MAX_COUNT-ctRepeat-1) + ": " + strRandom);
       }
 
       Print(""); // empty line

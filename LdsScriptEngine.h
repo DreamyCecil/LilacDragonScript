@@ -14,6 +14,9 @@ class LDS_API CLdsScriptEngine {
     void (*_pLdsPrintFunction)(const char *); // Custom output function
     void (*_pLdsErrorFunction)(const char *); // Custom error output function
     void (*_pDestructorFunc)(CLdsScriptEngine *plds); // A function to call after destruction
+
+    // Set output printing functions
+    void LdsOutputFunctions(void *pPrint, void *pError);
     
     // Print out formatted string
     void LdsOut(const char *strFormat, ...);
@@ -156,8 +159,8 @@ class LDS_API CLdsScriptEngine {
     // Constructor
     CLdsScriptEngine(void) :
       // Compatibility
-      _pLdsPrintFunction(NULL),
-      _pLdsErrorFunction(NULL),
+      _pLdsPrintFunction((void (*)(const char *))printf),
+      _pLdsErrorFunction((void (*)(const char *))printf),
       _pDestructorFunc(NULL),
       
       // Builder

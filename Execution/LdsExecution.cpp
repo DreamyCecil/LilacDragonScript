@@ -61,7 +61,6 @@ void Exec_Val(void) {
       
       // get array entries
       for (int iPopVal = ctValues-1; iPopVal >= 0; iPopVal--) {
-        ThreadOut(false);
         avalArray[iPopVal] = _pavalStack->Pop().val;
       }
       
@@ -71,7 +70,6 @@ void Exec_Val(void) {
       }
       
       _pavalStack->Push(CLdsValueRef(valArray));
-      ThreadOut(true);
       
     // structure
     } else {
@@ -92,21 +90,17 @@ void Exec_Val(void) {
       
       // fill the structure
       CLdsValue valStruct = CLdsValue(-1, mapVars, (iContainer > 1));
-      
       _pavalStack->Push(CLdsValueRef(valStruct));
-      ThreadOut(true);
     }
 
   // value
   } else {
     _pavalStack->Push(CLdsValueRef(_ca->lt_valValue));
-    ThreadOut(true);
   }
 };
 
 // Unary operations
 void Exec_Unary(void) {
-  ThreadOut(false);
   CLdsValueRef valRef = _pavalStack->Pop();
 
   if (valRef.val.eType > EVT_FLOAT) {
@@ -116,20 +110,17 @@ void Exec_Unary(void) {
   switch (_ca->lt_valValue.iValue) {
     case UOP_NEGATE:
       valRef.val = -valRef.val.GetNumber();
-      ThreadOut(true);
       break;
 
     // TODO: Make string inversion
     case UOP_INVERT: {
       bool bInvert = (valRef.val.GetIndex() > 0);
       valRef.val = !bInvert;
-      ThreadOut(true);
     } break;
 
     case UOP_BINVERT: {
       int iInvert = valRef.val.GetIndex();
       valRef.val = ~iInvert;
-      ThreadOut(true);
     } break;
   }
 
@@ -293,7 +284,6 @@ void Exec_Binary(void) {
     }
     
     _pavalStack->Push(CLdsValueRef(val1, valRef1.pvar, pvalArrayAccess, valRef1.strVar, valRef1.strRef, valRef1.bConst));
-    ThreadOut(true);
     return;
   }
 
@@ -467,7 +457,6 @@ void Exec_Binary(void) {
   }
   
   _pavalStack->Push(CLdsValueRef(val1));
-  ThreadOut(true);
 };
 
 // Get variable value
@@ -483,7 +472,6 @@ void Exec_Get(void) {
   CLdsValue *pvalRef = &pvar->var_valValue;
   
   _pavalStack->Push(CLdsValueRef(*pvalRef, pvar, NULL, strName, strName, false));
-  ThreadOut(true);
 };
 
 // Set variable value
@@ -501,7 +489,6 @@ void Exec_Set(void) {
     LdsThrow(LEX_CONST, "Cannot reassign constant variable '%s' at %s", strName.c_str(), _ca->PrintPos().c_str());
   }
   
-  ThreadOut(false);
   CLdsValueRef valRef = _pavalStack->Pop();
   
   // check for an array accessor
@@ -529,7 +516,6 @@ void Exec_GetLocal(void) {
   CLdsValue *pvalLocal = &pvar->var_valValue;
   
   _pavalStack->Push(CLdsValueRef(*pvalLocal, pvar, NULL, strName, strName, false));
-  ThreadOut(true);
 };
 
 // Set local variable value
@@ -543,7 +529,6 @@ void Exec_SetLocal(void) {
     LdsThrow(LEX_CONST, "Cannot reassign constant variable '%s' at %s", _ca->lt_valValue.GetString(), _ca->PrintPos().c_str());
   }
   
-  ThreadOut(false);
   CLdsValueRef valRef = _pavalStack->Pop();
   
   // check for an array accessor
@@ -592,5 +577,4 @@ void Exec_Call(void) {
   CLdsValueRef valValue = _pldsCurrent->CallFunction(_ca->lt_valValue.strValue, avalArgs);
   
   _pavalStack->Push(valValue);
-  ThreadOut(true);
 };
