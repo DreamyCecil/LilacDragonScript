@@ -88,3 +88,11 @@ struct LDS_API SLdsError {
 
 // Throw formatted exception
 void LdsThrow(const ELdsError &eError, const char *strFormat, ...);
+
+// Standard script loading
+bool LdsLoadScriptFile(const char *strFile, string &strScript);
+
+// Write data into a file
+void LdsWriteFile(void *pStream, const void *pData, const LdsSize &iSize);
+// Read data from a file
+void LdsReadFile(void *pStream, void *pData, const LdsSize &iSize);

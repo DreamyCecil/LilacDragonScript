@@ -16,6 +16,7 @@ typedef std::string string;
 
 // Special types
 typedef unsigned char LdsFlags; // script flags
+typedef unsigned long LdsSize; // size in bytes
 
 // Lists
 typedef CDArray<class CLdsValue> CLdsArray; // value array

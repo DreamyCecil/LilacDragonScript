@@ -1,6 +1,8 @@
 #include "LdsCompatibility.h"
 #include "../LdsScriptEngine.h"
 
+#include <fstream>
+
 // Throw formatted exception
 void LdsThrow(const ELdsError &eError, const char *strFormat, ...) {
   va_list arg;
@@ -10,6 +12,44 @@ void LdsThrow(const ELdsError &eError, const char *strFormat, ...) {
 
   // pair error message with the error code
   throw SLdsError(eError, strError);
+};
+
+// Standard script loading
+bool LdsLoadScriptFile(const char *strFile, string &strScript) {
+  std::ifstream strm;
+  strm.open(strFile);
+
+  // couldn't open the file
+  if (!strm) {
+    return false;
+  }
+
+  // read until the end
+  while (!strm.eof()) {
+    string strLine = "";
+    std::getline(strm, strLine);
+
+    // save each line into the script string
+    strScript += strLine+"\n";
+  }
+  strm.close();
+  
+  // loaded successfully
+  return true;
+};
+
+// Write data into a file
+void LdsWriteFile(void *pStream, const void *pData, const LdsSize &iSize) {
+  FILE *file = (FILE*)pStream;
+
+  fwrite(pData, iSize, 1, file);
+};
+
+// Read data from a file
+void LdsReadFile(void *pStream, void *pData, const LdsSize &iSize) {
+  FILE *file = (FILE*)pStream;
+
+  fread(pData, iSize, 1, file);
 };
 
 // Set output printing functions

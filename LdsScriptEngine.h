@@ -11,9 +11,11 @@ struct LDS_API SLdsCache {
 class LDS_API CLdsScriptEngine {
   // Compatibility
   public:
-    void (*_pLdsPrintFunction)(const char *); // Custom output function
-    void (*_pLdsErrorFunction)(const char *); // Custom error output function
-    void (*_pDestructorFunc)(CLdsScriptEngine *plds); // A function to call after destruction
+    // Custom output functions
+    void (*_pLdsPrintFunction)(const char *);
+    void (*_pLdsErrorFunction)(const char *);
+    // A function to call after destruction
+    void (*_pDestructorFunc)(CLdsScriptEngine *plds);
 
     // Set output printing functions
     void LdsOutputFunctions(void *pPrint, void *pError);
@@ -22,6 +24,15 @@ class LDS_API CLdsScriptEngine {
     void LdsOut(const char *strFormat, ...);
     // Print out an error
     void LdsErrorOut(const char *strFormat, ...);
+    
+  public:
+    // Script loading function
+    bool (*_pLdsLoadScript)(const char *strFile, string &strScript);
+
+    // Write some data into a data stream
+    void (*_pLdsWrite)(void *pStream, const void *pData, const LdsSize &iSize);
+    // Read some data from a data stream
+    void (*_pLdsRead)(void *pStream, void *pData, const LdsSize &iSize);
     
   // Functions
   public:
@@ -162,6 +173,10 @@ class LDS_API CLdsScriptEngine {
       _pLdsPrintFunction((void (*)(const char *))printf),
       _pLdsErrorFunction((void (*)(const char *))printf),
       _pDestructorFunc(NULL),
+
+      _pLdsLoadScript((bool (*)(const char *, string &))LdsLoadScriptFile),
+      _pLdsWrite((void (*)(void *, const void *, const LdsSize &))LdsWriteFile),
+      _pLdsRead((void (*)(void *, void *, const LdsSize &))LdsReadFile),
       
       // Builder
       _iBuildPos(0),

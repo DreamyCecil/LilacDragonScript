@@ -41,32 +41,16 @@ void SetupLDS(void) {
 int main() {
   SetupLDS();
 
-  // Script that gets 10 random characters from the string and prints them out.
-  // Runs it MAX_COUNT times in a loop.
+  // load script from the file
+  string strScript = "";
 
-  const char *strScript =
-  R"( Print("Original string: " + strHello);
-      Print(""); // empty line
+  // can also use "_ldsEngine._pLdsLoadScript" for the engine-specific function
+  if (!LdsLoadScriptFile("Test.lds", strScript)) {
+    printf("[LDS]: Couldn't load the script file\n");
+    return 0;
+  }
 
-      var ctRepeat = MAX_COUNT;
-  
-      while (--ctRepeat >= 0) {
-        var strRandom = "";
-
-        var ctRnd = 10;
-        while (--ctRnd >= 0) {
-          strRandom += strHello[Random() % 13];
-        }
-
-        Print((MAX_COUNT-ctRepeat-1) + ": " + strRandom);
-      }
-
-      Print(""); // empty line
-
-      // array as a result
-      strHello = "Goodbye";
-      return [false, 1.5, strHello];
-  )";
+  printf("[LDS]: Successfully loaded the script\n");
 
   // list of compiled actions
   CActionList acaActions;
