@@ -67,6 +67,12 @@ void CLdsScriptEngine::LdsOutputFunctions(void *pPrint, void *pError) {
   _pLdsErrorFunction = (void (*)(const char *))pError;
 };
 
+// Set stream functions
+void CLdsScriptEngine::LdsStreamFunctions(void *pWrite, void *pRead) {
+  _pLdsWrite = (void (*)(void *, const void *, const LdsSize &))pWrite;
+  _pLdsRead = (void (*)(void *, void *, const LdsSize &))pRead;
+};
+
 // Print out formatted string
 void CLdsScriptEngine::LdsOut(const char *strFormat, ...) {
   va_list arg;

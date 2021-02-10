@@ -33,6 +33,9 @@ class LDS_API CLdsScriptEngine {
     void (*_pLdsWrite)(void *pStream, const void *pData, const LdsSize &iSize);
     // Read some data from a data stream
     void (*_pLdsRead)(void *pStream, void *pData, const LdsSize &iSize);
+
+    // Set stream functions
+    void LdsStreamFunctions(void *pWrite, void *pRead);
     
   // Functions
   public:
