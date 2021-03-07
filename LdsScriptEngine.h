@@ -25,6 +25,7 @@ class LDS_API CLdsScriptEngine {
     // Print out an error
     void LdsErrorOut(const char *strFormat, ...);
     
+  // I/O
   public:
     // Script loading function
     bool (*_pLdsLoadScript)(const char *strFile, string &strScript);
@@ -34,8 +35,27 @@ class LDS_API CLdsScriptEngine {
     // Read some data from a data stream
     void (*_pLdsRead)(void *pStream, void *pData, const LdsSize &iSize);
 
+    // Get current position in a data stream
+    int (*_pLdsStreamTell)(void *pStream);
+
     // Set stream functions
-    void LdsStreamFunctions(void *pWrite, void *pRead);
+    void LdsStreamFunctions(void *pWrite, void *pRead, void *pTell);
+
+    // Write and read programs
+    void LdsWriteProgram(void *pStream, CActionList &acaProgram);
+    void LdsReadProgram(void *pStream, CActionList &acaProgram);
+
+    // Write and read actions
+    void LdsWriteAction(void *pStream, CCompAction &caAction);
+    void LdsReadAction(void *pStream, CCompAction &caAction);
+
+    // Write and read inline functions
+    void LdsWriteInlineFunc(void *pStream, SLdsInlineFunc &inFunc);
+    void LdsReadInlineFunc(void *pStream, SLdsInlineFunc &inFunc);
+
+    // Write and read values
+    void LdsWriteValue(void *pStream, CLdsValue &val);
+    void LdsReadValue(void *pStream, CLdsValue &val);
     
   // Functions
   public:
@@ -180,6 +200,7 @@ class LDS_API CLdsScriptEngine {
       _pLdsLoadScript((bool (*)(const char *, string &))LdsLoadScriptFile),
       _pLdsWrite((void (*)(void *, const void *, const LdsSize &))LdsWriteFile),
       _pLdsRead((void (*)(void *, void *, const LdsSize &))LdsReadFile),
+      _pLdsStreamTell((int (*)(void *))LdsFileTell),
       
       // Builder
       _iBuildPos(0),

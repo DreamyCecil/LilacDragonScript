@@ -10,7 +10,7 @@ extern CCompAction &SetCurrentAction(CCompAction *pcaCurrent);
 extern CLdsThread *_psthCurrent = NULL;
 
 // Action names
-static const char *_astrActionNames[] = {
+extern const char *_astrActionNames[LCA_SIZEOF] = {
   "UNKNOWN",
   "VAL", "UN", "BIN", "CALL", "INLINE", "FUNC", "VAR",
   "SET", "GET", "SET_ACCESS",

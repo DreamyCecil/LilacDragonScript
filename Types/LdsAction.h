@@ -36,6 +36,9 @@ enum ELdsAction {
   LCA_SIZEOF,
 };
 
+// Action names
+extern const char *_astrActionNames[LCA_SIZEOF];
+
 // Compiler action
 class LDS_API CCompAction : public CLdsToken {
   public:

@@ -7,7 +7,9 @@ enum ELdsError {
   // Generic
   LER_OK = 0x00, // no error
 
-  LER_TYPE = 0x01, // value type mismatch
+  LER_TYPE  = 0x01, // value type mismatch
+  LER_WRITE = 0x02, // cannot write data
+  LER_READ  = 0x03, // cannot read data
 
   // Parser errors
   LEP_STRING  = 0x10, // unclosed string
@@ -96,3 +98,5 @@ bool LdsLoadScriptFile(const char *strFile, string &strScript);
 void LdsWriteFile(void *pStream, const void *pData, const LdsSize &iSize);
 // Read data from a file
 void LdsReadFile(void *pStream, void *pData, const LdsSize &iSize);
+// Get current position in a file
+int LdsFileTell(void *pStream);

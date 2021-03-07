@@ -34,7 +34,7 @@ CLdsValue CLdsScriptEngine::LdsExecute(CActionList &acaActions) {
       case LCA_GET: Exec_Get(); break;
       case LCA_CALL: Exec_Call(); break;
 
-      default: LdsThrow(LEX_ACTION, "Can't run action %d at %s", ca.lt_eType, ca.PrintPos().c_str());
+      default: LdsThrow(LEX_ACTION, "Can't run action %s at %s", _astrActionNames[ca.lt_eType], ca.PrintPos().c_str());
     }
   }
   

@@ -117,6 +117,7 @@
     <ClCompile Include="Execution\LdsThread.cpp" />
     <ClCompile Include="Functions\LdsDefFunctions.cpp" />
     <ClCompile Include="Functions\LdsFunctions.cpp" />
+    <ClCompile Include="LdsIO.cpp" />
     <ClCompile Include="Types\LdsStruct.cpp" />
     <ClCompile Include="Types\LdsValue.cpp" />
     <ClCompile Include="UsageExample.cpp" />

@@ -52,6 +52,13 @@ void LdsReadFile(void *pStream, void *pData, const LdsSize &iSize) {
   fread(pData, iSize, 1, file);
 };
 
+// Get current position in a file
+int LdsFileTell(void *pStream) {
+  FILE *file = (FILE*)pStream;
+
+  return ftell(file);
+};
+
 // Set output printing functions
 void CLdsScriptEngine::LdsOutputFunctions(void *pPrint, void *pError) {
   // reset to standard printing function
@@ -68,9 +75,10 @@ void CLdsScriptEngine::LdsOutputFunctions(void *pPrint, void *pError) {
 };
 
 // Set stream functions
-void CLdsScriptEngine::LdsStreamFunctions(void *pWrite, void *pRead) {
+void CLdsScriptEngine::LdsStreamFunctions(void *pWrite, void *pRead, void *pTell) {
   _pLdsWrite = (void (*)(void *, const void *, const LdsSize &))pWrite;
   _pLdsRead = (void (*)(void *, void *, const LdsSize &))pRead;
+  _pLdsStreamTell = (int (*)(void *))pTell;
 };
 
 // Print out formatted string
