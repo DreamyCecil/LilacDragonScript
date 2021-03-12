@@ -61,7 +61,7 @@ void Exec_Val(void) {
       
       // get array entries
       for (int iPopVal = ctValues-1; iPopVal >= 0; iPopVal--) {
-        avalArray[iPopVal] = _pavalStack->Pop().val;
+        avalArray[iPopVal] = _pavalStack->Pop().vr_val;
       }
       
       // add them in the array
@@ -78,11 +78,11 @@ void Exec_Val(void) {
       // get structure variables
       for (int iVar = 0; iVar < ctValues; iVar++) {
         // variable name
-        string strVar = _pavalStack->Pop().val.strValue;
+        string strVar = _pavalStack->Pop().vr_val.strValue;
         // constant variable
-        int iConst = _pavalStack->Pop().val.iValue;
+        int iConst = _pavalStack->Pop().vr_val.iValue;
         // value
-        CLdsValue val = _pavalStack->Pop().val;
+        CLdsValue val = _pavalStack->Pop().vr_val;
         
         // add the variable
         mapVars[strVar] = SLdsVar(val, (iConst >= 1));
@@ -103,24 +103,24 @@ void Exec_Val(void) {
 void Exec_Unary(void) {
   CLdsValueRef valRef = _pavalStack->Pop();
 
-  if (valRef.val.eType > EVT_FLOAT) {
+  if (valRef.vr_val.eType > EVT_FLOAT) {
     LdsThrow(LEX_UNARY, "Cannot perform unary operation on a value that isn't a number at %s", _ca->PrintPos().c_str());
   }
 
   switch (_ca->lt_valValue.iValue) {
     case UOP_NEGATE:
-      valRef.val = -valRef.val.GetNumber();
+      valRef.vr_val = -valRef.vr_val.GetNumber();
       break;
 
     // TODO: Make string inversion
     case UOP_INVERT: {
-      bool bInvert = (valRef.val.GetIndex() > 0);
-      valRef.val = !bInvert;
+      bool bInvert = (valRef.vr_val.GetIndex() > 0);
+      valRef.vr_val = !bInvert;
     } break;
 
     case UOP_BINVERT: {
-      int iInvert = valRef.val.GetIndex();
-      valRef.val = ~iInvert;
+      int iInvert = valRef.vr_val.GetIndex();
+      valRef.vr_val = ~iInvert;
     } break;
   }
 
@@ -133,8 +133,8 @@ void Exec_Binary(void) {
   CLdsValueRef valRef2 = _pavalStack->Pop();
   CLdsValueRef valRef1 = _pavalStack->Pop();
 
-  CLdsValue val1 = valRef1.val;
-  CLdsValue val2 = valRef2.val;
+  CLdsValue val1 = valRef1.vr_val;
+  CLdsValue val2 = valRef2.vr_val;
   
   // types
   ELdsValueType eType1 = val1.eType;
@@ -150,7 +150,7 @@ void Exec_Binary(void) {
     CLdsValue *pvalStructAccess = NULL;
 
     // structure variable properties
-    string strStructVar = valRef1.strVar;
+    string strStructVar = valRef1.vr_strVar;
     bool bConstVar = false;
     
     switch (iOperation) {
@@ -178,24 +178,23 @@ void Exec_Binary(void) {
         
         val1 = sCopy[strVar];
         
-        // get pointer to the value within the struct
-        if (valRef1.pvar != NULL) {
-          if (valRef1.pvalAccess != NULL) {
-            pvalStructAccess = &valRef1.pvalAccess->sStruct[strVar];
-          } else {
-            pvalStructAccess = &valRef1.pvar->var_valValue.sStruct[strVar];
-          }
+        // get pointer to the value within the structure
+        if (valRef1.vr_pvar != NULL) {
+          pvalStructAccess = valRef1.GetValue(strVar);
 
           // get variable name and check for const
           strStructVar = strVar;
           bConstVar = (sCopy.mapVars[strVar].var_bConst > 0);
         }
+
+        // add reference index
+        valRef1.AddIndex(strVar);
       } break;
         
       default: LdsThrow(LEX_BINARY, "Cannot apply operator %d to %s and %s at %s", _ca->lt_valValue.iValue, strType1.c_str(), strType2.c_str(), _ca->PrintPos().c_str());
     }
     
-    _pavalStack->Push(CLdsValueRef(val1, valRef1.pvar, pvalStructAccess, valRef1.strVar, strStructVar, bConstVar));
+    _pavalStack->Push(CLdsValueRef(val1, valRef1.vr_pvar, pvalStructAccess, valRef1.vr_strVar, strStructVar, bConstVar, valRef1.vr_bGlobal));
     return;
   }
 
@@ -271,19 +270,16 @@ void Exec_Binary(void) {
         val1 = aCopy[iArrayIndex];
         
         // get pointer to the value within the array
-        if (valRef1.pvar != NULL) {
-          if (valRef1.pvalAccess != NULL) {
-            pvalArrayAccess = &valRef1.pvalAccess->aArray[iArrayIndex];
-          } else {
-            pvalArrayAccess = &valRef1.pvar->var_valValue.aArray[iArrayIndex];
-          }
-        }
+        pvalArrayAccess = valRef1.GetValue(iArrayIndex);
+
+        // add reference index
+        valRef1.AddIndex(iArrayIndex);
       } break;
       
       default: LdsThrow(LEX_BINARY, "Cannot apply operator %d to %s and %s at %s", _ca->lt_valValue.iValue, strType1.c_str(), strType2.c_str(), _ca->PrintPos().c_str());
     }
     
-    _pavalStack->Push(CLdsValueRef(val1, valRef1.pvar, pvalArrayAccess, valRef1.strVar, valRef1.strRef, valRef1.bConst));
+    _pavalStack->Push(CLdsValueRef(val1, valRef1.vr_pvar, pvalArrayAccess, valRef1.vr_strVar, valRef1.vr_strRef, valRef1.vr_bConst, valRef1.vr_bGlobal));
     return;
   }
 
@@ -471,7 +467,7 @@ void Exec_Get(void) {
   
   CLdsValue *pvalRef = &pvar->var_valValue;
   
-  _pavalStack->Push(CLdsValueRef(*pvalRef, pvar, NULL, strName, strName, false));
+  _pavalStack->Push(CLdsValueRef(*pvalRef, pvar, NULL, strName, strName, false, true));
 };
 
 // Set variable value
@@ -492,13 +488,13 @@ void Exec_Set(void) {
   CLdsValueRef valRef = _pavalStack->Pop();
   
   // check for an array accessor
-  if (valRef.pvalAccess != NULL && pvar == valRef.pvar) {
+  if (valRef.vr_pvalAccess != NULL && pvar == valRef.vr_pvar) {
     // set value within the array
-    *valRef.pvalAccess = valRef.val;
+    *valRef.vr_pvalAccess = valRef.vr_val;
     
   } else {
     // set value to the variable
-    pvar->var_valValue = valRef.val;
+    pvar->var_valValue = valRef.vr_val;
   }
   
   // constant variables
@@ -515,7 +511,7 @@ void Exec_GetLocal(void) {
   SLdsVar *pvar = &mapLocals.GetValue(iLocal);
   CLdsValue *pvalLocal = &pvar->var_valValue;
   
-  _pavalStack->Push(CLdsValueRef(*pvalLocal, pvar, NULL, strName, strName, false));
+  _pavalStack->Push(CLdsValueRef(*pvalLocal, pvar, NULL, strName, strName, false, false));
 };
 
 // Set local variable value
@@ -532,13 +528,13 @@ void Exec_SetLocal(void) {
   CLdsValueRef valRef = _pavalStack->Pop();
   
   // check for an array accessor
-  if (valRef.pvalAccess != NULL && pvar == valRef.pvar) {
+  if (valRef.vr_pvalAccess != NULL && pvar == valRef.vr_pvar) {
     // set value within the array
-    *valRef.pvalAccess = _pavalStack->Pop().val;
+    *valRef.vr_pvalAccess = _pavalStack->Pop().vr_val;
     
   } else {
     // set value to the variable
-    pvar->var_valValue = valRef.val;
+    pvar->var_valValue = valRef.vr_val;
   }
   
   // constant variables
@@ -550,22 +546,22 @@ void Exec_SetAccessor(void) {
   CLdsValueRef valRef = _pavalStack->Pop();
   
   // check for an array accessor
-  if (valRef.pvalAccess == NULL) {
+  if (valRef.vr_pvalAccess == NULL) {
     LdsThrow(LEX_ACCESS, "Trying to set value to an accessor with no accessor reference at %s", _ca->PrintPos().c_str());
   }
 
   // constant reference
-  if (valRef.pvar->var_bConst > 1) {
-    LdsThrow(LEX_CONST, "Cannot reassign value of a constant variable '%s' at %s", valRef.strVar.c_str(), _ca->PrintPos().c_str());
+  if (valRef.vr_pvar->var_bConst > 1) {
+    LdsThrow(LEX_CONST, "Cannot reassign value of a constant variable '%s' at %s", valRef.vr_strVar.c_str(), _ca->PrintPos().c_str());
   }
 
   // check for constants
-  if (valRef.bConst) {
-    LdsThrow(LEX_CONST, "Cannot reassign constant variable '%s' at %s", valRef.strRef.c_str(), _ca->PrintPos().c_str());
+  if (valRef.vr_bConst) {
+    LdsThrow(LEX_CONST, "Cannot reassign constant variable '%s' at %s", valRef.vr_strRef.c_str(), _ca->PrintPos().c_str());
   }
   
   // set value within the array
-  *valRef.pvalAccess = _pavalStack->Pop().val;
+  *valRef.vr_pvalAccess = _pavalStack->Pop().vr_val;
 };
 
 // Function call

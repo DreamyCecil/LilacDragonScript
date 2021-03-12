@@ -79,3 +79,17 @@ void CLdsScriptEngine::HandleThreads(const LONG64 &llCurrentTick) {
     }
   }
 };
+
+// Get handler index of some thread if it exists
+int CLdsScriptEngine::ThreadHandlerIndex(CLdsThread *psth) {
+  for (int iHandler = 0; iHandler < _athhThreadHandlers.Count(); iHandler++) {
+    SLdsHandler &thh = _athhThreadHandlers[iHandler];
+
+    // found matching thread
+    if (thh.psthThread == psth) {
+      return iHandler;
+    }
+  }
+
+  return -1;
+};

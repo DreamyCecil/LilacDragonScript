@@ -173,6 +173,9 @@
     <ClCompile Include="LdsIO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Types\LdsValueRef.cpp">
+      <Filter>Source Files\Types</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="DreamyStructures\DataArray.inl">

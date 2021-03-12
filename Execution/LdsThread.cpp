@@ -229,7 +229,7 @@ EThreadStatus CLdsThread::Resume(void) {
         } break;
       
         case LCA_JUMPIF: {
-          CLdsValue val = _pavalStack->Pop().val;
+          CLdsValue val = _pavalStack->Pop().vr_val;
           
           if (val.IsTrue()) {
             iPos = ca.lt_iArg;
@@ -237,7 +237,7 @@ EThreadStatus CLdsThread::Resume(void) {
         } break;
     
         case LCA_JUMPUNLESS: {
-          CLdsValue val = _pavalStack->Pop().val;
+          CLdsValue val = _pavalStack->Pop().vr_val;
           
           if (!val.IsTrue()) {
             iPos = ca.lt_iArg;
@@ -245,7 +245,7 @@ EThreadStatus CLdsThread::Resume(void) {
         } break;
       
         case LCA_AND: {
-          CLdsValue val = _pavalStack->Top().val;
+          CLdsValue val = _pavalStack->Top().vr_val;
           
           if (val.IsTrue()) {
             _pavalStack->Pop();
@@ -255,7 +255,7 @@ EThreadStatus CLdsThread::Resume(void) {
         } break;
       
         case LCA_OR: {
-          CLdsValue val = _pavalStack->Top().val;
+          CLdsValue val = _pavalStack->Top().vr_val;
           
           if (val.IsTrue()) {
             iPos = ca.lt_iArg;
@@ -266,8 +266,8 @@ EThreadStatus CLdsThread::Resume(void) {
     
         // Switch block
         case LCA_SWITCH: {
-          CLdsValue valCase = _pavalStack->Pop().val;
-          CLdsValue valDesired = _pavalStack->Top().val;
+          CLdsValue valCase = _pavalStack->Pop().vr_val;
+          CLdsValue valDesired = _pavalStack->Top().vr_val;
       
           if (valCase == valDesired) {
             _pavalStack->Pop();
@@ -300,7 +300,7 @@ EThreadStatus CLdsThread::Resume(void) {
     }
 
     sth_eStatus = ETS_FINISHED;
-    sth_valResult = GetResult().val;
+    sth_valResult = GetResult().vr_val;
 
   // plain external error
   } catch (char *strError) {
@@ -428,7 +428,7 @@ CLdsValueList MakeValueList(CDStack<CLdsValueRef> &avalStack, int ctValues) {
   aval.New(ctValues);
 
   while (ctValues-- > 0) {
-    aval[ctValues] = avalStack.Pop().val;
+    aval[ctValues] = avalStack.Pop().vr_val;
   }
   
   return aval;

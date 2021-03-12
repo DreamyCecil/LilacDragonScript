@@ -43,7 +43,7 @@ CLdsValue CLdsScriptEngine::LdsExecute(CActionList &acaActions) {
   // restore previous stack
   _pavalStack = pavalStackPrev;
   
-  CLdsValue valResult = avalStack.Pop().val;
+  CLdsValue valResult = avalStack.Pop().vr_val;
   avalStack.Clear();
   
   return valResult;

@@ -15,7 +15,7 @@ struct LDS_API SLdsHandler {
     psthThread(plds), llStartTime(llStart), llEndTime(llEnd) {};
     
   // Get waiting time
-  LONG64 WaitTime(void) {
+  inline LONG64 WaitTime(void) {
     return (llEndTime - llStartTime);
   };
 };

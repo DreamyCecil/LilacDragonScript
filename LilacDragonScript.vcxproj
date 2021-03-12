@@ -120,6 +120,7 @@
     <ClCompile Include="LdsIO.cpp" />
     <ClCompile Include="Types\LdsStruct.cpp" />
     <ClCompile Include="Types\LdsValue.cpp" />
+    <ClCompile Include="Types\LdsValueRef.cpp" />
     <ClCompile Include="UsageExample.cpp" />
     <ClCompile Include="Variables\LdsVariables.cpp" />
   </ItemGroup>

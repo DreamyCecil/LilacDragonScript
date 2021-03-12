@@ -41,6 +41,8 @@ class LDS_API CLdsScriptEngine {
     // Set stream functions
     void LdsStreamFunctions(void *pWrite, void *pRead, void *pTell);
 
+    // Compiled scripts I/O
+
     // Write and read programs
     void LdsWriteProgram(void *pStream, CActionList &acaProgram);
     void LdsReadProgram(void *pStream, CActionList &acaProgram);
@@ -53,9 +55,29 @@ class LDS_API CLdsScriptEngine {
     void LdsWriteInlineFunc(void *pStream, SLdsInlineFunc &inFunc);
     void LdsReadInlineFunc(void *pStream, SLdsInlineFunc &inFunc);
 
+    // Script values I/O
+
     // Write and read values
     void LdsWriteValue(void *pStream, CLdsValue &val);
     void LdsReadValue(void *pStream, CLdsValue &val);
+    
+    // Write and read value references
+    void LdsWriteValueRef(void *pStream, CLdsThread &sth, CLdsValueRef &vr);
+    void LdsReadValueRef(void *pStream, CLdsThread &sth, CLdsValueRef &vr);
+    
+    // Write and read strings
+    void LdsWriteString(void *pStream, string &str);
+    void LdsReadString(void *pStream, string &str);
+
+    // Current scripts I/O
+
+    // Write and read the script engine (always called before thread I/O)
+    void LdsWriteEngine(void *pStream);
+    void LdsReadEngine(void *pStream);
+
+    // Write and read threads
+    void LdsWriteThread(void *pStream, CLdsThread &sth, bool bHandler);
+    void LdsReadThread(void *pStream, CLdsThread &sth, bool bHandler);
     
   // Functions
   public:
@@ -75,7 +97,7 @@ class LDS_API CLdsScriptEngine {
   // Variables
   public:
     CLdsVarMap _mapLdsDefVar; // default variables
-    CLdsVarMap _mapLdsVariables; // custom variables
+    CLdsVarMap _mapLdsVariables; // custom variables (used in I/O)
     
     // Set default variables
     void SetDefaultVariables(void);
@@ -180,7 +202,7 @@ class LDS_API CLdsScriptEngine {
   public:
     CDList<SLdsHandler> _athhThreadHandlers;
     int _iThreadTickRate; // how many ticks to wait per second (higher = more precise)
-    LONG64 _llCurrentTick; // current timer tick (64 bits)
+    LONG64 _llCurrentTick; // current timer tick (used in I/O)
   
     // Create a new thread
     CLdsThread *ThreadCreate(CActionList acaActions, CLdsVarMap &mapArgs);
@@ -234,4 +256,7 @@ class LDS_API CLdsScriptEngine {
     
     // Thread handling
     void HandleThreads(const LONG64 &llCurrentTick);
+
+    // Get handler index of some thread if it exists
+    int ThreadHandlerIndex(CLdsThread *psth);
 };
