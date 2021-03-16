@@ -41,7 +41,6 @@ LdsReturn LdsPrintHex(LDS_ARGS) {
 // Pause the script execution
 LdsReturn LdsWait(LDS_ARGS) {
   float fWaitTime = LDS_NEXT_NUM;
-  CLdsThread *psth = _pldsCurrent->ThreadPause();
   
   // current tick and wait ticks
   const float fTickRate = _pldsCurrent->_iThreadTickRate;
@@ -50,15 +49,19 @@ LdsReturn LdsWait(LDS_ARGS) {
   
   // time when started waiting
   const float fStarted = float(llCurrent) / fTickRate;
-  
-  // no thread
-  if (psth == NULL) {
-    LdsThrow(LEX_PAUSE, "No thread to pause");
+
+  // try to pause the thread
+  try {
+    _psthCurrent->Pause();
+
+  // couldn't pause the thread
+  } catch (SLdsError leError) {
+    LdsThrow(leError.le_eError, leError.le_strMessage.c_str());
     return fStarted;
   }
   
   // create a thread handler
-  SLdsHandler thh(psth, llCurrent, llCurrent + llWait);
+  SLdsHandler thh(_psthCurrent, llCurrent, llCurrent + llWait);
   
   // add it to the list
   _pldsCurrent->_athhThreadHandlers.Add(thh);

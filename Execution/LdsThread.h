@@ -68,6 +68,8 @@ class LDS_API CLdsThread {
 
     // Resume the thread
     EThreadStatus Resume(void);
+    // Pause the thread
+    void Pause(void);
     
     // Get thread result
     CLdsValueRef GetResult(void);

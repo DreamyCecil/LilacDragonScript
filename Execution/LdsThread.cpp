@@ -353,6 +353,22 @@ EThreadStatus CLdsThread::Resume(void) {
   return sth_eStatus;
 };
 
+// Pause the thread
+void CLdsThread::Pause(void) {
+  if (this == NULL) {
+    LdsThrow(LEX_PAUSE, "Cannot pause a thread that does not exist");
+    return;
+  }
+  
+  // thread is in quick run mode
+  if (sth_bQuickRun) {
+    LdsThrow(LEX_QUICKRUN, "Cannot pause a thread that is in a quick run mode");
+    return;
+  }
+  
+  sth_eStatus = ETS_PAUSE;
+};
+
 // Get thread result
 CLdsValueRef CLdsThread::GetResult(void) {
   CDStack<CLdsValueRef> *paval = &sth_avalStack;

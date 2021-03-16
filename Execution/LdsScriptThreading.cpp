@@ -32,23 +32,6 @@ CLdsThread *CLdsScriptEngine::ThreadCreate(CActionList acaActions, CLdsVarMap &m
   return sthNew;
 };
 
-// Pause the thread
-CLdsThread *CLdsScriptEngine::ThreadPause(void) {
-  if (_psthCurrent == NULL) {
-    LdsThrow(LEX_PAUSE, "No currently active thread to pause");
-    return NULL;
-  }
-  
-  // thread is in quick run mode
-  if (_psthCurrent->sth_bQuickRun) {
-    LdsThrow(LEX_QUICKRUN, "Cannot pause a thread that is in a quick run mode");
-    return NULL;
-  }
-  
-  _psthCurrent->sth_eStatus = ETS_PAUSE;
-  return _psthCurrent;
-};
-
 // Execute the compiled script
 CLdsValue CLdsScriptEngine::ScriptExecute(CActionList acaActions, CLdsVarMap &mapArgs, CLdsInFuncMap *pmapInline) {
   CLdsThread *psth = ThreadCreate(acaActions, mapArgs);

@@ -226,8 +226,6 @@ class LDS_API CLdsScriptEngine {
   
     // Create a new thread
     CLdsThread *ThreadCreate(CActionList acaActions, CLdsVarMap &mapArgs);
-    // Pause the thread
-    CLdsThread *ThreadPause(void);
     // Execute the compiled inline script
     CLdsValue ScriptExecute(CActionList acaActions, CLdsVarMap &mapArgs, CLdsInFuncMap *pmapInline = NULL);
     
