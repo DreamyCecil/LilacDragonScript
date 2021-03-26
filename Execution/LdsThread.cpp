@@ -40,7 +40,7 @@ extern const char *_astrActionNames[LCA_SIZEOF] = {
 
 // Constructor
 CLdsThread::CLdsThread(CActionList aca, CLdsScriptEngine *plds) :
-  sth_pldsEngine(plds), sth_bQuickRun(false), sth_bDebugOutput(false),
+  sth_pldsEngine(plds), sth_eFlags(ELdsThreadFlags(0)),
   sth_acaActions(aca), sth_iPos(0),
   sth_eStatus(ETS_FINISHED), sth_eError(LER_OK),
   sth_pReference(NULL), sth_pPreRun(NULL), sth_pResult(NULL)
@@ -144,7 +144,7 @@ EThreadStatus CLdsThread::Resume(void) {
       const char *strAction = _astrActionNames[iType];
       
       // print the current action
-      if (sth_bDebugOutput && iType != LCA_DIR) {
+      if (IsDebug() && iType != LCA_DIR) {
         sth_pldsEngine->LdsOut("[LDS DEBUG]: (%d/%d - %s) - '%s', %d, %s\n", iPos, iLen, strAction, ca.lt_valValue.Print().c_str(), ca.lt_iArg, ca.PrintPos().c_str());
       }
   
@@ -238,7 +238,7 @@ EThreadStatus CLdsThread::Resume(void) {
           switch (iDirType) {
             // debug context level
             case THD_DEBUGCONTEXT:
-              sth_bDebugOutput = (val.iValue > 0);
+              SetFlag(THF_DEBUG, (val.iValue > 0));
               break;
           }
         } break;
@@ -361,7 +361,7 @@ void CLdsThread::Pause(void) {
   }
   
   // thread is in quick run mode
-  if (sth_bQuickRun) {
+  if (IsQuick()) {
     LdsThrow(LEX_QUICKRUN, "Cannot pause a thread that is in a quick run mode");
     return;
   }

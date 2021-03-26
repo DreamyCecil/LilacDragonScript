@@ -35,7 +35,7 @@ CLdsThread *CLdsScriptEngine::ThreadCreate(CActionList acaActions, CLdsVarMap &m
 // Execute the compiled script
 CLdsValue CLdsScriptEngine::ScriptExecute(CActionList acaActions, CLdsVarMap &mapArgs, CLdsInFuncMap *pmapInline) {
   CLdsThread *psth = ThreadCreate(acaActions, mapArgs);
-  psth->sth_bQuickRun = true;
+  psth->SetFlag(CLdsThread::THF_QUICK, true);
   
   // copy provided inline function if there are any
   if (pmapInline != NULL && pmapInline->Count() > 0) {

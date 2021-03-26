@@ -362,18 +362,16 @@ void CLdsScriptEngine::LdsWriteValueRef(void *pStream, CLdsThread &sth, CLdsValu
   LdsWriteString(pStream, vr.vr_strVar);
   LdsWriteString(pStream, vr.vr_strRef);
 
-  // write if it's const and global
-  char bConst = vr.vr_bConst;
-  char bGlobal = vr.vr_bGlobal;
-  _pLdsWrite(pStream, &bConst, sizeof(char));
-  _pLdsWrite(pStream, &bGlobal, sizeof(char));
+  // write value flags
+  char eFlags = vr.vr_eFlags;
+  _pLdsWrite(pStream, &eFlags, sizeof(char));
 
   // write variable reference index
   int iVarReference = -1; // nothing
 
   // some variable reference
   if (vr.vr_pvar != NULL) {
-    if (bGlobal) {
+    if (vr.IsGlobal()) {
       // global index
       iVarReference = _mapLdsVariables.Index(vr.vr_pvar);
 
@@ -418,14 +416,11 @@ void CLdsScriptEngine::LdsReadValueRef(void *pStream, CLdsThread &sth, CLdsValue
   LdsReadString(pStream, vr.vr_strVar);
   LdsReadString(pStream, vr.vr_strRef);
 
-  // read if it's const and global
-  char bConst = 0;
-  char bGlobal = 0;
-  _pLdsRead(pStream, &bConst, sizeof(char));
-  _pLdsRead(pStream, &bGlobal, sizeof(char));
+  // read value flags
+  char eFlags = 0;
+  _pLdsRead(pStream, &eFlags, sizeof(char));
 
-  vr.vr_bConst = bConst;
-  vr.vr_bGlobal = bGlobal;
+  vr.SetFlag(eFlags, true);
 
   // read variable reference index
   int iVarReference = -1; // nothing
@@ -433,7 +428,7 @@ void CLdsScriptEngine::LdsReadValueRef(void *pStream, CLdsThread &sth, CLdsValue
 
   // some variable reference
   if (iVarReference != -1) {
-    if (bGlobal) {
+    if (vr.IsGlobal()) {
       // global index
       vr.vr_pvar = &_mapLdsVariables.GetValue(iVarReference);
 

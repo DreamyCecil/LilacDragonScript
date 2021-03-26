@@ -214,7 +214,7 @@ void Exec_Binary(void) {
       default: LdsThrow(LEX_BINARY, "Cannot apply operator %d to %s and %s at %s", _ca->lt_valValue.iValue, strType1.c_str(), strType2.c_str(), _ca->PrintPos().c_str());
     }
     
-    _pavalStack->Push(CLdsValueRef(val1, valRef1.vr_pvar, pvalStructAccess, valRef1.vr_strVar, strStructVar, bConstVar, valRef1.vr_bGlobal));
+    _pavalStack->Push(CLdsValueRef(val1, valRef1.vr_pvar, pvalStructAccess, valRef1.vr_strVar, strStructVar, bConstVar, valRef1.IsGlobal()));
     return;
   }
 
@@ -299,7 +299,7 @@ void Exec_Binary(void) {
       default: LdsThrow(LEX_BINARY, "Cannot apply operator %d to %s and %s at %s", _ca->lt_valValue.iValue, strType1.c_str(), strType2.c_str(), _ca->PrintPos().c_str());
     }
     
-    _pavalStack->Push(CLdsValueRef(val1, valRef1.vr_pvar, pvalArrayAccess, valRef1.vr_strVar, valRef1.vr_strRef, valRef1.vr_bConst, valRef1.vr_bGlobal));
+    _pavalStack->Push(CLdsValueRef(val1, valRef1.vr_pvar, pvalArrayAccess, valRef1.vr_strVar, valRef1.vr_strRef, valRef1.IsConst(), valRef1.IsGlobal()));
     return;
   }
 
@@ -576,7 +576,7 @@ void Exec_SetAccessor(void) {
   }
 
   // check for constants
-  if (valRef.vr_bConst) {
+  if (valRef.IsConst()) {
     LdsThrow(LEX_CONST, "Cannot reassign constant variable '%s' at %s", valRef.vr_strRef.c_str(), _ca->PrintPos().c_str());
   }
   

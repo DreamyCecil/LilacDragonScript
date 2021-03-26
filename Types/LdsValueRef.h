@@ -41,15 +41,19 @@ struct LDS_API SLdsRefIndex {
 };
 
 // Constructor templates
-#define ARGS_TEMP(_Var, _Access, _Name, _Ref, _Const, _Global) vr_pvar(_Var), vr_pvalAccess(_Access), \
-  vr_strVar(_Name), vr_strRef(_Ref), vr_bConst(_Const), vr_bGlobal(_Global)
+#define ARGS_TEMP(_Var, _Access, _Name, _Ref, _Const, _Global) \
+  vr_pvar(_Var), vr_pvalAccess(_Access), vr_strVar(_Name), vr_strRef(_Ref) \
+{ \
+  vr_eFlags = ELdsValueRefFlags((_Const  ? VRF_CONST  : 0) \
+                              | (_Global ? VRF_GLOBAL : 0)); \
+}
 
 #define CONSTRUCTOR_TEMP(_Type) CLdsValueRef(const _Type &_Set) : \
-                                             vr_val(_Set), ARGS_TEMP(NULL, NULL, "", "", false, false) {}
+                                             vr_val(_Set), ARGS_TEMP(NULL, NULL, "", "", false, false)
 
 #define CONSTRUCTOR_FULL(_Type) CLdsValueRef(const _Type &_Set, SLdsVar *_Var, CLdsValue *_Access, \
   const string &_Name, const string &_Ref, bool _Const, bool _Global) \
-  : vr_val(_Set), ARGS_TEMP(_Var, _Access, _Name, _Ref, _Const, _Global) {}
+  : vr_val(_Set), ARGS_TEMP(_Var, _Access, _Name, _Ref, _Const, _Global)
 
 // Value reference
 class LDS_API CLdsValueRef {
@@ -64,11 +68,13 @@ class LDS_API CLdsValueRef {
     string vr_strVar; // variable this value belongs to
     string vr_strRef; // reference name
 
-    bool vr_bConst; // reference is a constant variable (for structure variables)
-    bool vr_bGlobal; // referencing a global variable (from CLdsScriptEngine::_mapLdsVariables; for I/O)
+    enum ELdsValueRefFlags {
+      VRF_CONST  = (1 << 0), // reference is a constant variable (for structure variables)
+      VRF_GLOBAL = (1 << 1), // referencing a global variable (from CLdsScriptEngine::_mapLdsVariables; for I/O)
+    } vr_eFlags;
   
     // Default constructor
-    CLdsValueRef(void) : vr_val(0.0f), ARGS_TEMP(NULL, NULL, "", "", false, false) {};
+    CLdsValueRef(void) : vr_val(0.0f), ARGS_TEMP(NULL, NULL, "", "", false, false);
   
     // Value constructors
     CONSTRUCTOR_TEMP(CLdsValue);
@@ -95,6 +101,23 @@ class LDS_API CLdsValueRef {
     // Add structure index
     inline void AddIndex(const string &strVar) {
       vr_ariIndices.Add(SLdsRefIndex(strVar));
+    };
+
+    // Set the flag
+    inline void SetFlag(int iFlag, bool bSet) {
+      if (bSet) {
+        vr_eFlags = ELdsValueRefFlags(vr_eFlags | iFlag);
+      } else {
+        vr_eFlags = ELdsValueRefFlags(vr_eFlags & ~iFlag);
+      }
+    };
+
+    // Check for flags
+    inline bool IsConst(void) {
+      return (vr_eFlags & VRF_CONST);
+    };
+    inline bool IsGlobal(void) {
+      return (vr_eFlags & VRF_GLOBAL);
     };
 };
 

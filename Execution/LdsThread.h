@@ -35,8 +35,12 @@ enum EThreadStatus {
 class LDS_API CLdsThread {
   public:
     class CLdsScriptEngine *sth_pldsEngine; // engine this thread belongs to
-    bool sth_bQuickRun; // the whole thread is being executed in one run (via ScriptExecute)
-    bool sth_bDebugOutput; // debug output for every action
+
+    // Thread flags
+    enum ELdsThreadFlags {
+      THF_QUICK = (1 << 0), // the whole thread is being executed in one run (via ScriptExecute)
+      THF_DEBUG = (1 << 1), // debug output for every action
+    } sth_eFlags;
     
     CActionList sth_acaActions; // compiled actions
     int sth_iPos; // current position in the thread
@@ -79,6 +83,23 @@ class LDS_API CLdsThread {
     
     // Return from the inline function
     int ReturnFromInline(void);
+
+    // Set the flag
+    inline void SetFlag(int iFlag, bool bSet) {
+      if (bSet) {
+        sth_eFlags = ELdsThreadFlags(sth_eFlags | iFlag);
+      } else {
+        sth_eFlags = ELdsThreadFlags(sth_eFlags & ~iFlag);
+      }
+    };
+
+    // Check for flags
+    inline bool IsQuick(void) {
+      return (sth_eFlags & THF_QUICK);
+    };
+    inline bool IsDebug(void) {
+      return (sth_eFlags & THF_DEBUG);
+    };
 
     // Writing and reading
     void Write(void);
