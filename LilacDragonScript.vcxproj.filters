@@ -123,6 +123,9 @@
     <ClInclude Include="DreamyStructures\DataTemplates.h">
       <Filter>Header Files\Dreamy Structures</Filter>
     </ClInclude>
+    <ClInclude Include="DreamyStructures\DataLinkedList.h">
+      <Filter>Header Files\Dreamy Structures</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Base\LdsCompatibility.cpp">
@@ -188,6 +191,9 @@
       <Filter>Header Files\Dreamy Structures</Filter>
     </None>
     <None Include="DreamyStructures\DataStack.inl">
+      <Filter>Header Files\Dreamy Structures</Filter>
+    </None>
+    <None Include="DreamyStructures\DataLinkedList.inl">
       <Filter>Header Files\Dreamy Structures</Filter>
     </None>
   </ItemGroup>

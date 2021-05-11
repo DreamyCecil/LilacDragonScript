@@ -81,6 +81,7 @@
     <ClInclude Include="Base\LdsCompatibility.h" />
     <ClInclude Include="Base\LdsFormatting.h" />
     <ClInclude Include="DreamyStructures\DataArray.h" />
+    <ClInclude Include="DreamyStructures\DataLinkedList.h" />
     <ClInclude Include="DreamyStructures\DataList.h" />
     <ClInclude Include="DreamyStructures\DataMap.h" />
     <ClInclude Include="DreamyStructures\DataStack.h" />
@@ -126,6 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="DreamyStructures\DataArray.inl" />
+    <None Include="DreamyStructures\DataLinkedList.inl" />
     <None Include="DreamyStructures\DataList.inl" />
     <None Include="DreamyStructures\DataMap.inl" />
     <None Include="DreamyStructures\DataStack.inl" />
