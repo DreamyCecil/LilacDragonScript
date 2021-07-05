@@ -36,6 +36,12 @@ LdsReturn LDS_Random(LDS_ARGS) {
   return rand();
 };
 
+// Console printing function
+LdsReturn LDS_ConsolePrint(LDS_ARGS) {
+  CLdsValue valPrint = LDS_NEXT_ARG;
+  return printf("%s", valPrint.Print().c_str());
+};
+
 // Initial LDS setup
 void SetupLDS(void) {
   // hook the error output function
@@ -44,6 +50,7 @@ void SetupLDS(void) {
   // custom functions
   CLdsFuncMap mapFunc;
   mapFunc["Random"] = SLdsFunc(0, &LDS_Random);
+  mapFunc["Out"] = SLdsFunc(1, &LDS_ConsolePrint);
 
   _ldsEngine.SetCustomFunctions(mapFunc);
 

@@ -20,6 +20,7 @@ SOFTWARE. */
 
 #include "../LdsScriptEngine.h"
 #include <math.h>
+#include <sstream>
 
 // Set custom constants from the map
 void CLdsScriptEngine::SetParserConstants(CLdsValueMap &mapFrom) {
@@ -283,27 +284,81 @@ void CLdsScriptEngine::ParseScript(string strScript) {
         break;
 
       // string
-      case '"':
+      case '"': {
+        #define ESCAPE_CHAR '\\'
+        bool bEscapeChar = false;
+
         while (iPos < ctLen) {
-          if (str[iPos] == '"') {
+          // mark escape characters
+          if (str[iPos] == ESCAPE_CHAR) {
+            bEscapeChar = !bEscapeChar;
+            iPos++;
+            continue;
+            
+          // string end
+          } else if (!bEscapeChar && str[iPos] == '"') {
             break;
           }
+
+          bEscapeChar = false;
           iPos++;
         }
 
         if (iPos < ctLen) {
           string strString = str.substr(iStart+1, iPos - iStart-1);
-          AddLdsToken(LTK_VAL, iPrintPos, strString);
 
+          // parse escape characters
+          std::ostringstream strmEscape;
+          bEscapeChar = false;
+
+          for (int iChar = 0; iChar < strString.length(); iChar++) {
+            const char &cString = strString[iChar];
+
+            switch (cString) {
+              case ESCAPE_CHAR: {
+                // has been marked as escape char already, just print it out
+                if (bEscapeChar) {
+                  strmEscape << ESCAPE_CHAR;
+                }
+
+                bEscapeChar = !bEscapeChar;
+              } break;
+
+              default: {
+                // check other symbols
+                if (bEscapeChar) {
+                  switch (cString) {
+                    case 'n': strmEscape << '\n'; break;
+                    case 'r': strmEscape << '\r'; break;
+                    case 't': strmEscape << '\t'; break;
+                    case '"': strmEscape << '"'; break;
+                  
+                    // write backslash
+                    default: strmEscape << ESCAPE_CHAR;
+                  }
+
+                  bEscapeChar = false;
+                  break;
+                }
+
+                // regular characters
+                strmEscape << cString;
+              } break;
+            }
+          }
+
+          AddLdsToken(LTK_VAL, iPrintPos, strmEscape.str());
           iPos++;
 
         } else {
           LdsThrow(LEP_STRING, "Unclosed string starting at %s", LdsPrintPos(iPrintPos).c_str());
         }
-        break;
+
+        #undef ESCAPE_CHAR
+      } break;
       
       // thread directive
-      case '#':
+      case '#': {
         iChar = str[iPos];
         
         // start directive names with an underscore or letters
@@ -345,10 +400,10 @@ void CLdsScriptEngine::ParseScript(string strScript) {
         } else {
           LdsThrow(LEP_DIRNAME, "Expected a directive name at %s", LdsPrintPos(iPrintPos).c_str());
         }
-        break;
+      } break;
 
       // constants
-      default:
+      default: {
         if (iChar >= '0' && iChar <= '9') {
           char ubType = 0; // 1 - float, 2 - hex
           bool bHexCheck = (iChar == '0');
@@ -532,6 +587,7 @@ void CLdsScriptEngine::ParseScript(string strScript) {
         } else {
           LdsThrow(LEP_CHAR, "Unexpected character '%c' at %s", iChar, LdsPrintPos(iPrintPos).c_str());
         }
+      }
     }
   }
 

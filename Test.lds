@@ -20,8 +20,7 @@ SOFTWARE. */
 
 // script that gets 10 random characters from the string and prints them out
 
-Print("Original string: " + strHello);
-Print(""); // empty line
+Out("Original string: " + strHello + "\n\n");
 
 // run it MAX_COUNT times in a loop
 var ctRepeat = MAX_COUNT;
@@ -34,10 +33,10 @@ while (--ctRepeat >= 0) {
     strRandom += strHello[Random() % 13];
   }
 
-  Print((MAX_COUNT-ctRepeat-1) + ": " + strRandom);
+  Out((MAX_COUNT-ctRepeat-1) + ": " + strRandom + "\n");
 }
 
-Print(""); // empty line
+Out("\n"); // extra line break
 
 // array as a result
 strHello = "Goodbye";

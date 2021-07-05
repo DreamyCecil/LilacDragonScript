@@ -114,10 +114,10 @@ class LDS_API CLdsValueRef {
 
     // Check for flags
     inline bool IsConst(void) {
-      return (vr_eFlags & VRF_CONST);
+      return (vr_eFlags & VRF_CONST) != 0;
     };
     inline bool IsGlobal(void) {
-      return (vr_eFlags & VRF_GLOBAL);
+      return (vr_eFlags & VRF_GLOBAL) != 0;
     };
 };
 

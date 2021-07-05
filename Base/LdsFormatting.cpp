@@ -21,13 +21,13 @@ SOFTWARE. */
 #include "LdsFormatting.h"
 
 // Resize raw string
-char *LdsResizeString(void *pMem, int ctSize) {
+void LdsResizeString(char **pMem, int ctSize) {
   char *pNew = new char[ctSize];
 
-  memcpy(pNew, pMem, ctSize);
-  delete[] pMem;
+  memcpy(pNew, &pMem, ctSize);
+  delete[] &pMem;
 
-  return pNew;
+  *pMem = pNew;
 };
 
 // Format a string
@@ -40,20 +40,15 @@ string LdsPrintF(const char *strFormat, ...) {
 
 // Format some string using a list of arguments
 string LdsVPrintF(const char *strFormat, va_list arg) {
-  static int _ctBufferSize = 0;
-  static char *_pchBuffer = NULL;
-
-  // allocate if buffer wasn't allocated yet
-  if (_ctBufferSize == 0) {
-    _ctBufferSize = 256;
-    _pchBuffer = new char[_ctBufferSize];
-  }
+  // allocate new buffer
+  int ctBufferSize = 256;
+  char *pchBuffer = new char[ctBufferSize];
 
   // repeat
   int iLen;
   while (true) {
     // print to the buffer
-    iLen = _vsnprintf(_pchBuffer, _ctBufferSize, strFormat, arg);
+    iLen = _vsnprintf(pchBuffer, ctBufferSize, strFormat, arg);
 
     // stop if printed ok
     if (iLen != -1) {
@@ -61,11 +56,13 @@ string LdsVPrintF(const char *strFormat, va_list arg) {
     }
 
     // increase the buffer size
-    _ctBufferSize += 256;
-    _pchBuffer = LdsResizeString(_pchBuffer, _ctBufferSize);
+    ctBufferSize += 256;
+    LdsResizeString(&pchBuffer, ctBufferSize);
   }
 
-  string strPrint = _pchBuffer;
+  string strPrint = pchBuffer;
+  delete[] pchBuffer;
+
   return strPrint;
 };
 

@@ -31,8 +31,8 @@ SLdsRefIndex::SLdsRefIndex(const string &strVar) :
   strIndex(strVar), bIndex(false) {};
 
 // Array index constructor
-SLdsRefIndex::SLdsRefIndex(const int &iIndex) : bIndex(true) {
-
+SLdsRefIndex::SLdsRefIndex(const int &iIndex) : bIndex(true)
+{
   // write index into a stream
   std::ostringstream strStream;
   strStream << iIndex;

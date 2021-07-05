@@ -95,10 +95,10 @@ class LDS_API CLdsThread {
 
     // Check for flags
     inline bool IsQuick(void) {
-      return (sth_eFlags & THF_QUICK);
+      return (sth_eFlags & THF_QUICK) != 0;
     };
     inline bool IsDebug(void) {
-      return (sth_eFlags & THF_DEBUG);
+      return (sth_eFlags & THF_DEBUG) != 0;
     };
 
     // Writing and reading
