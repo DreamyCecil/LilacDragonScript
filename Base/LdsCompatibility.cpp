@@ -29,6 +29,7 @@ void LdsThrow(const ELdsError &eError, const char *strFormat, ...) {
   va_start(arg, strFormat);
 
   string strError = LdsVPrintF(strFormat, arg);
+  va_end(arg);
 
   // pair error message with the error code
   throw SLdsError(eError, strError);
@@ -107,6 +108,8 @@ void CLdsScriptEngine::LdsOut(const char *strFormat, ...) {
   va_start(arg, strFormat);
 
   string strOut = LdsVPrintF(strFormat, arg);
+  va_end(arg);
+
   _pLdsPrintFunction(strOut.c_str());
 };
 
@@ -116,5 +119,7 @@ void CLdsScriptEngine::LdsErrorOut(const char *strFormat, ...) {
   va_start(arg, strFormat);
 
   string strOut = LdsVPrintF(strFormat, arg);
+  va_end(arg);
+
   _pLdsErrorFunction(strOut.c_str());
 };
