@@ -36,6 +36,10 @@ LDS_API string TypeName(const ELdsValueType &eType,
                         const string &strNumber, const string &strString,
                         const string &strArray, const string &strStruct);
 
+// Type name function definition
+#define TYPE_NAME_FUNC virtual string TypeName(const string &strNumber, const string &strString, \
+                                               const string &strArray, const string &strStruct)
+
 // Script value base
 class LDS_API ILdsValueBase {
   public:
@@ -55,8 +59,7 @@ class LDS_API ILdsValueBase {
   
   public:
     // Type name
-    virtual string TypeName(const string &strNumber, const string &strString,
-                            const string &strArray, const string &strStruct) = 0;
+    TYPE_NAME_FUNC = 0;
   
     // Print the value
     virtual string Print(void) = 0;

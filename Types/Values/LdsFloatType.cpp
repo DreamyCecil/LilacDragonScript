@@ -21,66 +21,6 @@ SOFTWARE. */
 #include "StdH.h"
 
 // Print the value
-string CLdsIntType::Print(void) {
-  return LdsPrintF("%d", iValue);
-};
-
-// Print the value
 string CLdsFloatType::Print(void) {
   return LdsPrintF("%s", LdsFloatStr(dValue).c_str());
-};
-
-// Print the value
-string CLdsStringType::Print(void) {
-  return strValue;
-};
-
-// Print the value
-string CLdsArrayType::Print(void) {
-  // array opening
-  string strArray = "[";
-  int ctArray = aArray.Count();
-        
-  if (ctArray > 0) {
-    strArray = "[ ";
-  }
-        
-  for (int iArray = 0; iArray < ctArray; iArray++) {
-    if (iArray != 0) {
-      // next entry
-      strArray += ", ";
-    }
-          
-    // print array entry
-    strArray += aArray[iArray].Print();
-  }
-        
-  // array closing
-  strArray += " ]";
-  return strArray;
-};
-      
-// Print the value
-string CLdsStructType::Print(void) {
-  // structure opening
-  string strStruct = "{";
-  int ctVars = sStruct.Count();
-        
-  if (ctVars > 0) {
-    strStruct = "{ ";
-  }
-        
-  for (int iVar = 0; iVar < ctVars; iVar++) {
-    if (iVar != 0) {
-      // next variable
-      strStruct += ", ";
-    }
-          
-    // print structure variable
-    strStruct += sStruct.Print(iVar);
-  }
-        
-  // structure closing
-  strStruct += " }";
-  return strStruct;
 };

@@ -20,8 +20,45 @@ SOFTWARE. */
 
 #pragma once
 
-#include "LdsIntType.h"
-#include "LdsFloatType.h"
-#include "LdsStringType.h"
-#include "LdsArrayType.h"
-#include "LdsStructType.h"
+#include "LdsValue.h"
+
+// Script float value
+class LDS_API CLdsFloatType : public ILdsValueBase {
+  public:
+    double dValue; // float value
+
+  public:
+    // Constructor
+    CLdsFloatType(const double &d) : dValue(d) {};
+
+    // Get value type
+    virtual ELdsValueType GetType(void) {
+      return EVT_FLOAT;
+    };
+
+    // Clear the value
+    virtual void Clear(void) {
+      dValue = 0.0;
+    };
+  
+  public:
+    // Type name
+    TYPE_NAME_FUNC { return strNumber; };
+
+    // Print the value
+    virtual string Print(void);
+  
+    // Get integer value
+    virtual int GetIndex(void) { return (int)dValue; };
+    // Get float value
+    virtual double GetNumber(void) { return dValue; };
+
+    // Conditions
+    virtual bool IsTrue(void) {
+      return (dValue >= 0.5);
+    };
+    
+    virtual bool Compare(const ILdsValueBase &valOther) {
+      return (dValue == ((CLdsFloatType &)valOther).dValue);
+    };
+};

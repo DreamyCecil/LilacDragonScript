@@ -18,10 +18,31 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#pragma once
+#include "StdH.h"
 
-#include "LdsIntType.h"
-#include "LdsFloatType.h"
-#include "LdsStringType.h"
-#include "LdsArrayType.h"
-#include "LdsStructType.h"
+// Print the value
+string CLdsArrayType::Print(void) {
+  int ctArray = aArray.Count();
+        
+  if (ctArray <= 0) {
+    return "[ ]";
+  }
+
+  // array opening
+  string strArray = "[ ";
+        
+  for (int iArray = 0; iArray < ctArray; iArray++) {
+    if (iArray != 0) {
+      // next entry
+      strArray += ", ";
+    }
+          
+    // print array entry
+    strArray += aArray[iArray].Print();
+  }
+        
+  // array closing
+  strArray += " ]";
+
+  return strArray;
+};

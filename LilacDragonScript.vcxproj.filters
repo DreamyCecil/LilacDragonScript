@@ -138,6 +138,21 @@
     <ClInclude Include="LilacDragonScript.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Types\Values\LdsFloatType.h">
+      <Filter>Header Files\Types\Values</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Values\LdsIntType.h">
+      <Filter>Header Files\Types\Values</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Values\LdsStringType.h">
+      <Filter>Header Files\Types\Values</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Values\LdsStructType.h">
+      <Filter>Header Files\Types\Values</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Values\LdsArrayType.h">
+      <Filter>Header Files\Types\Values</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Base\LdsCompatibility.cpp">
@@ -191,11 +206,23 @@
     <ClCompile Include="Types\Values\LdsValue.cpp">
       <Filter>Source Files\Types\Values</Filter>
     </ClCompile>
-    <ClCompile Include="Types\Values\LdsValueTypes.cpp">
-      <Filter>Source Files\Types\Values</Filter>
-    </ClCompile>
     <ClCompile Include="StdH.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Types\Values\LdsArrayType.cpp">
+      <Filter>Source Files\Types\Values</Filter>
+    </ClCompile>
+    <ClCompile Include="Types\Values\LdsFloatType.cpp">
+      <Filter>Source Files\Types\Values</Filter>
+    </ClCompile>
+    <ClCompile Include="Types\Values\LdsIntType.cpp">
+      <Filter>Source Files\Types\Values</Filter>
+    </ClCompile>
+    <ClCompile Include="Types\Values\LdsStringType.cpp">
+      <Filter>Source Files\Types\Values</Filter>
+    </ClCompile>
+    <ClCompile Include="Types\Values\LdsStructType.cpp">
+      <Filter>Source Files\Types\Values</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

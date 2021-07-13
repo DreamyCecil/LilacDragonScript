@@ -61,7 +61,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
-    <IncludePath>$(ProjectDir);$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -141,7 +141,12 @@
     <ClInclude Include="Types\LdsBuildNode.h" />
     <ClInclude Include="Types\LdsToken.h" />
     <ClInclude Include="Types\LdsValueRef.h" />
+    <ClInclude Include="Types\Values\LdsArrayType.h" />
+    <ClInclude Include="Types\Values\LdsFloatType.h" />
+    <ClInclude Include="Types\Values\LdsIntType.h" />
+    <ClInclude Include="Types\Values\LdsStringType.h" />
     <ClInclude Include="Types\Values\LdsStruct.h" />
+    <ClInclude Include="Types\Values\LdsStructType.h" />
     <ClInclude Include="Types\Values\LdsValue.h" />
     <ClInclude Include="Types\Values\LdsValueTypes.h" />
     <ClInclude Include="Variables\LdsVar.h" />
@@ -165,9 +170,13 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Types\LdsValueRef.cpp" />
+    <ClCompile Include="Types\Values\LdsArrayType.cpp" />
+    <ClCompile Include="Types\Values\LdsFloatType.cpp" />
+    <ClCompile Include="Types\Values\LdsIntType.cpp" />
+    <ClCompile Include="Types\Values\LdsStringType.cpp" />
     <ClCompile Include="Types\Values\LdsStruct.cpp" />
+    <ClCompile Include="Types\Values\LdsStructType.cpp" />
     <ClCompile Include="Types\Values\LdsValue.cpp" />
-    <ClCompile Include="Types\Values\LdsValueTypes.cpp" />
     <ClCompile Include="UsageExample.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>

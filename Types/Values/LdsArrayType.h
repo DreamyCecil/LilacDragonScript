@@ -20,8 +20,49 @@ SOFTWARE. */
 
 #pragma once
 
-#include "LdsIntType.h"
-#include "LdsFloatType.h"
-#include "LdsStringType.h"
-#include "LdsArrayType.h"
-#include "LdsStructType.h"
+#include "LdsValue.h"
+
+// Script array value
+class LDS_API CLdsArrayType : public ILdsValueBase {
+  public:
+    CLdsArray aArray; // array of values
+
+  public:
+    // Array constructor
+    CLdsArrayType(const int &ct, CLdsValue valDef) {
+      aArray.New(ct);
+
+      for (int i = 0; i < ct; i++) {
+        aArray[i] = valDef;
+      }
+    };
+
+    // Array copy constructor
+    CLdsArrayType(const CLdsArray &a) : aArray(a) {};
+
+    // Get value type
+    virtual ELdsValueType GetType(void) {
+      return EVT_ARRAY;
+    };
+
+    // Clear the value
+    virtual void Clear(void) {
+      aArray.Clear();
+    };
+  
+  public:
+    // Type name
+    TYPE_NAME_FUNC { return strArray; };
+
+    // Print the value
+    virtual string Print(void);
+
+    // Conditions
+    virtual bool IsTrue(void) {
+      return (aArray.Count() > 0);
+    };
+    
+    virtual bool Compare(const ILdsValueBase &valOther) {
+      return (aArray.Count() == ((CLdsArrayType &)valOther).aArray.Count());
+    };
+};

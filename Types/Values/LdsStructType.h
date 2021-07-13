@@ -20,8 +20,48 @@ SOFTWARE. */
 
 #pragma once
 
-#include "LdsIntType.h"
-#include "LdsFloatType.h"
-#include "LdsStringType.h"
-#include "LdsArrayType.h"
-#include "LdsStructType.h"
+#include "LdsValue.h"
+
+// Script struct value
+class LDS_API CLdsStructType : public ILdsValueBase {
+  public:
+    CLdsStruct sStruct; // structure with value fields
+    
+  public:
+    // Structure constructor
+    CLdsStructType(const int &iSetID, const CLdsVarMap &map, const bool &bSetStatic) :
+      sStruct(iSetID)
+    {
+      sStruct.mapVars = map;
+      sStruct.bStatic = bSetStatic;
+    };
+
+    // Structure copy constructor
+    CLdsStructType(const CLdsStruct &s) : sStruct(s) {};
+
+    // Get value type
+    virtual ELdsValueType GetType(void) {
+      return EVT_STRUCT;
+    };
+
+    // Clear the value
+    virtual void Clear(void) {
+      sStruct.Clear();
+    };
+  
+  public:
+    // Type name
+    TYPE_NAME_FUNC { return strStruct; };
+
+    // Print the value
+    virtual string Print(void);
+
+    // Conditions
+    virtual bool IsTrue(void) {
+      return (sStruct.iID != -1);
+    };
+    
+    virtual bool Compare(const ILdsValueBase &valOther) {
+      return (sStruct.iID == ((CLdsStructType &)valOther).sStruct.iID);
+    };
+};
