@@ -52,7 +52,7 @@ class LDS_API CLdsIntType : public ILdsValueBase {
     // Get integer value
     virtual int GetIndex(void) { return iValue; };
     // Get float value
-    virtual float GetNumber(void) { return (float)iValue; };
+    virtual double GetNumber(void) { return (double)iValue; };
 
     // Conditions
     virtual bool IsTrue(void) {
@@ -67,11 +67,11 @@ class LDS_API CLdsIntType : public ILdsValueBase {
 // Script float value
 class LDS_API CLdsFloatType : public ILdsValueBase {
   public:
-    float fValue; // float value
+    double dValue; // float value
 
   public:
     // Constructor
-    CLdsFloatType(const float &f) : fValue(f) {};
+    CLdsFloatType(const double &d) : dValue(d) {};
 
     // Get value type
     virtual ELdsValueType GetType(void) {
@@ -80,7 +80,7 @@ class LDS_API CLdsFloatType : public ILdsValueBase {
 
     // Clear the value
     virtual void Clear(void) {
-      fValue = 0.0f;
+      dValue = 0.0;
     };
   
   public:
@@ -92,17 +92,17 @@ class LDS_API CLdsFloatType : public ILdsValueBase {
     virtual string Print(void);
   
     // Get integer value
-    virtual int GetIndex(void) { return (int)fValue; };
+    virtual int GetIndex(void) { return (int)dValue; };
     // Get float value
-    virtual float GetNumber(void) { return fValue; };
+    virtual double GetNumber(void) { return dValue; };
 
     // Conditions
     virtual bool IsTrue(void) {
-      return (fValue >= 0.5f);
+      return (dValue >= 0.5);
     };
     
     virtual bool Compare(const ILdsValueBase &valOther) {
-      return (fValue == ((CLdsFloatType &)valOther).fValue);
+      return (dValue == ((CLdsFloatType &)valOther).dValue);
     };
 };
 

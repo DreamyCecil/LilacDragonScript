@@ -41,15 +41,15 @@ LdsReturn LdsPrintHex(LDS_ARGS) {
 
 // Pause the script execution
 LdsReturn LdsWait(LDS_ARGS) {
-  float fWaitTime = LDS_NEXT_NUM;
+  double dWaitTime = LDS_NEXT_NUM;
   
   // current tick and wait ticks
-  const float fTickRate = _pldsCurrent->_iThreadTickRate;
+  const double dTickRate = _pldsCurrent->_iThreadTickRate;
   LONG64 llCurrent = _pldsCurrent->_llCurrentTick;
-  LONG64 llWait = (fWaitTime * fTickRate);
+  LONG64 llWait = LONG64(dWaitTime * dTickRate);
   
   // time when started waiting
-  const float fStarted = float(llCurrent) / fTickRate;
+  const double dStarted = double(llCurrent) / dTickRate;
 
   // try to pause the thread
   try {
@@ -58,7 +58,7 @@ LdsReturn LdsWait(LDS_ARGS) {
   // couldn't pause the thread
   } catch (SLdsError leError) {
     LdsThrow(leError.le_eError, leError.le_strMessage.c_str());
-    return fStarted;
+    return dStarted;
   }
   
   // create a thread handler
@@ -68,5 +68,5 @@ LdsReturn LdsWait(LDS_ARGS) {
   _pldsCurrent->_athhThreadHandlers.Add(thh);
   
   // return when started
-  return fStarted;
+  return dStarted;
 };

@@ -119,7 +119,7 @@ class LDS_API CLdsToken {
       lt_eType(LTK_END), lt_iPos(0), lt_valValue(), lt_iArg(-1) {};
     
     CLdsToken(const int &iType, const int &iLine, const int &iArg) :
-      lt_eType(iType), lt_iPos(iLine), lt_valValue(), lt_iArg(-1) {};
+      lt_eType(iType), lt_iPos(iLine), lt_valValue(), lt_iArg(iArg) {};
       
     CLdsToken(const int &iType, const int &iLine, const CLdsValue &val, const int &iArg) :
       lt_eType(iType), lt_iPos(iLine), lt_valValue(val), lt_iArg(iArg) {};

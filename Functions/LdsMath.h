@@ -23,115 +23,132 @@ SOFTWARE. */
 #include "../Types/Values/LdsValue.h"
 #include "../Types/LdsValueRef.h"
 
+// Use STL log2 function or not
+#ifdef _MSC_VER
+  #if _MSC_VER >= 1700
+    #define USE_LOG2_FUNC 1
+  #else
+    #define USE_LOG2_FUNC 0
+  #endif
+#else
+  #define USE_LOG2_FUNC 0
+#endif
+
 // Trigonometric functions
 inline LdsReturn LdsSin(LDS_ARGS) {
-  return sinf(LDS_NEXT_NUM);
+  return sin(LDS_NEXT_NUM);
 };
 
 inline LdsReturn LdsCos(LDS_ARGS) {
-  return cosf(LDS_NEXT_NUM);
+  return cos(LDS_NEXT_NUM);
 };
 
 inline LdsReturn LdsTan(LDS_ARGS) {
-  return tanf(LDS_NEXT_NUM);
+  return tan(LDS_NEXT_NUM);
 };
 
 inline LdsReturn LdsASin(LDS_ARGS) {
-  return asinf(LDS_NEXT_NUM);
+  return asin(LDS_NEXT_NUM);
 };
 
 inline LdsReturn LdsACos(LDS_ARGS) {
-  return acosf(LDS_NEXT_NUM);
+  return acos(LDS_NEXT_NUM);
 };
 
 inline LdsReturn LdsATan(LDS_ARGS) {
-  return atanf(LDS_NEXT_NUM);
+  return atan(LDS_NEXT_NUM);
 };
 
 inline LdsReturn LdsATan2(LDS_ARGS) {
-  float fArg1 = LDS_NEXT_NUM;
-  float fArg2 = LDS_NEXT_NUM;
-  return atan2f(fArg1, fArg2);
+  double dArg1 = LDS_NEXT_NUM;
+  double dArg2 = LDS_NEXT_NUM;
+  return atan2(dArg1, dArg2);
 };
 
 // Power functions
 inline LdsReturn LdsSqrt(LDS_ARGS) {
-  return sqrtf(LDS_NEXT_NUM);
+  return sqrt(LDS_NEXT_NUM);
 };
 
 inline LdsReturn LdsRoot(LDS_ARGS) {
-  float fNum = LDS_NEXT_NUM;
-  float fBase = LDS_NEXT_NUM;
+  double dNum = LDS_NEXT_NUM;
+  double dBase = LDS_NEXT_NUM;
 
   // get number sign and turn into positive if needed
-  float fSign = (fNum < 0.0f ? -1.0f : 1.0f);
-  fNum = fabs(fNum);
+  double dSign = (dNum < 0.0 ? -1.0 : 1.0);
+  dNum = fabs(dNum);
 
-  // example: [8, 3] = 2; [-8, 3] = -2
-  return powf(fNum, 1.0f / fBase) * fSign;
+  // example: (8, 3) = 2; (-8, 3) = -2
+  return pow(dNum, 1.0f / dBase) * dSign;
 };
 
 inline LdsReturn LdsPow(LDS_ARGS) {
-  float fArg1 = LDS_NEXT_NUM;
-  float fArg2 = LDS_NEXT_NUM;
-  return powf(fArg1, fArg2);
+  double dArg1 = LDS_NEXT_NUM;
+  double dArg2 = LDS_NEXT_NUM;
+  return pow(dArg1, dArg2);
 };
 
 // Exponential functions
 inline LdsReturn LdsExp(LDS_ARGS) {
-  return expf(LDS_NEXT_NUM);
+  return exp(LDS_NEXT_NUM);
 };
 
 inline LdsReturn LdsLog(LDS_ARGS) {
-  return logf(LDS_NEXT_NUM);
+  return log(LDS_NEXT_NUM);
 };
 
 inline LdsReturn LdsLog2(LDS_ARGS) {
+#if USE_LOG2_FUNC == 1
+  return log2(LDS_NEXT_NUM);
+
+#else
   // result of log2(e)
   #define LOG2_OF_E 1.44269504088896340736
 
-  return float(log(LDS_NEXT_NUM) * LOG2_OF_E);
+  // not using "log2()" for compatibility with older compilers
+  return log(LDS_NEXT_NUM) * LOG2_OF_E;
+#endif
 };
 
 inline LdsReturn LdsLog10(LDS_ARGS) {
-  return log10f(LDS_NEXT_NUM);
+  return log10(LDS_NEXT_NUM);
 };
 
 // Rounding functions
 inline LdsReturn LdsCeil(LDS_ARGS) {
-  return ceilf(LDS_NEXT_NUM);
+  return ceil(LDS_NEXT_NUM);
 };
 
 inline LdsReturn LdsRound(LDS_ARGS) {
-  return floorf(LDS_NEXT_NUM + 0.5f);
+  return floor(LDS_NEXT_NUM + 0.5f);
 };
 
 inline LdsReturn LdsFloor(LDS_ARGS) {
-  return floorf(LDS_NEXT_NUM);
+  return floor(LDS_NEXT_NUM);
 };
 
 // Other
 inline LdsReturn LdsAbs(LDS_ARGS) {
-  return (float)fabs(LDS_NEXT_NUM);
+  return fabs(LDS_NEXT_NUM);
 };
 
 inline LdsReturn LdsMin(LDS_ARGS) {
-  float fArg1 = LDS_NEXT_NUM;
-  float fArg2 = LDS_NEXT_NUM;
-  return (fArg1 > fArg2) ? fArg2 : fArg1;
+  double dArg1 = LDS_NEXT_NUM;
+  double dArg2 = LDS_NEXT_NUM;
+  return (dArg1 > dArg2) ? dArg2 : dArg1;
 };
 
 inline LdsReturn LdsMax(LDS_ARGS) {
-  float fArg1 = LDS_NEXT_NUM;
-  float fArg2 = LDS_NEXT_NUM;
-  return (fArg1 > fArg2) ? fArg1 : fArg2;
+  double dArg1 = LDS_NEXT_NUM;
+  double dArg2 = LDS_NEXT_NUM;
+  return (dArg1 > dArg2) ? dArg1 : dArg2;
 };
 
 inline LdsReturn LdsClamp(LDS_ARGS) {
-  float fNum = LDS_NEXT_NUM;
-  float fDown = LDS_NEXT_NUM;
-  float fUp = LDS_NEXT_NUM;
-  return (fNum >= fDown ? (fNum <= fUp ? fNum : fUp) : fDown);
+  double dNum = LDS_NEXT_NUM;
+  double dDown = LDS_NEXT_NUM;
+  double dUp = LDS_NEXT_NUM;
+  return (dNum >= dDown ? (dNum <= dUp ? dNum : dUp) : dDown);
 };
 
 inline void SetMathFunctions(CLdsFuncMap &map) {

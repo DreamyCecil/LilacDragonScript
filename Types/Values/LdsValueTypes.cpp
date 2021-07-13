@@ -27,7 +27,7 @@ string CLdsIntType::Print(void) {
 
 // Print the value
 string CLdsFloatType::Print(void) {
-  return LdsPrintF("%s", LdsFloatStr(fValue).c_str());
+  return LdsPrintF("%s", LdsFloatStr(dValue).c_str());
 };
 
 // Print the value

@@ -481,8 +481,8 @@ void CLdsScriptEngine::ParseScript(string strScript) {
             } break;
 
             default: { // float
-              float fValue = atof(strString.c_str());
-              AddLdsToken(LTK_VAL, iPrintPos, fValue);
+              double dValue = atof(strString.c_str());
+              AddLdsToken(LTK_VAL, iPrintPos, dValue);
             }
           }
         
@@ -613,8 +613,8 @@ void CLdsScriptEngine::AddLdsToken(const ELdsToken &eType, const int &iPos, cons
   _aetTokens.Add(CLdsToken(eType, iPos, iValue, -1));
 };
 
-void CLdsScriptEngine::AddLdsToken(const ELdsToken &eType, const int &iPos, const float &fValue) {
-  _aetTokens.Add(CLdsToken(eType, iPos, fValue, -1));
+void CLdsScriptEngine::AddLdsToken(const ELdsToken &eType, const int &iPos, const double &dValue) {
+  _aetTokens.Add(CLdsToken(eType, iPos, dValue, -1));
 };
 
 void CLdsScriptEngine::AddLdsToken(const ELdsToken &eType, const int &iPos, const string &strValue) {

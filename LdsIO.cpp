@@ -236,8 +236,8 @@ void CLdsScriptEngine::LdsWriteValue(void *pStream, CLdsValue &val) {
 
     // float number
     case EVT_FLOAT: {
-      float f = val.GetNumber();
-      _pLdsWrite(pStream, &f, sizeof(float));
+      double d = val.GetNumber();
+      _pLdsWrite(pStream, &d, sizeof(double));
     } break;
 
     // string

@@ -64,7 +64,7 @@ class LDS_API ILdsValueBase {
     // Get integer value
     virtual int GetIndex(void) { return 0; };
     // Get float value
-    virtual float GetNumber(void) { return 0.0f; };
+    virtual double GetNumber(void) { return 0.0; };
     // Get pure string value
     virtual const char *GetString(void) { return ""; };
   
@@ -84,7 +84,7 @@ class LDS_API CLdsValue {
 
     // Simple constructors
     CLdsValue(const int &i);
-    CLdsValue(const float &f);
+    CLdsValue(const double &d);
     CLdsValue(const string &str);
 
     // Array constructor
@@ -121,7 +121,7 @@ class LDS_API CLdsValue {
     
     // Assignment by value
     CLdsValue &operator=(const int &i);
-    CLdsValue &operator=(const float &f);
+    CLdsValue &operator=(const double &d);
     CLdsValue &operator=(const string &str);
     CLdsValue &operator=(const CLdsArray &a);
     CLdsValue &operator=(const CLdsStruct &s);
@@ -133,7 +133,7 @@ class LDS_API CLdsValue {
     // Get integer value
     int GetIndex(void) const;
     // Get float value
-    float GetNumber(void) const;
+    double GetNumber(void) const;
     // Get string value
     string &GetStringClass(void) const;
     // Get pure string value

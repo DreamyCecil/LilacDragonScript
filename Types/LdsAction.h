@@ -68,7 +68,7 @@ class LDS_API CCompAction : public CLdsToken {
     CCompAction(void) : CLdsToken() {};
     
     CCompAction(const int &iType, const int &iLine, const int &iArg) :
-      CLdsToken(iType, iLine, -1) {};
+      CLdsToken(iType, iLine, iArg) {};
       
     CCompAction(const int &iType, const int &iLine, const CLdsValue &val, const int &iArg) :
       CLdsToken(iType, iLine, val, iArg) {};

@@ -74,18 +74,18 @@ class LDS_API CLdsValueRef {
     } vr_eFlags;
   
     // Default constructor
-    CLdsValueRef(void) : vr_val(0.0f), ARGS_TEMP(NULL, NULL, "", "", false, false);
+    CLdsValueRef(void) : vr_val(0), ARGS_TEMP(NULL, NULL, "", "", false, false);
   
     // Value constructors
     CONSTRUCTOR_TEMP(CLdsValue);
     CONSTRUCTOR_TEMP(int);
-    CONSTRUCTOR_TEMP(float);
+    CONSTRUCTOR_TEMP(double);
     CONSTRUCTOR_TEMP(string);
   
     // Full constructors
     CONSTRUCTOR_FULL(CLdsValue);
     CONSTRUCTOR_FULL(int);
-    CONSTRUCTOR_FULL(float);
+    CONSTRUCTOR_FULL(double);
     CONSTRUCTOR_FULL(string);
 
     // Get actual value

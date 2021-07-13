@@ -423,19 +423,19 @@ void Exec_Binary(void) {
     // get numbers
     int iNum1 = val1.GetIndex();
     int iNum2 = val2.GetIndex();
-    float fNum1 = val1.GetNumber();
-    float fNum2 = val2.GetNumber();
+    double dNum1 = val1.GetNumber();
+    double dNum2 = val2.GetNumber();
 
     switch (iOperation) {
       // operators
-      case LOP_ADD: val1 = (fNum1 + fNum2); break;
-      case LOP_SUB: val1 = (fNum1 - fNum2); break;
-      case LOP_MUL: val1 = (fNum1 * fNum2); break;
-      case LOP_DIV: val1 = (fNum1 / fNum2); break;
+      case LOP_ADD: val1 = (dNum1 + dNum2); break;
+      case LOP_SUB: val1 = (dNum1 - dNum2); break;
+      case LOP_MUL: val1 = (dNum1 * dNum2); break;
+      case LOP_DIV: val1 = (dNum1 / dNum2); break;
     
       case LOP_FMOD:
-        if (fNum2 != 0.0f) {
-          val1 = fmodf(fNum1, fNum2);
+        if (dNum2 != 0.0f) {
+          val1 = fmod(dNum1, dNum2);
         } else {
           val1 = 0.0f;
         }
@@ -461,12 +461,12 @@ void Exec_Binary(void) {
       case LOP_OR:  val1 = (iNum1 > 0) || (iNum2 > 0); break;
       case LOP_XOR: val1 = ((iNum1 >= 0) ^ (iNum2 > 0)) > 0; break;
 
-      case LOP_GT:  val1 = (fNum1 >  fNum2); break;
-      case LOP_GOE: val1 = (fNum1 >= fNum2); break;
-      case LOP_LT:  val1 = (fNum1 <  fNum2); break;
-      case LOP_LOE: val1 = (fNum1 <= fNum2); break;
-      case LOP_EQ:  val1 = (fNum1 == fNum2); break;
-      case LOP_NEQ: val1 = (fNum1 != fNum2); break;
+      case LOP_GT:  val1 = (dNum1 >  dNum2); break;
+      case LOP_GOE: val1 = (dNum1 >= dNum2); break;
+      case LOP_LT:  val1 = (dNum1 <  dNum2); break;
+      case LOP_LOE: val1 = (dNum1 <= dNum2); break;
+      case LOP_EQ:  val1 = (dNum1 == dNum2); break;
+      case LOP_NEQ: val1 = (dNum1 != dNum2); break;
       
       default: LdsThrow(LEX_BINARY, "Cannot apply operator %d at %s", _ca->lt_valValue.GetIndex(), _ca->PrintPos().c_str());
     }

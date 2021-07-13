@@ -43,8 +43,8 @@ CLdsValue::CLdsValue(void) :
 CLdsValue::CLdsValue(const int &i) :
   val_pBase(new CLdsIntType(i)) {};
 
-CLdsValue::CLdsValue(const float &f) :
-  val_pBase(new CLdsFloatType(f)) {};
+CLdsValue::CLdsValue(const double &d) :
+  val_pBase(new CLdsFloatType(d)) {};
 
 CLdsValue::CLdsValue(const string &str) :
   val_pBase(new CLdsStringType(str)) {};
@@ -108,7 +108,7 @@ int CLdsValue::GetIndex(void) const {
 };
 
 // Get float value
-float CLdsValue::GetNumber(void) const {
+double CLdsValue::GetNumber(void) const {
   return val_pBase->GetNumber();
 };
 
@@ -143,7 +143,7 @@ CLdsValue &CLdsValue::operator=(const CLdsValue &valOther) {
   // replace the value
   switch (pvalBase->GetType()) {
     case EVT_INDEX:  operator=(((CLdsIntType    *)pvalBase)->iValue); break;
-    case EVT_FLOAT:  operator=(((CLdsFloatType  *)pvalBase)->fValue); break;
+    case EVT_FLOAT:  operator=(((CLdsFloatType  *)pvalBase)->dValue); break;
     case EVT_STRING: operator=(((CLdsStringType *)pvalBase)->strValue); break;
     case EVT_ARRAY:  operator=(((CLdsArrayType  *)pvalBase)->aArray); break;
     case EVT_STRUCT: operator=(((CLdsStructType *)pvalBase)->sStruct); break;
@@ -160,9 +160,9 @@ CLdsValue &CLdsValue::operator=(const int &i) {
   return *this;
 };
 
-CLdsValue &CLdsValue::operator=(const float &f) {
+CLdsValue &CLdsValue::operator=(const double &d) {
   DeleteValue();
-  val_pBase = new CLdsFloatType(f);
+  val_pBase = new CLdsFloatType(d);
 
   return *this;
 };

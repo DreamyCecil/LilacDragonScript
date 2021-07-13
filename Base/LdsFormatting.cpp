@@ -63,8 +63,8 @@ string LdsVPrintF(const char *strFormat, va_list arg) {
 };
 
 // Convert float number into a string
-string LdsFloatStr(const float &fNum) {
-  string str = LdsPrintF("%f", fNum);
+string LdsFloatStr(const double &dNum) {
+  string str = LdsPrintF("%f", dNum);
 
   // check for a dot
   int iDot = str.find('.');
