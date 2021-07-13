@@ -58,7 +58,7 @@ CLdsValue::CLdsValue(const int &iSetID, const CLdsVarMap &map, const bool &bSetS
   val_pBase(new CLdsStructType(iSetID, map, bSetStatic)) {};
 
 // Copy constructor
-CLdsValue::CLdsValue(const CLdsValue &valOther) : CLdsValue() {
+CLdsValue::CLdsValue(const CLdsValue &valOther) : val_pBase(NULL) {
   operator=(valOther);
 };
 
