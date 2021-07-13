@@ -18,9 +18,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#include "LdsValueRef.h"
-#include "../Variables/LdsVar.h"
-#include <sstream>
+#include "StdH.h"
 
 // Constructor
 SLdsRefIndex::SLdsRefIndex(void) :
@@ -45,30 +43,30 @@ SLdsRefIndex::SLdsRefIndex(const int &iIndex) : bIndex(true)
 CLdsValue *CLdsValueRef::GetValue(const int &iIndex) {
   if (vr_pvar != NULL) {
     if (vr_pvalAccess != NULL) {
-      return &vr_pvalAccess->aArray[iIndex];
+      return &vr_pvalAccess->GetArray()[iIndex];
 
     } else {
-      return &vr_pvar->var_valValue.aArray[iIndex];
+      return &vr_pvar->var_valValue.GetArray()[iIndex];
     }
   }
 
   // TODO: Make sure this is a wise decision instead of just using NULL
   // TODO: Check if something like 'val = ExternalFunc()[0][1];' worked before when it was NULL
-  return &vr_val.aArray[iIndex];
+  return &vr_val.GetArray()[iIndex];
 };
     
 // Get value by a structure variable name
 CLdsValue *CLdsValueRef::GetValue(const string &strVar) {
   if (vr_pvar != NULL) {
     if (vr_pvalAccess != NULL) {
-      return &vr_pvalAccess->sStruct[strVar];
+      return &vr_pvalAccess->GetStruct()[strVar];
 
     } else {
-      return &vr_pvar->var_valValue.sStruct[strVar];
+      return &vr_pvar->var_valValue.GetStruct()[strVar];
     }
   }
   
   // TODO: Make sure this is a wise decision instead of just using NULL
   // TODO: Check if something like 'val = ExternalFunc().structVar[1];' worked before when it was NULL
-  return &vr_val.sStruct[strVar];
+  return &vr_val.GetStruct()[strVar];
 };

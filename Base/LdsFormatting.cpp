@@ -18,7 +18,20 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
+#include "StdH.h"
 #include "LdsFormatting.h"
+
+// Secure printing function
+#ifdef _MSC_VER
+  #if _MSC_VER >= 1700
+    #define VSPRINTF_FUNC vsprintf_s
+  #else
+    #define VSPRINTF_FUNC vsprintf
+  #endif
+
+#else
+  #define VSPRINTF_FUNC vsprintf
+#endif
 
 // Resize raw string
 void LdsResizeString(char **pMem, int ctSize) {
@@ -44,7 +57,7 @@ string LdsPrintF(const char *strFormat, ...) {
 // Format some string using a list of arguments
 string LdsVPrintF(const char *strFormat, va_list arg) {
   char strBuffer[1024];
-  vsprintf(strBuffer, strFormat, arg);
+  VSPRINTF_FUNC(strBuffer, strFormat, arg);
 
   return strBuffer;
 };

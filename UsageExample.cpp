@@ -18,8 +18,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
+// Don't import the library for this example
+#define LDS_EXPORT
+
 // Lilac Dragon Script
-#include "LdsHeader.h"
+#include "LilacDragonScript.h"
 
 // Script engine
 static CLdsScriptEngine _ldsEngine;

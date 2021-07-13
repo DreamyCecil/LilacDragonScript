@@ -20,7 +20,7 @@ SOFTWARE. */
 
 #pragma once
 
-#include "LdsValue.h"
+#include "Values/LdsValue.h"
 
 // Value reference index
 struct LDS_API SLdsRefIndex {
@@ -87,6 +87,11 @@ class LDS_API CLdsValueRef {
     CONSTRUCTOR_FULL(int);
     CONSTRUCTOR_FULL(float);
     CONSTRUCTOR_FULL(string);
+
+    // Get actual value
+    inline ILdsValueBase &ToVal(void) {
+      return *vr_val.val_pBase;
+    };
 
     // Get value by an array index
     CLdsValue *GetValue(const int &iIndex);

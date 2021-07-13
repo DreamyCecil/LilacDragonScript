@@ -20,16 +20,33 @@ SOFTWARE. */
 
 #pragma once
 
+// Importing/exporting for Visual Studio
+#ifdef _MSC_VER
+  #ifdef LDS_EXPORT
+    #define LDS_API _declspec(dllexport)
+  #else
+    #define LDS_API _declspec(dllimport)
+  #endif
+#endif
+
+#ifdef PLATFORM_UNIX
+  #define LDS_API
+#endif
+
+// Include the library
+#ifndef LDS_EXPORT
+  #pragma comment(lib, "LilacDragonScript.lib")
+#endif
+
+// Standart library
+#include <math.h>
+#include <sstream>
+
 // Standard string
 #include <string>
 typedef std::string string;
 
-// For importing
-#ifndef LDS_API
-#define LDS_API _declspec(dllexport)
-#endif
-
-// Include structures if needed
+// Include Dreamy Structures if needed
 #ifndef LDS_EXCLUDE_DSTRUCT
 #include "DreamyStructures/DataStructures.h"
 #endif

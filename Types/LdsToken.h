@@ -20,7 +20,7 @@ SOFTWARE. */
 
 #pragma once
 
-#include "LdsValue.h"
+#include "Values/LdsValue.h"
 
 // TODO: Add '::' semi-operator that will access specific scope for a variable/function.
 //       E.g. if inside the inline function and need to access outside variable/function that was redefined, should use '::Out(::strName)'.

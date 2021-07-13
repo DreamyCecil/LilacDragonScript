@@ -18,7 +18,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#include "../LdsScriptEngine.h"
+#include "StdH.h"
 
 // Build the script or the expression
 void CLdsScriptEngine::LdsBuild(bool bExpression) {
@@ -404,7 +404,7 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
     // variable definition
     case LTK_VAR: {
       CNodeList abnNodes;
-      bool bConst = (et.lt_valValue.iValue >= 1);
+      bool bConst = (et.lt_valValue.GetIndex() >= 1);
       
       do {
         CLdsToken &etNext = _aetTokens[_iBuildPos++];
@@ -413,7 +413,7 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
           LdsThrow(LEB_ID, "Expected a variable name at %s", etNext.PrintPos().c_str());
         }
       
-        string strName = etNext.lt_valValue.strValue;
+        string strName = etNext.lt_valValue.GetString();
         
         // define the variable
         CBuildNode bnDefine = CBuildNode(EBN_VAR, etNext.lt_iPos, strName, bConst);
@@ -463,7 +463,7 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
       }
       
       // get function name
-      string strFunc = etNext.lt_valValue.strValue;
+      string strFunc = etNext.lt_valValue.GetString();
       
       // expect function arguments
       etNext = _aetTokens[_iBuildPos++];
@@ -490,7 +490,7 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
           LdsThrow(LEB_ID, "Expected an argument name at %s", etNext.PrintPos().c_str());
         }
         
-        astrArgs.Add(etNext.lt_valValue.strValue);
+        astrArgs.Add(etNext.lt_valValue.GetString());
 
         // skip commas
         etNext = _aetTokens[_iBuildPos];
@@ -552,7 +552,7 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
     // thread directive
     case LTK_DIR: {
       // directive type
-      int iDirType = et.lt_valValue.iValue;
+      int iDirType = et.lt_valValue.GetIndex();
       
       // get directive value
       CLdsToken &etNext = _aetTokens[_iBuildPos++];
@@ -571,9 +571,9 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
       }
       
       // wrong type
-      if (iDesiredVal != -1 && valDir.eType != iDesiredVal) {
+      if (iDesiredVal != -1 && valDir.GetType() != iDesiredVal) {
         string strDesired = TypeName((ELdsValueType)iDesiredVal, "number", "string", "", "");
-        string strValType = valDir.TypeName("number", "string", "", "");
+        string strValType = valDir.val_pBase->TypeName("number", "string", "", "");
         
         LdsThrow(LER_TYPE, "Expected a %s but got a %s at %s", strDesired.c_str(), strValType.c_str(), etNext.PrintPos().c_str());
       }
@@ -685,7 +685,7 @@ void CLdsScriptEngine::ExpressionBuilder(LdsFlags ubFlags) {
           bool bConst = false;
           
           if (etNext.lt_eType == LTK_VAR) {
-            bConst = (etNext.lt_valValue.iValue >= 1);
+            bConst = (etNext.lt_valValue.GetIndex() >= 1);
             
             etNext = _aetTokens[_iBuildPos++];
           }
@@ -700,7 +700,7 @@ void CLdsScriptEngine::ExpressionBuilder(LdsFlags ubFlags) {
           // assignment operator
           etNext = _aetTokens[_iBuildPos++];
           
-          if (etNext.lt_eType != LTK_SET && etNext.lt_valValue.iValue != LOP_SET) {
+          if (etNext.lt_eType != LTK_SET && etNext.lt_valValue.GetIndex() != LOP_SET) {
             LdsThrow(LEB_ASSIGN, "Expected a '=' at %s", etNext.PrintPos().c_str());
           }
         
@@ -742,7 +742,7 @@ void CLdsScriptEngine::ExpressionBuilder(LdsFlags ubFlags) {
 
       // binary/unary operation
       case LTK_OPERATOR: {
-        switch (et.lt_valValue.iValue) {
+        switch (et.lt_valValue.GetIndex()) {
           case LOP_ADD:
             ExpressionBuilder(LBF_NOOPS);
             break;
@@ -978,7 +978,7 @@ void CLdsScriptEngine::OperationBuilder(CLdsToken etFirst) {
       et = aetOperators[iOperator];
 
       // operator doesn't match the priority
-      if ((et.lt_valValue.iValue >> 4) != iPriority) {
+      if ((et.lt_valValue.GetIndex() >> 4) != iPriority) {
         continue;
       }
 

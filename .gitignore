@@ -1,5 +1,7 @@
 *.sdf
 *.suo
+*.ipch
 
 Debug/*
 Release/*
+Test/*

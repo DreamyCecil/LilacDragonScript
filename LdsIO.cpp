@@ -18,7 +18,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#include "LdsScriptEngine.h"
+#include "StdH.h"
 
 // Compiled scripts I/O
 
@@ -224,28 +224,30 @@ void CLdsScriptEngine::LdsReadInlineFunc(void *pStream, SLdsInlineFunc &inFunc) 
 
 // Write value
 void CLdsScriptEngine::LdsWriteValue(void *pStream, CLdsValue &val) {
-  char iType = val.eType;
+  char iType = val.GetType();
   _pLdsWrite(pStream, &iType, sizeof(char));
 
   switch (iType) {
     // integer
     case EVT_INDEX: {
-      _pLdsWrite(pStream, &val.iValue, sizeof(int));
+      int i = val.GetIndex();
+      _pLdsWrite(pStream, &i, sizeof(int));
     } break;
 
     // float number
     case EVT_FLOAT: {
-      _pLdsWrite(pStream, &val.fValue, sizeof(float));
+      float f = val.GetNumber();
+      _pLdsWrite(pStream, &f, sizeof(float));
     } break;
 
     // string
     case EVT_STRING: {
-      LdsWriteString(pStream, val.strValue);
+      LdsWriteString(pStream, val.GetStringClass());
     } break;
 
     // array
     case EVT_ARRAY: {
-      CLdsArray &aArray = val.aArray;
+      CLdsArray &aArray = val.GetArray();
       const int ctArray = aArray.Count();
 
       // write array count
@@ -259,7 +261,7 @@ void CLdsScriptEngine::LdsWriteValue(void *pStream, CLdsValue &val) {
 
     // structure
     case EVT_STRUCT: {
-      CLdsStruct &sStruct = val.sStruct;
+      CLdsStruct &sStruct = val.GetStruct();
       const int ctStruct = sStruct.Count();
 
       // write structure ID and if it's static
@@ -321,7 +323,7 @@ void CLdsScriptEngine::LdsReadValue(void *pStream, CLdsValue &val) {
 
       // read values into the array
       for (int i = 0; i < ctArray; i++) {
-        LdsReadValue(pStream, val.aArray[i]);
+        LdsReadValue(pStream, val.GetArray()[i]);
       }
     } break;
 
@@ -346,7 +348,7 @@ void CLdsScriptEngine::LdsReadValue(void *pStream, CLdsValue &val) {
       }
 
       // create a structure
-      val = CLdsValue(iID, mapVars, bStatic);
+      val = CLdsValue(iID, mapVars, (bStatic != 0));
     } break;
 
     default: LdsThrow(LER_READ, "Cannot read value type %d at %d!", iType, _pLdsStreamTell(pStream));

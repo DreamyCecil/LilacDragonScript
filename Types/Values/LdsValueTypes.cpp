@@ -1,0 +1,86 @@
+/* Copyright (c) 2021 Dreamy Cecil
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE. */
+
+#include "StdH.h"
+
+// Print the value
+string CLdsIntType::Print(void) {
+  return LdsPrintF("%d", iValue);
+};
+
+// Print the value
+string CLdsFloatType::Print(void) {
+  return LdsPrintF("%s", LdsFloatStr(fValue).c_str());
+};
+
+// Print the value
+string CLdsStringType::Print(void) {
+  return strValue;
+};
+
+// Print the value
+string CLdsArrayType::Print(void) {
+  // array opening
+  string strArray = "[";
+  int ctArray = aArray.Count();
+        
+  if (ctArray > 0) {
+    strArray = "[ ";
+  }
+        
+  for (int iArray = 0; iArray < ctArray; iArray++) {
+    if (iArray != 0) {
+      // next entry
+      strArray += ", ";
+    }
+          
+    // print array entry
+    strArray += aArray[iArray].Print();
+  }
+        
+  // array closing
+  strArray += " ]";
+  return strArray;
+};
+      
+// Print the value
+string CLdsStructType::Print(void) {
+  // structure opening
+  string strStruct = "{";
+  int ctVars = sStruct.Count();
+        
+  if (ctVars > 0) {
+    strStruct = "{ ";
+  }
+        
+  for (int iVar = 0; iVar < ctVars; iVar++) {
+    if (iVar != 0) {
+      // next variable
+      strStruct += ", ";
+    }
+          
+    // print structure variable
+    strStruct += sStruct.Print(iVar);
+  }
+        
+  // structure closing
+  strStruct += " }";
+  return strStruct;
+};

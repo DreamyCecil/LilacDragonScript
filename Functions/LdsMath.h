@@ -20,11 +20,8 @@ SOFTWARE. */
 
 #pragma once
 
-#include "../Types/LdsValue.h"
+#include "../Types/Values/LdsValue.h"
 #include "../Types/LdsValueRef.h"
-
-// Standard math functions for expressions
-#include <math.h>
 
 // Trigonometric functions
 inline LdsReturn LdsSin(LDS_ARGS) {

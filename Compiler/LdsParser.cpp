@@ -18,9 +18,19 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#include "../LdsScriptEngine.h"
-#include <math.h>
-#include <sstream>
+#include "StdH.h"
+
+// Secure scanning function
+#ifdef _MSC_VER
+  #if _MSC_VER >= 1700
+    #define SSCANF_FUNC sscanf_s
+  #else
+    #define SSCANF_FUNC sscanf
+  #endif
+
+#else
+  #define SSCANF_FUNC sscanf
+#endif
 
 // Set custom constants from the map
 void CLdsScriptEngine::SetParserConstants(CLdsValueMap &mapFrom) {
@@ -311,7 +321,7 @@ void CLdsScriptEngine::ParseScript(string strScript) {
           std::ostringstream strmEscape;
           bEscapeChar = false;
 
-          for (int iChar = 0; iChar < strString.length(); iChar++) {
+          for (string::size_type iChar = 0; iChar < strString.length(); iChar++) {
             const char &cString = strString[iChar];
 
             switch (cString) {
@@ -466,7 +476,7 @@ void CLdsScriptEngine::ParseScript(string strScript) {
 
             case 2: { // hexadecimal index
               int iHexValue = 0;
-              sscanf(strString.c_str(), "%x", &iHexValue);
+              SSCANF_FUNC(strString.c_str(), "%x", &iHexValue);
               AddLdsToken(LTK_VAL, iPrintPos, iHexValue);
             } break;
 

@@ -18,27 +18,46 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#pragma once
+#include "StdH.h"
 
-#include "LdsBase.h"
+// Clear the structure
+void CLdsStruct::Clear(void) {
+  iID = -1;
+  mapVars.Clear();
+};
 
-// Script value (any type)
-#include "Types/Values/LdsValue.h"
+// Print one variable
+string CLdsStruct::Print(int iVar) {
+  // print value
+  string strValue = mapVars.GetValue(iVar).var_valValue.Print();
+  
+  // var = 'val'
+  string strVar = mapVars.GetKey(iVar) + " = '" + strValue + "'";
+  
+  return strVar;
+};
 
-#include "Types/Values/LdsStruct.h"
-#include "Types/Values/LdsValueTypes.h"
+// Assignment
+CLdsStruct &CLdsStruct::operator=(const CLdsStruct &sOther) {
+  if (this == &sOther) {
+    return *this;
+  }
 
-#include "Types/LdsValueRef.h"
+  // copy variable fields
+  Clear();
+  
+  iID = sOther.iID;
+  mapVars = sOther.mapVars;
 
-// Script elements
-#include "Types/LdsToken.h"
-#include "Types/LdsBuildNode.h"
-#include "Types/LdsAction.h"
+  return *this;
+};
 
-// Script functions and variables
-#include "Functions/LdsFunc.h"
-#include "Variables/LdsVar.h"
+// Structure accessor
+CLdsValue &CLdsStruct::operator[](const string &strVar) {
+  return mapVars[strVar].var_valValue;
+};
 
-// Script execution
-#include "Execution/LdsThread.h"
-#include "Execution/LdsHandler.h"
+// Find variable index
+int CLdsStruct::FindIndex(const string &strVar) {
+  return mapVars.FindKeyIndex(strVar);
+};

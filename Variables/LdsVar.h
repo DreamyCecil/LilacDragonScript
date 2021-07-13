@@ -20,7 +20,7 @@ SOFTWARE. */
 
 #pragma once
 
-#include "../Types/LdsValue.h"
+#include "../Types/Values/LdsValue.h"
 
 // Script variable
 struct LDS_API SLdsVar {

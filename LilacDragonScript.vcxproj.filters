@@ -43,12 +43,15 @@
     <Filter Include="Header Files\Dreamy Structures">
       <UniqueIdentifier>{100b8579-72b0-4754-8d7e-0703d324a21c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Types\Values">
+      <UniqueIdentifier>{093e1064-5c47-438a-9b28-acb32e91937c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Types\Values">
+      <UniqueIdentifier>{a701c97b-1ac5-43cb-88b1-ede9063453f6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LdsBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LdsHeader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LdsScriptEngine.h">
@@ -78,13 +81,7 @@
     <ClInclude Include="Types\LdsBuildNode.h">
       <Filter>Header Files\Types</Filter>
     </ClInclude>
-    <ClInclude Include="Types\LdsStruct.h">
-      <Filter>Header Files\Types</Filter>
-    </ClInclude>
     <ClInclude Include="Types\LdsToken.h">
-      <Filter>Header Files\Types</Filter>
-    </ClInclude>
-    <ClInclude Include="Types\LdsValue.h">
       <Filter>Header Files\Types</Filter>
     </ClInclude>
     <ClInclude Include="Types\LdsValueRef.h">
@@ -126,6 +123,21 @@
     <ClInclude Include="DreamyStructures\DataLinkedList.h">
       <Filter>Header Files\Dreamy Structures</Filter>
     </ClInclude>
+    <ClInclude Include="Types\Values\LdsStruct.h">
+      <Filter>Header Files\Types\Values</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Values\LdsValue.h">
+      <Filter>Header Files\Types\Values</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Values\LdsValueTypes.h">
+      <Filter>Header Files\Types\Values</Filter>
+    </ClInclude>
+    <ClInclude Include="StdH.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LilacDragonScript.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Base\LdsCompatibility.cpp">
@@ -142,12 +154,6 @@
     </ClCompile>
     <ClCompile Include="Compiler\LdsParser.cpp">
       <Filter>Source Files\Compiler</Filter>
-    </ClCompile>
-    <ClCompile Include="Types\LdsStruct.cpp">
-      <Filter>Source Files\Types</Filter>
-    </ClCompile>
-    <ClCompile Include="Types\LdsValue.cpp">
-      <Filter>Source Files\Types</Filter>
     </ClCompile>
     <ClCompile Include="Variables\LdsVariables.cpp">
       <Filter>Source Files</Filter>
@@ -178,6 +184,18 @@
     </ClCompile>
     <ClCompile Include="Types\LdsValueRef.cpp">
       <Filter>Source Files\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Types\Values\LdsStruct.cpp">
+      <Filter>Source Files\Types\Values</Filter>
+    </ClCompile>
+    <ClCompile Include="Types\Values\LdsValue.cpp">
+      <Filter>Source Files\Types\Values</Filter>
+    </ClCompile>
+    <ClCompile Include="Types\Values\LdsValueTypes.cpp">
+      <Filter>Source Files\Types\Values</Filter>
+    </ClCompile>
+    <ClCompile Include="StdH.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
