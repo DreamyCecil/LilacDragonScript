@@ -230,24 +230,24 @@ void CLdsScriptEngine::LdsWriteValue(void *pStream, CLdsValue &val) {
   switch (iType) {
     // integer
     case EVT_INDEX: {
-      int i = val.GetIndex();
+      int i = val->GetIndex();
       _pLdsWrite(pStream, &i, sizeof(int));
     } break;
 
     // float number
     case EVT_FLOAT: {
-      double d = val.GetNumber();
+      double d = val->GetNumber();
       _pLdsWrite(pStream, &d, sizeof(double));
     } break;
 
     // string
     case EVT_STRING: {
-      LdsWriteString(pStream, val.GetStringClass());
+      LdsWriteString(pStream, val->GetString());
     } break;
 
     // array
     case EVT_ARRAY: {
-      CLdsArray &aArray = val.GetArray();
+      CLdsArray &aArray = val->GetArray();
       const int ctArray = aArray.Count();
 
       // write array count
@@ -261,7 +261,7 @@ void CLdsScriptEngine::LdsWriteValue(void *pStream, CLdsValue &val) {
 
     // structure
     case EVT_STRUCT: {
-      CLdsStruct &sStruct = val.GetStruct();
+      CLdsStruct &sStruct = val->GetStruct();
       const int ctStruct = sStruct.Count();
 
       // write structure ID and if it's static
@@ -323,7 +323,7 @@ void CLdsScriptEngine::LdsReadValue(void *pStream, CLdsValue &val) {
 
       // read values into the array
       for (int i = 0; i < ctArray; i++) {
-        LdsReadValue(pStream, val.GetArray()[i]);
+        LdsReadValue(pStream, val->GetArray()[i]);
       }
     } break;
 

@@ -52,10 +52,13 @@ class LDS_API CLdsArrayType : public ILdsValueBase {
   
   public:
     // Type name
-    TYPE_NAME_FUNC { return strArray; };
+    TYPE_NAME_FUNC(strNumber, strString, strArray, strStruct) { return strArray; };
 
     // Print the value
     virtual string Print(void);
+
+    // Get array value
+    virtual CLdsArray &GetArray(void) { return aArray; };
 
     // Conditions
     virtual bool IsTrue(void) {

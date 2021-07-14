@@ -24,11 +24,13 @@ SOFTWARE. */
 
 // Script value type
 enum ELdsValueType {
-  EVT_INDEX  = 0,
-  EVT_FLOAT  = 1,
-  EVT_STRING = 2,
-  EVT_ARRAY  = 3,
-  EVT_STRUCT = 4,
+  EVT_INDEX = 0,
+  EVT_FLOAT,
+  EVT_STRING,
+  EVT_ARRAY,
+  EVT_STRUCT,
+
+  EVT_LAST,
 };
 
 // Value type name
@@ -37,8 +39,9 @@ LDS_API string TypeName(const ELdsValueType &eType,
                         const string &strArray, const string &strStruct);
 
 // Type name function definition
-#define TYPE_NAME_FUNC virtual string TypeName(const string &strNumber, const string &strString, \
-                                               const string &strArray, const string &strStruct)
+#define TYPE_NAME_FUNC(_Number, _String, _Array, _Struct) \
+  virtual string TypeName(const string &_Number, const string &_String, \
+                          const string &_Array, const string &_Struct)
 
 // Script value base
 class LDS_API ILdsValueBase {
@@ -46,20 +49,15 @@ class LDS_API ILdsValueBase {
     // Constructor
     ILdsValueBase(void) {};
 
-    // Destructor
-    ~ILdsValueBase(void) {
-      Clear();
-    };
-
     // Get value type
     virtual ELdsValueType GetType(void) = 0;
 
     // Clear the value
-    virtual void Clear(void) {};
+    virtual void Clear(void) = 0;
   
   public:
     // Type name
-    TYPE_NAME_FUNC = 0;
+    TYPE_NAME_FUNC(strNumber, strString, strArray, strStruct) = 0;
   
     // Print the value
     virtual string Print(void) = 0;
@@ -68,8 +66,12 @@ class LDS_API ILdsValueBase {
     virtual int GetIndex(void) { return 0; };
     // Get float value
     virtual double GetNumber(void) { return 0.0; };
-    // Get pure string value
-    virtual const char *GetString(void) { return ""; };
+    // Get string value
+    virtual string GetString(void) { return ""; };
+    // Get array value
+    virtual CLdsArray &GetArray(void) { return *((CLdsArray *)NULL); };
+    // Get struct value
+    virtual CLdsStruct &GetStruct(void) { return *((CLdsStruct *)NULL); };
   
     // Conditions
     virtual bool IsTrue(void) = 0;
@@ -110,13 +112,16 @@ class LDS_API CLdsValue {
       return val_pBase->GetType();
     };
 
-    // Type conversions
-    ILdsValueBase &ToVal(void) const { return *val_pBase; };
-    class CLdsIntType    &ToInt(void)    const { return (class CLdsIntType &)*val_pBase; };
-    class CLdsFloatType  &ToFloat(void)  const { return (class CLdsFloatType &)*val_pBase; };
-    class CLdsStringType &ToString(void) const { return (class CLdsStringType &)*val_pBase; };
-    class CLdsArrayType  &ToArray(void)  const { return (class CLdsArrayType &)*val_pBase; };
-    class CLdsStructType &ToStruct(void) const { return (class CLdsStructType &)*val_pBase; };
+    // Quick value access
+    inline ILdsValueBase *operator->(void) const {
+      return val_pBase;
+    };
+    inline operator ILdsValueBase*(void) const {
+      return val_pBase;
+    };
+    inline ILdsValueBase &operator*(void) const {
+      return *val_pBase; 
+    };
 
   public:
     // Assignment
@@ -133,19 +138,6 @@ class LDS_API CLdsValue {
     CLdsValue &Assert(const ELdsValueType &eDesired);
     CLdsValue &AssertNumber(void);
 
-    // Get integer value
-    int GetIndex(void) const;
-    // Get float value
-    double GetNumber(void) const;
-    // Get string value
-    string &GetStringClass(void) const;
-    // Get pure string value
-    const char *GetString(void) const;
-    // Get array value
-    CLdsArray &GetArray(void) const;
-    // Get struct value
-    CLdsStruct &GetStruct(void) const;
-
     // Print the value
     inline string Print(void) {
       return val_pBase->Print();
@@ -161,8 +153,8 @@ class LDS_API CLdsValue {
 
 // Get value of the next function argument
 #define LDS_NEXT_ARG    (*_LDS_FuncArgs++)
-#define LDS_NEXT_INT    (LDS_NEXT_ARG.AssertNumber().GetIndex())
-#define LDS_NEXT_NUM    (LDS_NEXT_ARG.AssertNumber().GetNumber())
-#define LDS_NEXT_STR    (LDS_NEXT_ARG.Assert(EVT_STRING).GetStringClass())
-#define LDS_NEXT_ARRAY  (LDS_NEXT_ARG.Assert(EVT_ARRAY).GetArray())
-#define LDS_NEXT_STRUCT (LDS_NEXT_ARG.Assert(EVT_STRUCT).GetStruct())
+#define LDS_NEXT_INT    (LDS_NEXT_ARG.AssertNumber()->GetIndex())
+#define LDS_NEXT_NUM    (LDS_NEXT_ARG.AssertNumber()->GetNumber())
+#define LDS_NEXT_STR    (LDS_NEXT_ARG.Assert(EVT_STRING)->GetString())
+#define LDS_NEXT_ARRAY  (LDS_NEXT_ARG.Assert(EVT_ARRAY)->GetArray())
+#define LDS_NEXT_STRUCT (LDS_NEXT_ARG.Assert(EVT_STRUCT)->GetStruct())

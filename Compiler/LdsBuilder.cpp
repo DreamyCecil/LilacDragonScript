@@ -404,7 +404,7 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
     // variable definition
     case LTK_VAR: {
       CNodeList abnNodes;
-      bool bConst = (et.lt_valValue.GetIndex() >= 1);
+      bool bConst = (et->GetIndex() >= 1);
       
       do {
         CLdsToken &etNext = _aetTokens[_iBuildPos++];
@@ -413,7 +413,7 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
           LdsThrow(LEB_ID, "Expected a variable name at %s", etNext.PrintPos().c_str());
         }
       
-        string strName = etNext.lt_valValue.GetString();
+        string strName = etNext->GetString();
         
         // define the variable
         CBuildNode bnDefine = CBuildNode(EBN_VAR, etNext.lt_iPos, strName, bConst);
@@ -463,7 +463,7 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
       }
       
       // get function name
-      string strFunc = etNext.lt_valValue.GetString();
+      string strFunc = etNext->GetString();
       
       // expect function arguments
       etNext = _aetTokens[_iBuildPos++];
@@ -490,7 +490,7 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
           LdsThrow(LEB_ID, "Expected an argument name at %s", etNext.PrintPos().c_str());
         }
         
-        astrArgs.Add(etNext.lt_valValue.GetString());
+        astrArgs.Add(etNext->GetString());
 
         // skip commas
         etNext = _aetTokens[_iBuildPos];
@@ -552,7 +552,7 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
     // thread directive
     case LTK_DIR: {
       // directive type
-      int iDirType = et.lt_valValue.GetIndex();
+      int iDirType = et->GetIndex();
       
       // get directive value
       CLdsToken &etNext = _aetTokens[_iBuildPos++];
@@ -685,7 +685,7 @@ void CLdsScriptEngine::ExpressionBuilder(LdsFlags ubFlags) {
           bool bConst = false;
           
           if (etNext.lt_eType == LTK_VAR) {
-            bConst = (etNext.lt_valValue.GetIndex() >= 1);
+            bConst = (etNext->GetIndex() >= 1);
             
             etNext = _aetTokens[_iBuildPos++];
           }
@@ -700,7 +700,7 @@ void CLdsScriptEngine::ExpressionBuilder(LdsFlags ubFlags) {
           // assignment operator
           etNext = _aetTokens[_iBuildPos++];
           
-          if (etNext.lt_eType != LTK_SET && etNext.lt_valValue.GetIndex() != LOP_SET) {
+          if (etNext.lt_eType != LTK_SET && etNext->GetIndex() != LOP_SET) {
             LdsThrow(LEB_ASSIGN, "Expected a '=' at %s", etNext.PrintPos().c_str());
           }
         
@@ -742,7 +742,7 @@ void CLdsScriptEngine::ExpressionBuilder(LdsFlags ubFlags) {
 
       // binary/unary operation
       case LTK_OPERATOR: {
-        switch (et.lt_valValue.GetIndex()) {
+        switch (et->GetIndex()) {
           case LOP_ADD:
             ExpressionBuilder(LBF_NOOPS);
             break;
@@ -978,7 +978,7 @@ void CLdsScriptEngine::OperationBuilder(CLdsToken etFirst) {
       et = aetOperators[iOperator];
 
       // operator doesn't match the priority
-      if ((et.lt_valValue.GetIndex() >> 4) != iPriority) {
+      if ((et->GetIndex() >> 4) != iPriority) {
         continue;
       }
 

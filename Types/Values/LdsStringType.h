@@ -43,13 +43,13 @@ class LDS_API CLdsStringType : public ILdsValueBase {
   
   public:
     // Type name
-    TYPE_NAME_FUNC { return strString; };
+    TYPE_NAME_FUNC(strNumber, strString, strArray, strStruct) { return strString; };
 
     // Print the value
     virtual string Print(void);
 
-    // Get pure string value
-    virtual const char *GetString(void) { return strValue.c_str(); };
+    // Get string value
+    virtual string GetString(void) { return strValue; };
 
     // Conditions
     virtual bool IsTrue(void) {

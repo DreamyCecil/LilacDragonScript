@@ -38,7 +38,7 @@ extern CCompAction &SetCurrentAction(CCompAction *pcaCurrent) {
 
 // Get index of a local variable
 int GetLocalVar(void) {
-  string strName = _ca->lt_valValue.GetString();
+  string strName = (*_ca)->GetString();
   
   CLdsVarMap &mapLocals = _psthCurrent->sth_mapLocals;
   int iLocal = -1;
@@ -69,7 +69,7 @@ void Exec_Val(void) {
   int ctValues = _ca->lt_iArg;
   
   if (ctValues >= 0) {
-    int iContainer = _ca->lt_valValue.GetIndex();
+    int iContainer = (*_ca)->GetIndex();
     
     // array
     if (iContainer == 0) {
@@ -85,7 +85,7 @@ void Exec_Val(void) {
       
       // add them in the array
       for (int iArrayVal = 0; iArrayVal < ctValues; iArrayVal++) {
-        valArray.GetArray()[iArrayVal] = avalArray[iArrayVal];
+        valArray->GetArray()[iArrayVal] = avalArray[iArrayVal];
       }
       
       _pavalStack->Push(CLdsValueRef(valArray));
@@ -97,9 +97,9 @@ void Exec_Val(void) {
       // get structure variables
       for (int iVar = 0; iVar < ctValues; iVar++) {
         // variable name
-        string strVar = _pavalStack->Pop().vr_val.GetString();
+        string strVar = _pavalStack->Pop().vr_val->GetString();
         // constant variable
-        int iConst = _pavalStack->Pop().vr_val.GetIndex();
+        int iConst = _pavalStack->Pop().vr_val->GetIndex();
         // value
         CLdsValue val = _pavalStack->Pop().vr_val;
         
@@ -121,25 +121,25 @@ void Exec_Val(void) {
 // Unary operations
 void Exec_Unary(void) {
   CLdsValueRef valRef = _pavalStack->Pop();
-  ILdsValueBase &val = valRef.ToVal();
+  CLdsValue val = valRef.vr_val;
 
   if (val.GetType() > EVT_FLOAT) {
     LdsThrow(LEX_UNARY, "Cannot perform unary operation on a value that isn't a number at %s", _ca->PrintPos().c_str());
   }
 
-  switch (_ca->lt_valValue.GetIndex()) {
+  switch ((*_ca)->GetIndex()) {
     case UOP_NEGATE:
-      valRef.vr_val = -val.GetNumber();
+      valRef.vr_val = -val->GetNumber();
       break;
 
     // TODO: Make string inversion
     case UOP_INVERT: {
-      bool bInvert = (val.GetIndex() > 0);
+      bool bInvert = (val->GetIndex() > 0);
       valRef.vr_val = !bInvert;
     } break;
 
     case UOP_BINVERT: {
-      int iInvert = val.GetIndex();
+      int iInvert = val->GetIndex();
       valRef.vr_val = ~iInvert;
     } break;
   }
@@ -163,7 +163,7 @@ void Exec_Binary(void) {
   string strType1 = val1.val_pBase->TypeName("a number", "a string", "an array", "a structure");
   string strType2 = val2.val_pBase->TypeName("a number", "a string", "an array", "a structure");
     
-  int iOperation = _ca->lt_valValue.GetIndex();
+  int iOperation = (*_ca)->GetIndex();
   
   // structure operations
   if (eType1 == EVT_STRUCT) {
@@ -187,10 +187,10 @@ void Exec_Binary(void) {
           }
         }
         
-        string strVar = val2.GetString();
+        string strVar = val2->GetString();
         
         // direct 'val1 = val1.sStruct' empties its own struct before getting a value from it
-        CLdsStruct sCopy = val1.GetStruct();
+        CLdsStruct sCopy = val1->GetStruct();
 
         if (sCopy.FindIndex(strVar) == -1) {
           LdsThrow(LEX_STRUCTVAR, "Variable '%s' does not exist in the structure at %s", strVar.c_str(), _ca->PrintPos().c_str());
@@ -211,7 +211,7 @@ void Exec_Binary(void) {
         valRef1.AddIndex(strVar);
       } break;
         
-      default: LdsThrow(LEX_BINARY, "Cannot apply operator %d to %s and %s at %s", _ca->lt_valValue.GetIndex(), strType1.c_str(), strType2.c_str(), _ca->PrintPos().c_str());
+      default: LdsThrow(LEX_BINARY, "Cannot apply operator %d to %s and %s at %s", (*_ca)->GetIndex(), strType1.c_str(), strType2.c_str(), _ca->PrintPos().c_str());
     }
     
     _pavalStack->Push(CLdsValueRef(val1, valRef1.vr_pvar, pvalStructAccess, valRef1.vr_strVar, strStructVar, bConstVar, valRef1.IsGlobal()));
@@ -231,8 +231,8 @@ void Exec_Binary(void) {
         }
         
         // expand the array
-        int ctResize = (val1.GetArray().Count() + val2.GetIndex());
-        val1.GetArray().Resize(ctResize);
+        int ctResize = (val1->GetArray().Count() + val2->GetIndex());
+        val1->GetArray().Resize(ctResize);
       } break;
         
       case LOP_SUB: {
@@ -241,8 +241,8 @@ void Exec_Binary(void) {
         }
         
         // shrink the array
-        int ctResize = (val1.GetArray().Count() - val2.GetIndex());
-        val1.GetArray().Resize(ctResize);
+        int ctResize = (val1->GetArray().Count() - val2->GetIndex());
+        val1->GetArray().Resize(ctResize);
       } break;
       
       // conditional operators
@@ -254,10 +254,10 @@ void Exec_Binary(void) {
         }
         
         switch (iOperation) {
-          case LOP_GT:  val1 = int(val1.GetArray().Count() >  val2.GetArray().Count()); break;
-          case LOP_GOE: val1 = int(val1.GetArray().Count() >= val2.GetArray().Count()); break;
-          case LOP_LT:  val1 = int(val1.GetArray().Count() <  val2.GetArray().Count()); break;
-          case LOP_LOE: val1 = int(val1.GetArray().Count() <= val2.GetArray().Count()); break;
+          case LOP_GT:  val1 = int(val1->GetArray().Count() >  val2->GetArray().Count()); break;
+          case LOP_GOE: val1 = int(val1->GetArray().Count() >= val2->GetArray().Count()); break;
+          case LOP_LT:  val1 = int(val1->GetArray().Count() <  val2->GetArray().Count()); break;
+          case LOP_LOE: val1 = int(val1->GetArray().Count() <= val2->GetArray().Count()); break;
           case LOP_EQ:  val1 = int(val1 == val2); break;
           case LOP_NEQ: val1 = int(val1 != val2); break;
         }
@@ -274,9 +274,9 @@ void Exec_Binary(void) {
         }
         
         // direct 'val1 = val1.aArray' empties its own array before getting a value from it
-        CLdsArray aCopy = val1.GetArray();
+        CLdsArray aCopy = val1->GetArray();
         
-        int iArrayIndex = val2.GetIndex();
+        int iArrayIndex = val2->GetIndex();
         int iSize = aCopy.Count();
     
         // out of bounds
@@ -296,7 +296,7 @@ void Exec_Binary(void) {
         valRef1.AddIndex(iArrayIndex);
       } break;
       
-      default: LdsThrow(LEX_BINARY, "Cannot apply operator %d to %s and %s at %s", _ca->lt_valValue.GetIndex(), strType1.c_str(), strType2.c_str(), _ca->PrintPos().c_str());
+      default: LdsThrow(LEX_BINARY, "Cannot apply operator %d to %s and %s at %s", (*_ca)->GetIndex(), strType1.c_str(), strType2.c_str(), _ca->PrintPos().c_str());
     }
     
     _pavalStack->Push(CLdsValueRef(val1, valRef1.vr_pvar, pvalArrayAccess, valRef1.vr_strVar, valRef1.vr_strRef, valRef1.IsConst(), valRef1.IsGlobal()));
@@ -323,9 +323,9 @@ void Exec_Binary(void) {
           LdsThrow(LEX_BINARY, "Cannot subtract a string from a string at %s", _ca->PrintPos().c_str());
         }
 
-        string str = val1.GetString();
+        string str = val1->GetString();
         int ctStr = strlen(str.c_str());
-        int ctSub = val2.GetIndex();
+        int ctSub = val2->GetIndex();
 
         val1 = str.substr(0, ctStr - ctSub);
       } break;
@@ -341,8 +341,8 @@ void Exec_Binary(void) {
 
         string strMul = "";
 
-        for (int iCopy = 0; iCopy < val2.GetIndex(); iCopy++) {
-          strMul += val1.GetString();
+        for (int iCopy = 0; iCopy < val2->GetIndex(); iCopy++) {
+          strMul += val1->GetString();
         }
 
         val1 = strMul;
@@ -354,9 +354,9 @@ void Exec_Binary(void) {
 
         // compare length
         if (!bStr1 && bStr2) {
-          bResult = (val1.GetIndex() == val2.GetStringClass().length());
+          bResult = (val1->GetIndex() == val2->GetString().length());
         } else if (bStr1 && !bStr2) {
-          bResult = (val2.GetIndex() == val1.GetStringClass().length());
+          bResult = (val2->GetIndex() == val1->GetString().length());
 
         // compare string contents
         } else {
@@ -371,9 +371,9 @@ void Exec_Binary(void) {
 
         // compare length
         if (!bStr1 && bStr2) {
-          bResult = (val1.GetIndex() != val2.GetStringClass().length());
+          bResult = (val1->GetIndex() != val2->GetString().length());
         } else if (bStr1 && !bStr2) {
-          bResult = (val2.GetIndex() != val1.GetStringClass().length());
+          bResult = (val2->GetIndex() != val1->GetString().length());
 
         // compare string contents
         } else {
@@ -399,9 +399,9 @@ void Exec_Binary(void) {
           LdsThrow(LEX_BINARY, "Cannot use %s as an string accessor at %s", strType2.c_str(), _ca->PrintPos().c_str());
         }
         
-        string strCopy = val1.GetStringClass();
+        string strCopy = val1->GetString();
         
-        int iCharIndex = val2.GetIndex();
+        int iCharIndex = val2->GetIndex();
         int iLength = strCopy.length();
     
         // out of bounds
@@ -416,15 +416,15 @@ void Exec_Binary(void) {
         val1 = LdsPrintF("%c", strCopy.c_str()[iCharIndex]);
       } break;
 
-      default: LdsThrow(LEX_BINARY, "Cannot apply operator %d to %s and %s at %s", _ca->lt_valValue.GetIndex(), strType1.c_str(), strType2.c_str(), _ca->PrintPos().c_str());
+      default: LdsThrow(LEX_BINARY, "Cannot apply operator %d to %s and %s at %s", (*_ca)->GetIndex(), strType1.c_str(), strType2.c_str(), _ca->PrintPos().c_str());
     }
 
   } else {
     // get numbers
-    int iNum1 = val1.GetIndex();
-    int iNum2 = val2.GetIndex();
-    double dNum1 = val1.GetNumber();
-    double dNum2 = val2.GetNumber();
+    int iNum1 = val1->GetIndex();
+    int iNum2 = val2->GetIndex();
+    double dNum1 = val1->GetNumber();
+    double dNum2 = val2->GetNumber();
 
     switch (iOperation) {
       // operators
@@ -468,7 +468,7 @@ void Exec_Binary(void) {
       case LOP_EQ:  val1 = (dNum1 == dNum2); break;
       case LOP_NEQ: val1 = (dNum1 != dNum2); break;
       
-      default: LdsThrow(LEX_BINARY, "Cannot apply operator %d at %s", _ca->lt_valValue.GetIndex(), _ca->PrintPos().c_str());
+      default: LdsThrow(LEX_BINARY, "Cannot apply operator %d at %s", (*_ca)->GetIndex(), _ca->PrintPos().c_str());
     }
   }
   
@@ -478,11 +478,11 @@ void Exec_Binary(void) {
 // Get variable value
 void Exec_Get(void) {
   SLdsVar *pvar = NULL;
-  string strName = _ca->lt_valValue.GetStringClass();
+  string strName = (*_ca)->GetString();
         
   // try to get the value
   if (!_pldsCurrent->LdsVariableValue(strName, pvar)) {
-    LdsThrow(LEX_VARIABLE, "Variable '%s' is invalid at %s", _ca->lt_valValue.GetString(), _ca->PrintPos().c_str());
+    LdsThrow(LEX_VARIABLE, "Variable '%s' is invalid at %s", strName.c_str(), _ca->PrintPos().c_str());
   }
   
   CLdsValue *pvalRef = &pvar->var_valValue;
@@ -493,11 +493,11 @@ void Exec_Get(void) {
 // Set variable value
 void Exec_Set(void) {
   SLdsVar *pvar = NULL;
-  string strName = _ca->lt_valValue.GetStringClass();
+  string strName = (*_ca)->GetString();
   
   // try to get the value
   if (!_pldsCurrent->LdsVariableValue(strName, pvar)) {
-    LdsThrow(LEX_VARIABLE, "Variable '%s' is invalid at %s", _ca->lt_valValue.GetString(), _ca->PrintPos().c_str());
+    LdsThrow(LEX_VARIABLE, "Variable '%s' is invalid at %s", strName.c_str(), _ca->PrintPos().c_str());
   }
   
   // check if it's a constant
@@ -526,7 +526,7 @@ void Exec_GetLocal(void) {
   int iLocal = GetLocalVar();
   CLdsVarMap &mapLocals = _psthCurrent->sth_mapLocals;
   
-  string strName = _ca->lt_valValue.GetStringClass();
+  string strName = (*_ca)->GetString();
 
   SLdsVar *pvar = &mapLocals.GetValue(iLocal);
   CLdsValue *pvalLocal = &pvar->var_valValue;
@@ -542,7 +542,8 @@ void Exec_SetLocal(void) {
   
   // check if it's a constant
   if (pvar->var_bConst > 1) {
-    LdsThrow(LEX_CONST, "Cannot reassign constant variable '%s' at %s", _ca->lt_valValue.GetString(), _ca->PrintPos().c_str());
+    string strName = (*_ca)->GetString();
+    LdsThrow(LEX_CONST, "Cannot reassign constant variable '%s' at %s", strName.c_str(), _ca->PrintPos().c_str());
   }
   
   CLdsValueRef valRef = _pavalStack->Pop();
@@ -590,7 +591,8 @@ void Exec_Call(void) {
   CLdsValueList avalArgs = MakeValueList(*_pavalStack, _ca->lt_iArg);
 
   // call the function
-  CLdsValueRef valValue = _pldsCurrent->CallFunction(_ca->lt_valValue.GetStringClass(), avalArgs);
+  string strFunc = (*_ca)->GetString();
+  CLdsValueRef valValue = _pldsCurrent->CallFunction(strFunc, avalArgs);
   
   _pavalStack->Push(valValue);
 };

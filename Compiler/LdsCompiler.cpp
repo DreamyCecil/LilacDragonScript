@@ -58,7 +58,7 @@ void CLdsScriptEngine::CompileGetter(CBuildNode &bn, CActionList &aca) {
   switch (bn.lt_eType) {
     // iVal
     case EBN_ID: {
-      string strName = bn.lt_valValue.GetString();
+      string strName = bn->GetString();
       
       // custom variables and constants
       if (_mapLdsVariables.FindKeyIndex(strName) != -1) {
@@ -93,7 +93,7 @@ void CLdsScriptEngine::CompileSetter(CBuildNode &bn, CActionList &aca) {
   switch (bn.lt_eType) {
     // iVal
     case EBN_ID: {
-      string strName = bn.lt_valValue.GetString();
+      string strName = bn->GetString();
       bool bLocal = (_mapLdsVariables.FindKeyIndex(strName) == -1);
       
       // custom variables
@@ -241,7 +241,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
 
     // binary operation values
     case EBN_BIN:
-      switch (bn.lt_valValue.GetIndex()) {
+      switch (bn->GetIndex()) {
         case LOP_AND: {
           Compile(*bn.bn_abnNodes[0], aca);
         
@@ -275,7 +275,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
     case EBN_CALL: {
       // verify argument count
       int ctArgs = bn.lt_iArg;
-      string strFunc = bn.lt_valValue.GetString();
+      string strFunc = bn->GetString();
 
       ELdsAction eAction = LCA_CALL;
       
@@ -285,7 +285,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
         eAction = LCA_INLINE;
         
         if (ctArgs != ctFuncArgs) {
-          LdsThrow(LEC_FUNCARG, "Inline function '%s' takes %d argument(s) but got %d at %s", bn.lt_valValue.GetString(), ctFuncArgs, ctArgs, bn.PrintPos().c_str());
+          LdsThrow(LEC_FUNCARG, "Inline function '%s' takes %d argument(s) but got %d at %s", strFunc.c_str(), ctFuncArgs, ctArgs, bn.PrintPos().c_str());
         }
         
       // find the function
@@ -294,11 +294,11 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
         eAction = LCA_CALL;
         
         if (ctArgs != ctFuncArgs) {
-          LdsThrow(LEC_FUNCARG, "Function '%s' takes %d argument(s) but got %d at %s", bn.lt_valValue.GetString(), ctFuncArgs, ctArgs, bn.PrintPos().c_str());
+          LdsThrow(LEC_FUNCARG, "Function '%s' takes %d argument(s) but got %d at %s", strFunc.c_str(), ctFuncArgs, ctArgs, bn.PrintPos().c_str());
         }
         
       } else {
-        LdsThrow(LEC_NOFUNC, "Unknown function '%s' at %s", bn.lt_valValue.GetString(), bn.PrintPos().c_str());
+        LdsThrow(LEC_NOFUNC, "Unknown function '%s' at %s", strFunc.c_str(), bn.PrintPos().c_str());
       }
 
       for (int iArg = 0; iArg < ctArgs; iArg++) {
@@ -310,7 +310,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
     // inline function
     case EBN_FUNC: {
       // function name
-      string strFunc = bn.lt_valValue.GetString();
+      string strFunc = bn->GetString();
       
       // compile the function
       CActionList acaFunc;
@@ -330,7 +330,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
     // variable definition
     case EBN_VAR: {
       // variable name
-      string strVar = bn.lt_valValue.GetString();
+      string strVar = bn->GetString();
       
       // global variable redefinition
       if (_mapLdsVariables.FindKeyIndex(strVar) != -1) {
@@ -476,7 +476,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
     
     case EBN_SET: {
       // get the value
-      if (bn.lt_valValue.GetIndex() == LOP_SET) {
+      if (bn->GetIndex() == LOP_SET) {
         Compile(*bn.bn_abnNodes[1], aca);
       
       // get both values then perform an operation

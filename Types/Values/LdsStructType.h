@@ -51,10 +51,13 @@ class LDS_API CLdsStructType : public ILdsValueBase {
   
   public:
     // Type name
-    TYPE_NAME_FUNC { return strStruct; };
+    TYPE_NAME_FUNC(strNumber, strString, strArray, strStruct) { return strStruct; };
 
     // Print the value
     virtual string Print(void);
+
+    // Get struct value
+    virtual CLdsStruct &GetStruct(void) { return sStruct; };
 
     // Conditions
     virtual bool IsTrue(void) {

@@ -44,13 +44,14 @@ CLdsValue CLdsScriptEngine::ScriptExecute(CActionList acaActions, CLdsVarMap &ma
   CLdsValue valResult;
 
   switch (psth->Resume()) {
-    case ETS_FINISHED:
+    case ETS_FINISHED: {
       valResult = psth->sth_valResult;
-      break;
+    } break;
     
-    case ETS_ERROR:
-      LdsErrorOut("%s (code: 0x%X)\n", psth->sth_valResult.GetString(), psth->sth_eError);
-      break;
+    case ETS_ERROR: {
+      string strError = psth->sth_valResult->GetString();
+      LdsErrorOut("%s (code: 0x%X)\n", strError.c_str(), psth->sth_eError);
+    } break;
     
     default:
       LdsErrorOut("Thread execution got paused inside of the 'Execute' function instead of 'ThreadResume'\n");

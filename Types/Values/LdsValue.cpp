@@ -102,36 +102,6 @@ CLdsValue &CLdsValue::AssertNumber(void) {
   return *this;
 };
 
-// Get integer value
-int CLdsValue::GetIndex(void) const {
-  return val_pBase->GetIndex();
-};
-
-// Get float value
-double CLdsValue::GetNumber(void) const {
-  return val_pBase->GetNumber();
-};
-
-// Get string value
-string &CLdsValue::GetStringClass(void) const {
-  return ToString().strValue;
-};
-
-// Get pure string value
-const char *CLdsValue::GetString(void) const {
-  return val_pBase->GetString();
-};
-
-// Get array value
-CLdsArray &CLdsValue::GetArray(void) const {
-  return ToArray().aArray;
-};
-
-// Get struct value
-CLdsStruct &CLdsValue::GetStruct(void) const {
-  return ToStruct().sStruct;
-};
-
 // Assignment
 CLdsValue &CLdsValue::operator=(const CLdsValue &valOther) {
   if (this == &valOther) {

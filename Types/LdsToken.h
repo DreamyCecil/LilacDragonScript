@@ -114,6 +114,7 @@ class LDS_API CLdsToken {
     
     CLdsValue lt_valValue;
     
+  public:
     // Constructors
     CLdsToken(void) :
       lt_eType(LTK_END), lt_iPos(0), lt_valValue(), lt_iArg(-1) {};
@@ -127,5 +128,16 @@ class LDS_API CLdsToken {
     // Token position
     string PrintPos(void) {
       return LdsPrintPos(lt_iPos);
+    };
+
+    // Quick value access
+    inline ILdsValueBase *operator->(void) const {
+      return lt_valValue.val_pBase;
+    };
+    inline operator ILdsValueBase*(void) const {
+      return lt_valValue.val_pBase;
+    };
+    inline ILdsValueBase &operator*(void) const {
+      return *lt_valValue.val_pBase; 
     };
 };

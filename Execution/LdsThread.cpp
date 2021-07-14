@@ -70,16 +70,17 @@ bool CLdsThread::Run(CLdsThread **ppsth) {
   
   switch (eResume) {
     // return the value
-    case ETS_FINISHED:
+    case ETS_FINISHED: {
       if (sth_pResult != NULL) {
         sth_pResult(this);
       }
-      break;
+    } break;
       
     // error has occured
-    case ETS_ERROR:
-      sth_pldsEngine->LdsErrorOut("%s (code: 0x%X)\n", sth_valResult.GetString(), sth_eError);
-      break;
+    case ETS_ERROR: {
+      string strError = sth_valResult->GetString();
+      sth_pldsEngine->LdsErrorOut("%s (code: 0x%X)\n", strError.c_str(), sth_eError);
+    } break;
   }
   
   // delete the thread
@@ -180,7 +181,7 @@ EThreadStatus CLdsThread::Resume(void) {
             // make a list of arguments
             CLdsValueList avalArgs = MakeValueList(*_pavalStack, ca.lt_iArg);
             
-            _psthCurrent->CallInlineFunction(ca.lt_valValue.GetStringClass(), avalArgs);
+            _psthCurrent->CallInlineFunction(ca->GetString(), avalArgs);
             
             // reset position to go through the inline function
             iPos = 0;
@@ -201,14 +202,14 @@ EThreadStatus CLdsThread::Resume(void) {
         // Add inline function to the list
         case LCA_FUNC: {
           SLdsInlineFunc &in = ca.ca_inFunc;
-          string strFunc = ca.lt_valValue.GetStringClass();
+          string strFunc = ca->GetString();
           
           sth_mapInlineFunc[strFunc] = in;
         } break;
         
         // Define a local variable
         case LCA_VAR: {
-          string strName = ca.lt_valValue.GetStringClass();
+          string strName = ca->GetString();
           bool bConst = (ca.lt_iArg >= 1);
           
           // add to the list of inline locals
@@ -238,7 +239,7 @@ EThreadStatus CLdsThread::Resume(void) {
           switch (iDirType) {
             // debug context level
             case THD_DEBUGCONTEXT:
-              SetFlag(THF_DEBUG, (val.GetIndex() > 0));
+              SetFlag(THF_DEBUG, (val->GetIndex() > 0));
               break;
           }
         } break;
@@ -251,7 +252,7 @@ EThreadStatus CLdsThread::Resume(void) {
         case LCA_JUMPIF: {
           CLdsValue val = _pavalStack->Pop().vr_val;
           
-          if (val.ToVal().IsTrue()) {
+          if (val->IsTrue()) {
             iPos = ca.lt_iArg;
           }
         } break;
@@ -259,7 +260,7 @@ EThreadStatus CLdsThread::Resume(void) {
         case LCA_JUMPUNLESS: {
           CLdsValue val = _pavalStack->Pop().vr_val;
           
-          if (!val.ToVal().IsTrue()) {
+          if (!val->IsTrue()) {
             iPos = ca.lt_iArg;
           }
         } break;
@@ -267,7 +268,7 @@ EThreadStatus CLdsThread::Resume(void) {
         case LCA_AND: {
           CLdsValue val = _pavalStack->Top().vr_val;
           
-          if (val.ToVal().IsTrue()) {
+          if (val->IsTrue()) {
             _pavalStack->Pop();
           } else {
             iPos = ca.lt_iArg;
@@ -277,7 +278,7 @@ EThreadStatus CLdsThread::Resume(void) {
         case LCA_OR: {
           CLdsValue val = _pavalStack->Top().vr_val;
           
-          if (val.ToVal().IsTrue()) {
+          if (val->IsTrue()) {
             iPos = ca.lt_iArg;
           } else {
             _pavalStack->Pop();

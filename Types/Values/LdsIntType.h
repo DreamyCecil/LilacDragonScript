@@ -43,7 +43,7 @@ class LDS_API CLdsIntType : public ILdsValueBase {
   
   public:
     // Type name
-    TYPE_NAME_FUNC { return strNumber; };
+    TYPE_NAME_FUNC(strNumber, strString, strArray, strStruct) { return strNumber; };
 
     // Print the value
     virtual string Print(void);
