@@ -60,6 +60,9 @@ class LDS_API CLdsArrayType : public ILdsValueBase {
     // Get array value
     virtual CLdsArray &GetArray(void) { return aArray; };
 
+    // Perform a binary operation
+    virtual CLdsValueRef BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, CCompAction &ca);
+
     // Conditions
     virtual bool IsTrue(void) {
       return (aArray.Count() > 0);

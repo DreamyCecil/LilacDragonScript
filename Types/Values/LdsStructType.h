@@ -59,6 +59,9 @@ class LDS_API CLdsStructType : public ILdsValueBase {
     // Get struct value
     virtual CLdsStruct &GetStruct(void) { return sStruct; };
 
+    // Perform a binary operation
+    virtual CLdsValueRef BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, CCompAction &ca);
+
     // Conditions
     virtual bool IsTrue(void) {
       return (sStruct.iID != -1);

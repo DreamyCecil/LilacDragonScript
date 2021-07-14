@@ -571,9 +571,9 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
       }
       
       // wrong type
-      if (iDesiredVal != -1 && valDir.GetType() != iDesiredVal) {
+      if (iDesiredVal != -1 && valDir->GetType() != iDesiredVal) {
         string strDesired = TypeName((ELdsValueType)iDesiredVal, "number", "string", "", "");
-        string strValType = valDir.val_pBase->TypeName("number", "string", "", "");
+        string strValType = valDir->TypeName("number", "string", "", "");
         
         LdsThrow(LER_TYPE, "Expected a %s but got a %s at %s", strDesired.c_str(), strValType.c_str(), etNext.PrintPos().c_str());
       }

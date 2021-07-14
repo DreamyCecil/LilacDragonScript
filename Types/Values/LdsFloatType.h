@@ -53,6 +53,9 @@ class LDS_API CLdsFloatType : public ILdsValueBase {
     // Get float value
     virtual double GetNumber(void) { return dValue; };
 
+    // Perform a binary operation
+    virtual CLdsValueRef BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, CCompAction &ca);
+
     // Conditions
     virtual bool IsTrue(void) {
       return (dValue >= 0.5);

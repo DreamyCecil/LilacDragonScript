@@ -88,11 +88,6 @@ class LDS_API CLdsValueRef {
     CONSTRUCTOR_FULL(double);
     CONSTRUCTOR_FULL(string);
 
-    // Get actual value
-    inline ILdsValueBase &ToVal(void) {
-      return *vr_val.val_pBase;
-    };
-
     // Get value by an array index
     CLdsValue *GetValue(const int &iIndex);
     // Get value by a structure variable name

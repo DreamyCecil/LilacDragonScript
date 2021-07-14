@@ -24,11 +24,10 @@ SOFTWARE. */
 
 // Script value (any type)
 #include "Types/Values/LdsValue.h"
+#include "Types/LdsValueRef.h"
 
 #include "Types/Values/LdsStruct.h"
 #include "Types/Values/LdsValueTypes.h"
-
-#include "Types/LdsValueRef.h"
 
 // Script elements
 #include "Types/LdsToken.h"

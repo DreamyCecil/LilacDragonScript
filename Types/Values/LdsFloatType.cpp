@@ -24,3 +24,9 @@ SOFTWARE. */
 string CLdsFloatType::Print(void) {
   return LdsPrintF("%s", LdsFloatStr(dValue).c_str());
 };
+
+// Perform a binary operation
+CLdsValueRef CLdsFloatType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, CCompAction &ca) {
+  // use integer's binary function
+  return CLdsIntType(0).BinaryOp(valRef1, valRef2, ca);
+};

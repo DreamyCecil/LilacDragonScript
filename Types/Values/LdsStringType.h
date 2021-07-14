@@ -51,6 +51,9 @@ class LDS_API CLdsStringType : public ILdsValueBase {
     // Get string value
     virtual string GetString(void) { return strValue; };
 
+    // Perform a binary operation
+    virtual CLdsValueRef BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, CCompAction &ca);
+
     // Conditions
     virtual bool IsTrue(void) {
       return (strValue == "");

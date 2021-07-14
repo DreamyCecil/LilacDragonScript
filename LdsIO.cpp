@@ -224,7 +224,7 @@ void CLdsScriptEngine::LdsReadInlineFunc(void *pStream, SLdsInlineFunc &inFunc) 
 
 // Write value
 void CLdsScriptEngine::LdsWriteValue(void *pStream, CLdsValue &val) {
-  char iType = val.GetType();
+  char iType = val->GetType();
   _pLdsWrite(pStream, &iType, sizeof(char));
 
   switch (iType) {

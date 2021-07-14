@@ -72,6 +72,9 @@ class LDS_API ILdsValueBase {
     virtual CLdsArray &GetArray(void) { return *((CLdsArray *)NULL); };
     // Get struct value
     virtual CLdsStruct &GetStruct(void) { return *((CLdsStruct *)NULL); };
+    
+    // Perform a binary operation
+    virtual class CLdsValueRef BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, CCompAction &ca) = 0;
   
     // Conditions
     virtual bool IsTrue(void) = 0;
@@ -106,11 +109,6 @@ class LDS_API CLdsValue {
 
     // Delete the value
     void DeleteValue(void);
-
-    // Get value type
-    ELdsValueType GetType(void) {
-      return val_pBase->GetType();
-    };
 
     // Quick value access
     inline ILdsValueBase *operator->(void) const {
