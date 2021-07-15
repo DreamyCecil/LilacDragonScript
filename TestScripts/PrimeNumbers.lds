@@ -18,32 +18,32 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-// Script that takes 10 random characters from the string and prints them out a few times
+// Script that prints out prime numbers until 50
 
-Out("Original string: " + strHello + "\n\n");
-
-// run it MAX_COUNT times in a loop
-var ctRepeat = MAX_COUNT;
-
-while (--ctRepeat >= 0) {
-  var strRandom = "";
+for (var ct = 2; ct <= 50; ct++)
+{
+  // print it out if it's a prime number
+  var bPrime = IsPrime(ct);
   
-  // add 10 random characters
-  var ctRnd = 10;
-  
-  while (--ctRnd >= 0) {
-    strRandom += strHello[Random() % 13];
+  if (bPrime) {
+    Out(ct + ", ");
+  }
+}
+
+// and so on...
+return Out("...\n");
+
+// check if the number is prime
+function IsPrime(iNumber) {
+  // check if the current number is divisible by others
+  for (var iLower = 2; iLower < iNumber; iLower++)
+  {
+    // not a prime number
+    if (iNumber % iLower == 0) {
+      return false;
+    }
   }
   
-  // print the result
-  Out((MAX_COUNT-ctRepeat-1) + ": " + strRandom + "\n");
-}
-
-// switch strings between runs
-if (strHello == "Hello, world!") {
-  strHello = "See ya later!";
-} else {
-  strHello = "Hello, world!";
-}
-
-return strHello;
+  // prime number
+  return true;
+};

@@ -66,7 +66,7 @@ void SetupLDS(void) {
 
   _ldsEngine.SetCustomFunctions(mapFunc);
 
-  // custom variables
+  // custom variables (values are preserved between runs)
   CLdsVarMap mapVars;
   mapVars["MAX_COUNT"] = SLdsVar(10, true);
   mapVars["strHello"] = SLdsVar(string("Hello, world!"));
