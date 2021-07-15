@@ -18,7 +18,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-// script that gets 10 random characters from the string and prints them out
+// Script that takes 10 random characters from the string and prints them out a few times
 
 Out("Original string: " + strHello + "\n\n");
 
@@ -27,17 +27,18 @@ var ctRepeat = MAX_COUNT;
 
 while (--ctRepeat >= 0) {
   var strRandom = "";
-
+  
+  // add 10 random characters
   var ctRnd = 10;
+  
   while (--ctRnd >= 0) {
     strRandom += strHello[Random() % 13];
   }
-
+  
+  // print the result
   Out((MAX_COUNT-ctRepeat-1) + ": " + strRandom + "\n");
 }
 
-Out("\n"); // extra line break
-
-// array as a result
+// return a new string
 strHello = "Goodbye";
-return [false, 1.5, strHello];
+return strHello;

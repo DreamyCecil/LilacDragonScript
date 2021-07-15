@@ -75,7 +75,7 @@ int main() {
   string strScript = "";
 
   // can also use "_ldsEngine._pLdsLoadScript" for the engine-specific function
-  if (!LdsLoadScriptFile("Test.lds", strScript)) {
+  if (!LdsLoadScriptFile("TestScripts\\RandomLetters.lds", strScript)) {
     printf("[LDS]: Couldn't load the script file\n");
     return 0;
   }
@@ -90,10 +90,15 @@ int main() {
   
   // compiled OK
   if (eResult == LER_OK) {
+    // display action count
+    printf("[LDS]: Compiled %d actions\n", acaActions.Count());
+    printf("--------------------------------\n");
+
     // execute script in quick run mode
     CLdsValue valResult = _ldsEngine.ScriptExecute(acaActions, CLdsVarMap());
 
     // print out the result
+    printf("--------------------------------\n");
     printf("[RESULT]: %s\n", valResult.Print().c_str());
   }
 
