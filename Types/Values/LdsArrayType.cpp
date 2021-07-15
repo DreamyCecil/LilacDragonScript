@@ -47,6 +47,23 @@ string CLdsArrayType::Print(void) {
   return strArray;
 };
 
+// Perform a unary operation
+CLdsValueRef CLdsArrayType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
+  // [Cecil] TEMP: Cannot do unary operations on arrays
+  LdsThrow(LEX_UNARY, "Cannot perform a unary operation on an array at %s", ca.PrintPos().c_str());
+
+  // actual value and the operation
+  CLdsValue val = valRef.vr_val;
+  int iOperation = ca->GetIndex();
+
+  switch (iOperation) {
+    // TODO: Make array inversion
+    case UOP_INVERT: break;
+  }
+
+  return CLdsValueRef(val);
+};
+
 // Perform a binary operation
 CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, CCompAction &ca) {
   // actual values and the operation

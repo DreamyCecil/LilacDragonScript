@@ -25,6 +25,23 @@ string CLdsStringType::Print(void) {
   return strValue;
 };
 
+// Perform a unary operation
+CLdsValueRef CLdsStringType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
+  // [Cecil] TEMP: Cannot do unary operations on strings
+  LdsThrow(LEX_UNARY, "Cannot perform a unary operation on a string value at %s", ca.PrintPos().c_str());
+  
+  // actual value and the operation
+  CLdsValue val = valRef.vr_val;
+  int iOperation = ca->GetIndex();
+
+  switch (iOperation) {
+    // TODO: Make string inversion
+    case UOP_INVERT: break;
+  }
+
+  return CLdsValueRef(val);
+};
+
 // Perform a binary operation
 CLdsValueRef CLdsStringType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, CCompAction &ca) {
   // actual values and the operation

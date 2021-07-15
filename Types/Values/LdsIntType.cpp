@@ -25,6 +25,32 @@ string CLdsIntType::Print(void) {
   return LdsPrintF("%d", iValue);
 };
 
+// Perform a unary operation
+CLdsValueRef CLdsIntType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
+  // actual value and the operation
+  CLdsValue val = valRef.vr_val;
+  int iOperation = ca->GetIndex();
+
+  switch (iOperation) {
+    case UOP_NEGATE:
+      valRef.vr_val = -val->GetNumber();
+      break;
+
+    // TODO: Make string inversion
+    case UOP_INVERT: {
+      bool bInvert = (val->GetIndex() > 0);
+      valRef.vr_val = !bInvert;
+    } break;
+
+    case UOP_BINVERT: {
+      int iInvert = val->GetIndex();
+      valRef.vr_val = ~iInvert;
+    } break;
+  }
+
+  return CLdsValueRef(val);
+};
+
 // Perform a binary operation
 CLdsValueRef CLdsIntType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, CCompAction &ca) {
   // actual values and the operation

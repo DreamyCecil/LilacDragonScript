@@ -47,6 +47,14 @@ string CLdsStructType::Print(void) {
   return strStruct;
 };
 
+// Perform a unary operation
+CLdsValueRef CLdsStructType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
+  // cannot do unary operations on structures
+  LdsThrow(LEX_UNARY, "Cannot perform a unary operation on a struct at %s", ca.PrintPos().c_str());
+
+  return valRef;
+};
+
 // Perform a binary operation
 CLdsValueRef CLdsStructType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, CCompAction &ca) {
   // actual values and the operation

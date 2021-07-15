@@ -25,6 +25,12 @@ string CLdsFloatType::Print(void) {
   return LdsPrintF("%s", LdsFloatStr(dValue).c_str());
 };
 
+// Perform a unary operation
+CLdsValueRef CLdsFloatType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
+  // use integer's unary function
+  return CLdsIntType(0).UnaryOp(valRef, ca);
+};
+
 // Perform a binary operation
 CLdsValueRef CLdsFloatType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, CCompAction &ca) {
   // use integer's binary function

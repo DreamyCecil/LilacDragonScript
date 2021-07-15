@@ -73,6 +73,8 @@ class LDS_API ILdsValueBase {
     // Get struct value
     virtual CLdsStruct &GetStruct(void) { return *((CLdsStruct *)NULL); };
     
+    // Perform a unary operation
+    virtual class CLdsValueRef UnaryOp(CLdsValueRef &valRef, CCompAction &ca) = 0;
     // Perform a binary operation
     virtual class CLdsValueRef BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, CCompAction &ca) = 0;
   

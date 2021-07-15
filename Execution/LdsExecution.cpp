@@ -121,31 +121,10 @@ void Exec_Val(void) {
 // Unary operations
 void Exec_Unary(void) {
   CLdsValueRef valRef = _pavalStack->Pop();
-  CLdsValue val = valRef.vr_val;
-
-  if (val->GetType() > EVT_FLOAT) {
-    LdsThrow(LEX_UNARY, "Cannot perform unary operation on a value that isn't a number at %s", _ca->PrintPos().c_str());
-  }
-
-  switch ((*_ca)->GetIndex()) {
-    case UOP_NEGATE:
-      valRef.vr_val = -val->GetNumber();
-      break;
-
-    // TODO: Make string inversion
-    case UOP_INVERT: {
-      bool bInvert = (val->GetIndex() > 0);
-      valRef.vr_val = !bInvert;
-    } break;
-
-    case UOP_BINVERT: {
-      int iInvert = val->GetIndex();
-      valRef.vr_val = ~iInvert;
-    } break;
-  }
-
-  // push back into the stack
-  _pavalStack->Push(valRef);
+  
+  // value to return
+  CLdsValueRef valRefReturn = valRef.vr_val->UnaryOp(valRef, *_ca);
+  _pavalStack->Push(valRefReturn);
 };
 
 // Binary operations
@@ -156,7 +135,6 @@ void Exec_Binary(void) {
   
   // value to return
   CLdsValueRef valRefReturn = valRef1.vr_val->BinaryOp(valRef1, valRef2, *_ca);
-
   _pavalStack->Push(valRefReturn);
 };
 
