@@ -27,7 +27,11 @@ SOFTWARE. */
 // Script engine
 static CLdsScriptEngine _ldsEngine;
 
+#include <iostream>
+#include <windows.h>
 
+// Running tests of all scripts
+static bool _bAllScriptsTest = false;
 
 // Error output function
 void ErrorOutput(const char *strError) {
@@ -41,6 +45,11 @@ LdsReturn LDS_Random(LDS_ARGS) {
 
 // Console printing function
 LdsReturn LDS_ConsolePrint(LDS_ARGS) {
+  // don't output anything on tests
+  if (_bAllScriptsTest) {
+    return 0;
+  }
+
   CLdsValue valPrint = LDS_NEXT_ARG;
   return printf("%s", valPrint.Print().c_str());
 };
@@ -67,20 +76,23 @@ void SetupLDS(void) {
 
 
 
-// Entry point
-int main() {
-  SetupLDS();
+// Test one script
+static bool RunScript(string strFile, const bool &bInfo)
+{
+  strFile = LdsPrintF("TestScripts\\%s", strFile.c_str());
+
+  if (bInfo) {
+    printf("[LDS]: Running \"%s\"...\n", strFile.c_str());
+  }
 
   // load script from the file
   string strScript = "";
 
   // can also use "_ldsEngine._pLdsLoadScript" for the engine-specific function
-  if (!LdsLoadScriptFile("TestScripts\\RandomLetters.lds", strScript)) {
-    printf("[LDS]: Couldn't load the script file\n");
-    return 0;
+  if (!LdsLoadScriptFile(strFile.c_str(), strScript)) {
+    ErrorOutput("Couldn't load the script file\n\n");
+    return false;
   }
-
-  printf("[LDS]: Successfully loaded the script\n");
 
   // list of compiled actions
   CActionList acaActions;
@@ -88,18 +100,124 @@ int main() {
   // compile the script
   ELdsError eResult = _ldsEngine.LdsCompileScript(strScript, acaActions);
   
-  // compiled OK
-  if (eResult == LER_OK) {
-    // display action count
+  // didn't compile OK
+  if (eResult != LER_OK) {
+    return false;
+  }
+
+  // display action count
+  if (bInfo) {
     printf("[LDS]: Compiled %d actions\n", acaActions.Count());
-    printf("--------------------------------\n");
 
-    // execute script in quick run mode
-    CLdsValue valResult = _ldsEngine.ScriptExecute(acaActions, CLdsVarMap());
+    if (!_bAllScriptsTest) {
+      printf("--------------------------------\n");
+    }
+  }
 
-    // print out the result
-    printf("--------------------------------\n");
-    printf("[RESULT]: %s\n", valResult.Print().c_str());
+  // execute script in quick run mode
+  CLdsValue valResult = _ldsEngine.ScriptExecute(acaActions, CLdsVarMap());
+    
+  // print out the result
+  if (bInfo) {
+    if (!_bAllScriptsTest) {
+      printf("\n--------------------------------\n");
+    }
+
+    printf("[RESULT]: %s\n\n", valResult.Print().c_str());
+  }
+
+  // ran successfully
+  return true;
+};
+
+// Test all scripts
+static void RunAllScripts(void) {
+  _bAllScriptsTest = true;
+  printf("\n");
+
+  WIN32_FIND_DATA fndData;
+  HANDLE hFind = FindFirstFile("TestScripts\\*.lds", &fndData);
+
+  // no matching files
+  if (hFind == INVALID_HANDLE_VALUE) {
+    printf("No scripts has been found\n\n");
+    return;
+  }
+
+  int ctScripts = 0;
+  int ctPassed = 0;
+    
+  // as long as the file is found
+  while (hFind != INVALID_HANDLE_VALUE) {
+    // run this script
+    string strFile = fndData.cFileName;
+
+    if (RunScript(strFile, true)) {
+      // count passed scripts
+      ctPassed++;
+    }
+
+    // count the script
+    ctScripts++;
+
+    // find next script
+    if (!FindNextFile(hFind, &fndData)) {
+      // not found
+      FindClose(hFind);
+      break;
+    }
+  }
+
+  printf("[LDS]: Ran %d/%d scripts successfully\n\n", ctPassed, ctScripts);
+};
+
+// Entry point
+int main() {
+  SetupLDS();
+
+  // forever
+  while (true) {
+    _bAllScriptsTest = false;
+
+    // display help
+    RunScript("UsageExampleHelp.lds", false);
+
+    // user input
+    string strInput;
+    std::getline(std::cin, strInput);
+
+    // retrive action number
+    char *chr;
+    int iAction = strtol(strInput.c_str(), &chr, 10);
+
+    // not a number
+    if (*chr) {
+      printf("- Invalid input\n\n");
+      continue;
+    }
+
+    switch (iAction) {
+      // test all scripts
+      case 1: RunAllScripts(); break;
+
+      // test one script
+      case 2:
+        printf("Enter script name: ");
+        std::getline(std::cin, strInput);
+
+        printf("\n");
+
+        strInput += ".lds";
+        RunScript(strInput, true);
+        break;
+
+      // quit
+      case 3: return 0;
+
+      default:
+        printf("- Invalid action number\n\n");
+        continue;
+    }
   }
 
   return 0;
