@@ -28,7 +28,10 @@ SOFTWARE. */
 static CLdsScriptEngine _ldsEngine;
 
 #include <iostream>
+
+#ifdef WIN32
 #include <windows.h>
+#endif
 
 // Running tests of all scripts
 static bool _bAllScriptsTest = false;
@@ -54,6 +57,24 @@ LdsReturn LDS_ConsolePrint(LDS_ARGS) {
   return printf("%s", valPrint.Print().c_str());
 };
 
+// Suspend execution for some time
+LdsReturn LDS_Sleep(LDS_ARGS) {
+  int iMilliseconds = int(LDS_NEXT_NUM * 1000);
+
+  // wait for very little while doing all tests
+  if (_bAllScriptsTest) {
+    iMilliseconds = 10;
+  }
+  
+  #ifndef WIN32
+  throw "Sleep() method is only available on Windows systems!";
+  #else
+  Sleep(iMilliseconds);
+  #endif
+
+  return 0;
+};
+
 // Initial LDS setup
 void SetupLDS(void) {
   // hook the error output function
@@ -63,6 +84,7 @@ void SetupLDS(void) {
   CLdsFuncMap mapFunc;
   mapFunc["Random"] = SLdsFunc(0, &LDS_Random);
   mapFunc["Out"] = SLdsFunc(1, &LDS_ConsolePrint);
+  mapFunc["Sleep"] = SLdsFunc(1, &LDS_Sleep);
 
   _ldsEngine.SetCustomFunctions(mapFunc);
 
@@ -132,6 +154,10 @@ static bool RunScript(string strFile, const bool &bInfo)
 
 // Test all scripts
 static void RunAllScripts(void) {
+  #ifndef WIN32
+  printf("Only supported on Windows systems\n");
+  #else
+
   _bAllScriptsTest = true;
   printf("\n");
 
@@ -169,6 +195,7 @@ static void RunAllScripts(void) {
   }
 
   printf("[LDS]: Ran %d/%d scripts successfully\n\n", ctPassed, ctScripts);
+  #endif
 };
 
 // Entry point
