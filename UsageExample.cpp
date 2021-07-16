@@ -124,6 +124,7 @@ static bool RunScript(string strFile, const bool &bInfo)
   
   // didn't compile OK
   if (eResult != LER_OK) {
+    printf("\n");
     return false;
   }
 
@@ -135,10 +136,16 @@ static bool RunScript(string strFile, const bool &bInfo)
       printf("--------------------------------\n");
     }
   }
-
+  
   // execute script in quick run mode
-  CLdsValue valResult = _ldsEngine.ScriptExecute(acaActions, CLdsVarMap());
-    
+  CLdsValue valResult;
+  
+  if (_ldsEngine.ScriptExecute(acaActions, &valResult) != ETS_FINISHED) {
+    // execution has failed
+    printf("\n");
+    return false;
+  }
+  
   // print out the result
   if (bInfo) {
     if (!_bAllScriptsTest) {

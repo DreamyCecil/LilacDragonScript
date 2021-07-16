@@ -32,7 +32,9 @@ CLdsThread *CLdsScriptEngine::ThreadCreate(CActionList acaActions, CLdsVarMap &m
 };
 
 // Execute the compiled script
-CLdsValue CLdsScriptEngine::ScriptExecute(CActionList acaActions, CLdsVarMap &mapArgs, CLdsInFuncMap *pmapInline) {
+EThreadStatus CLdsScriptEngine::ScriptExecute(CActionList acaActions, CLdsValue *pvalResult,
+                                              CLdsVarMap &mapArgs, CLdsInFuncMap *pmapInline)
+{
   CLdsThread *psth = ThreadCreate(acaActions, mapArgs);
   psth->SetFlag(CLdsThread::THF_QUICK, true);
   
@@ -40,12 +42,16 @@ CLdsValue CLdsScriptEngine::ScriptExecute(CActionList acaActions, CLdsVarMap &ma
   if (pmapInline != NULL && pmapInline->Count() > 0) {
     psth->sth_mapInlineFunc.AddFrom(*pmapInline, true);
   }
-  
-  CLdsValue valResult;
 
-  switch (psth->Resume()) {
+  // get script status
+  EThreadStatus eStatus = psth->Resume();
+
+  switch (eStatus) {
     case ETS_FINISHED: {
-      valResult = psth->sth_valResult;
+      // return value
+      if (pvalResult != NULL) {
+        *pvalResult = psth->sth_valResult;
+      }
     } break;
     
     case ETS_ERROR: {
@@ -60,7 +66,7 @@ CLdsValue CLdsScriptEngine::ScriptExecute(CActionList acaActions, CLdsVarMap &ma
   // delete the thread
   delete psth;
   
-  return valResult;
+  return eStatus;
 };
 
 // Thread handling
