@@ -113,39 +113,39 @@ void CLdsScriptEngine::ParseScript(string strScript) {
       case '\n': COUNT_LINE; break;
 
       // parentheses
-      case '(': AddLdsToken(LTK_PAR_OPEN, iPrintPos); break;
-      case ')': AddLdsToken(LTK_PAR_CLOSE, iPrintPos); break;
+      case '(': AddParserToken(LTK_PAR_OPEN, iPrintPos); break;
+      case ')': AddParserToken(LTK_PAR_CLOSE, iPrintPos); break;
       // square brackets
-      case '[': AddLdsToken(LTK_SQ_OPEN, iPrintPos); break;
-      case ']': AddLdsToken(LTK_SQ_CLOSE, iPrintPos); break;
+      case '[': AddParserToken(LTK_SQ_OPEN, iPrintPos); break;
+      case ']': AddParserToken(LTK_SQ_CLOSE, iPrintPos); break;
       // curly brackets
-      case '{': AddLdsToken(LTK_CUR_OPEN, iPrintPos); break;
-      case '}': AddLdsToken(LTK_CUR_CLOSE, iPrintPos); break;
+      case '{': AddParserToken(LTK_CUR_OPEN, iPrintPos); break;
+      case '}': AddParserToken(LTK_CUR_CLOSE, iPrintPos); break;
       
       // structure accessor
-      case '.': AddLdsToken(LTK_ACCESS, iPrintPos); break;
+      case '.': AddParserToken(LTK_ACCESS, iPrintPos); break;
 
       // comma
-      case ',': AddLdsToken(LTK_COMMA, iPrintPos); break;
+      case ',': AddParserToken(LTK_COMMA, iPrintPos); break;
       // semicolon
-      case ';': AddLdsToken(LTK_SEMICOL, iPrintPos); break;
+      case ';': AddParserToken(LTK_SEMICOL, iPrintPos); break;
       // colon
-      case ':': AddLdsToken(LTK_COLON, iPrintPos); break;
+      case ':': AddParserToken(LTK_COLON, iPrintPos); break;
 
       // operators
       case '+':
         switch (cNextChar) {
           case '=': // +=
             _iPos++;
-            AddLdsToken(LTK_SET, iPrintPos, LOP_ADD);
+            AddParserToken(LTK_SET, iPrintPos, LOP_ADD);
             break;
 
           case '+': // ++
             _iPos++;
-            AddLdsToken(LTK_ADJFIX, iPrintPos, 1);
+            AddParserToken(LTK_ADJFIX, iPrintPos, 1);
             break;
 
-          default: AddLdsToken(LTK_OPERATOR, iPrintPos, LOP_ADD);
+          default: AddParserToken(LTK_OPERATOR, iPrintPos, LOP_ADD);
         }
         break;
 
@@ -153,15 +153,15 @@ void CLdsScriptEngine::ParseScript(string strScript) {
         switch (cNextChar) {
           case '=': // -=
             _iPos++;
-            AddLdsToken(LTK_SET, iPrintPos, LOP_SUB);
+            AddParserToken(LTK_SET, iPrintPos, LOP_SUB);
             break;
 
           case '-': // --
             _iPos++;
-            AddLdsToken(LTK_ADJFIX, iPrintPos, -1);
+            AddParserToken(LTK_ADJFIX, iPrintPos, -1);
             break;
 
-          default: AddLdsToken(LTK_OPERATOR, iPrintPos, LOP_SUB);
+          default: AddParserToken(LTK_OPERATOR, iPrintPos, LOP_SUB);
         }
         break;
 
@@ -169,9 +169,9 @@ void CLdsScriptEngine::ParseScript(string strScript) {
         // *=
         if (cNextChar == '=') {
           _iPos++;
-          AddLdsToken(LTK_SET, iPrintPos, LOP_MUL);
+          AddParserToken(LTK_SET, iPrintPos, LOP_MUL);
         } else {
-          AddLdsToken(LTK_OPERATOR, iPrintPos, LOP_MUL);
+          AddParserToken(LTK_OPERATOR, iPrintPos, LOP_MUL);
         }
         break;
 
@@ -180,7 +180,7 @@ void CLdsScriptEngine::ParseScript(string strScript) {
           // /=
           case '=':
             _iPos++;
-            AddLdsToken(LTK_SET, iPrintPos, LOP_DIV);
+            AddParserToken(LTK_SET, iPrintPos, LOP_DIV);
             break;
 
           // comments
@@ -188,16 +188,16 @@ void CLdsScriptEngine::ParseScript(string strScript) {
           case '*': ParseBlockComment(str); break;
 
           // division operator
-          default: AddLdsToken(LTK_OPERATOR, iPrintPos, LOP_DIV);
+          default: AddParserToken(LTK_OPERATOR, iPrintPos, LOP_DIV);
         }
         break;
 
       case '%':
-        AddLdsToken(LTK_OPERATOR, iPrintPos, LOP_FMOD);
+        AddParserToken(LTK_OPERATOR, iPrintPos, LOP_FMOD);
         break;
 
       case '~':
-        AddLdsToken(LTK_UNARYOP, iPrintPos, UOP_BINVERT);
+        AddParserToken(LTK_UNARYOP, iPrintPos, UOP_BINVERT);
         break;
 
       // bitwise operators
@@ -205,15 +205,15 @@ void CLdsScriptEngine::ParseScript(string strScript) {
         switch (cNextChar) {
           case '=': // &=
             _iPos++;
-            AddLdsToken(LTK_SET, iPrintPos, LOP_B_AND);
+            AddParserToken(LTK_SET, iPrintPos, LOP_B_AND);
             break;
 
           case '&': // &&
             _iPos++;
-            AddLdsToken(LTK_OPERATOR, iPrintPos, LOP_AND);
+            AddParserToken(LTK_OPERATOR, iPrintPos, LOP_AND);
             break;
 
-          default: AddLdsToken(LTK_OPERATOR, iPrintPos, LOP_B_AND);
+          default: AddParserToken(LTK_OPERATOR, iPrintPos, LOP_B_AND);
         }
         break;
 
@@ -221,15 +221,15 @@ void CLdsScriptEngine::ParseScript(string strScript) {
         switch (cNextChar) {
           case '=': // ^=
             _iPos++;
-            AddLdsToken(LTK_SET, iPrintPos, LOP_B_XOR);
+            AddParserToken(LTK_SET, iPrintPos, LOP_B_XOR);
             break;
 
           case '^': // ^^
             _iPos++;
-            AddLdsToken(LTK_OPERATOR, iPrintPos, LOP_XOR);
+            AddParserToken(LTK_OPERATOR, iPrintPos, LOP_XOR);
             break;
 
-          default: AddLdsToken(LTK_OPERATOR, iPrintPos, LOP_B_XOR);
+          default: AddParserToken(LTK_OPERATOR, iPrintPos, LOP_B_XOR);
         }
         break;
 
@@ -237,15 +237,15 @@ void CLdsScriptEngine::ParseScript(string strScript) {
         switch (cNextChar) {
           case '=': // |=
             _iPos++;
-            AddLdsToken(LTK_SET, iPrintPos, LOP_B_OR);
+            AddParserToken(LTK_SET, iPrintPos, LOP_B_OR);
             break;
 
           case '|': // ||
             _iPos++;
-            AddLdsToken(LTK_OPERATOR, iPrintPos, LOP_OR);
+            AddParserToken(LTK_OPERATOR, iPrintPos, LOP_OR);
             break;
 
-          default: AddLdsToken(LTK_OPERATOR, iPrintPos, LOP_B_OR);
+          default: AddParserToken(LTK_OPERATOR, iPrintPos, LOP_B_OR);
         }
         break;
 
@@ -254,15 +254,15 @@ void CLdsScriptEngine::ParseScript(string strScript) {
         switch (cNextChar) {
           case '=': // >=
             _iPos++;
-            AddLdsToken(LTK_OPERATOR, iPrintPos, LOP_GOE);
+            AddParserToken(LTK_OPERATOR, iPrintPos, LOP_GOE);
             break;
 
           case '>': // >>
             _iPos++;
-            AddLdsToken(LTK_OPERATOR, iPrintPos, LOP_SH_R);
+            AddParserToken(LTK_OPERATOR, iPrintPos, LOP_SH_R);
             break;
 
-          default: AddLdsToken(LTK_OPERATOR, iPrintPos, LOP_GT);
+          default: AddParserToken(LTK_OPERATOR, iPrintPos, LOP_GT);
         }
         break;
 
@@ -270,15 +270,15 @@ void CLdsScriptEngine::ParseScript(string strScript) {
         switch (cNextChar) {
           case '=': // <=
             _iPos++;
-            AddLdsToken(LTK_OPERATOR, iPrintPos, LOP_LOE);
+            AddParserToken(LTK_OPERATOR, iPrintPos, LOP_LOE);
             break;
 
           case '<': // <<
             _iPos++;
-            AddLdsToken(LTK_OPERATOR, iPrintPos, LOP_SH_L);
+            AddParserToken(LTK_OPERATOR, iPrintPos, LOP_SH_L);
             break;
 
-          default: AddLdsToken(LTK_OPERATOR, iPrintPos, LOP_LT);
+          default: AddParserToken(LTK_OPERATOR, iPrintPos, LOP_LT);
         }
         break;
 
@@ -286,9 +286,9 @@ void CLdsScriptEngine::ParseScript(string strScript) {
         // ==
         if (cNextChar == '=') {
           _iPos++;
-          AddLdsToken(LTK_OPERATOR, iPrintPos, LOP_EQ);
+          AddParserToken(LTK_OPERATOR, iPrintPos, LOP_EQ);
         } else {
-          AddLdsToken(LTK_SET, iPrintPos, LOP_SET);
+          AddParserToken(LTK_SET, iPrintPos, LOP_SET);
         }
         break;
 
@@ -296,17 +296,14 @@ void CLdsScriptEngine::ParseScript(string strScript) {
         // !=
         if (cNextChar == '=') {
           _iPos++;
-          AddLdsToken(LTK_OPERATOR, iPrintPos, LOP_NEQ);
+          AddParserToken(LTK_OPERATOR, iPrintPos, LOP_NEQ);
         } else {
-          AddLdsToken(LTK_UNARYOP, iPrintPos, UOP_INVERT);
+          AddParserToken(LTK_UNARYOP, iPrintPos, UOP_INVERT);
         }
         break;
 
       // string
       case '"': {
-        // resulting string
-        string strString = "";
-        
         // current character
         bool bEscapeChar = false;
         char cString;
@@ -314,8 +311,6 @@ void CLdsScriptEngine::ParseScript(string strScript) {
         UNTIL_END {
           // current character
           cString = str[_iPos];
-
-          bool bContinueString = false;
 
           switch (cString) {
             // line break
@@ -325,97 +320,26 @@ void CLdsScriptEngine::ParseScript(string strScript) {
             case ESCAPE_CHAR:
               bEscapeChar = !bEscapeChar;
               _iPos++;
-            
-              // add character to the string
-              strString += cString;
               continue;
             
             // string end
-            case '"': {
-              // or actually not
-              if (bEscapeChar) {
-                break;
-              }
-
-              // store current position
-              int iLastPos = _iPos;
-              int iLastLine = _iLine;
-              int iLastLineStart = _iLineStart;
-
-              bool bStringAddition = false;
-            
-              // search for the next string if there is one
-              UNTIL_END {
-                // start with the next character
-                _iPos++;
-
-                cChar = str[_iPos];
-                cNextChar = str[_iPos + 1];
-
-                switch (cChar) {
-                  // skip spaces
-                  case ' ': case '\t': case '\r': break;
-
-                  // line break
-                  case '\n': COUNT_LINE; break;
-
-                  // comments
-                  case '/': {
-                    switch (cNextChar) {
-                      case '/': ParseLineComment(str); break;
-                      case '*': ParseBlockComment(str); break;
-                    }
-                  } break;
-
-                  // addition of another string
-                  case '+': {
-                    // can't have two operators in a row
-                    if (bStringAddition) {
-                      goto __AfterNextString__;
-                    }
-
-                    bStringAddition = true;
-                  } break;
-
-                  // start of a new string
-                  case '"': {
-                    bContinueString = true;
-                  } goto __AfterNextString__;
-
-                  // no next string if any other character
-                  default:
-                    goto __AfterNextString__;
-                }
-              }
-
-              __AfterNextString__:
-
-              // if not followed by another string
-              if (!bContinueString) {
-                // restore the position
-                _iPos = iLastPos;
-                _iLine = iLastLine;
-                _iLineStart = iLastLineStart;
-
-                // finish parsing the string
+            case '"':
+              if (!bEscapeChar) {
                 goto __FinishString__;
               }
-            } break;
+              break;
           }
 
           bEscapeChar = false;
           _iPos++;
-
-          // add character to the string
-          if (!bContinueString) {
-            strString += cString;
-          }
         }
 
         __FinishString__:
 
         // didn't parse past the limit
         if (_iPos < _ctLen) {
+          string strString = str.substr(iStart + 1, _iPos - iStart - 1);
+
           // parse escape characters
           std::ostringstream strmEscape;
           bEscapeChar = false;
@@ -457,7 +381,7 @@ void CLdsScriptEngine::ParseScript(string strScript) {
             }
           }
 
-          AddLdsToken(LTK_VAL, iPrintPos, strmEscape.str());
+          AddParserToken(LTK_VAL, iPrintPos, strmEscape.str());
           _iPos++;
 
         } else {
@@ -491,7 +415,7 @@ void CLdsScriptEngine::ParseScript(string strScript) {
           }
           
           // copy the name (excluding '#')
-          string strDir = str.substr(iStart+1, _iPos - iStart - 1);
+          string strDir = str.substr(iStart + 1, _iPos - iStart - 1);
           
           // determine directive type by its name
           int iDirType = -1;
@@ -503,7 +427,7 @@ void CLdsScriptEngine::ParseScript(string strScript) {
             LdsThrow(LEP_DIR, "Unknown directive '%s' at %s", strDir.c_str(), LdsPrintPos(iPrintPos).c_str());
           }
           
-          AddLdsToken(LTK_DIR, iPrintPos, iDirType);
+          AddParserToken(LTK_DIR, iPrintPos, iDirType);
           
         } else {
           LdsThrow(LEP_DIRNAME, "Expected a directive name at %s", LdsPrintPos(iPrintPos).c_str());
@@ -569,18 +493,18 @@ void CLdsScriptEngine::ParseScript(string strScript) {
           switch (ubType) {
             case 0: { // index
               int iValue = atoi(strString.c_str());
-              AddLdsToken(LTK_VAL, iPrintPos, iValue);
+              AddParserToken(LTK_VAL, iPrintPos, iValue);
             } break;
 
             case 2: { // hexadecimal index
               int iHexValue = 0;
               SSCANF_FUNC(strString.c_str(), "%x", &iHexValue);
-              AddLdsToken(LTK_VAL, iPrintPos, iHexValue);
+              AddParserToken(LTK_VAL, iPrintPos, iHexValue);
             } break;
 
             default: { // float
               double dValue = atof(strString.c_str());
-              AddLdsToken(LTK_VAL, iPrintPos, dValue);
+              AddParserToken(LTK_VAL, iPrintPos, dValue);
             }
           }
         
@@ -610,85 +534,85 @@ void CLdsScriptEngine::ParseScript(string strScript) {
           
           // operators
           if (strName == "mod") {
-            AddLdsToken(LTK_OPERATOR, iPrintPos, LOP_FMOD);
+            AddParserToken(LTK_OPERATOR, iPrintPos, LOP_FMOD);
 
           } else if (strName == "div") {
-            AddLdsToken(LTK_OPERATOR, iPrintPos, LOP_IDIV);
+            AddParserToken(LTK_OPERATOR, iPrintPos, LOP_IDIV);
 
           } else if (strName == "and") {
-            AddLdsToken(LTK_OPERATOR, iPrintPos, LOP_AND);
+            AddParserToken(LTK_OPERATOR, iPrintPos, LOP_AND);
 
           } else if (strName == "or") {
-            AddLdsToken(LTK_OPERATOR, iPrintPos, LOP_OR);
+            AddParserToken(LTK_OPERATOR, iPrintPos, LOP_OR);
 
           // constants
           } else if (strName == "true") {
-            AddLdsToken(LTK_VAL, iPrintPos, true);
+            AddParserToken(LTK_VAL, iPrintPos, true);
             
           } else if (strName == "false") {
-            AddLdsToken(LTK_VAL, iPrintPos, false);
+            AddParserToken(LTK_VAL, iPrintPos, false);
 
           } else if (strName == "pi") {
-            AddLdsToken(LTK_VAL, iPrintPos, 3.14159265358979323846);
+            AddParserToken(LTK_VAL, iPrintPos, 3.14159265358979323846);
 
           } else if (strName == "e") {
-            AddLdsToken(LTK_VAL, iPrintPos, 2.71828182845904523536);
+            AddParserToken(LTK_VAL, iPrintPos, 2.71828182845904523536);
 
           // conditions
           } else if (strName == "if") {
-            AddLdsToken(LTK_IF, iPrintPos);
+            AddParserToken(LTK_IF, iPrintPos);
 
           } else if (strName == "else") {
-            AddLdsToken(LTK_ELSE, iPrintPos);
+            AddParserToken(LTK_ELSE, iPrintPos);
 
           } else if (strName == "return") {
-            AddLdsToken(LTK_RETURN, iPrintPos);
+            AddParserToken(LTK_RETURN, iPrintPos);
           
           // loops
           } else if (strName == "while") {
-            AddLdsToken(LTK_WHILE, iPrintPos);
+            AddParserToken(LTK_WHILE, iPrintPos);
 
           } else if (strName == "do") {
-            AddLdsToken(LTK_DO, iPrintPos);
+            AddParserToken(LTK_DO, iPrintPos);
 
           } else if (strName == "for") {
-            AddLdsToken(LTK_FOR, iPrintPos);
+            AddParserToken(LTK_FOR, iPrintPos);
 
           } else if (strName == "break") {
-            AddLdsToken(LTK_BREAK, iPrintPos);
+            AddParserToken(LTK_BREAK, iPrintPos);
 
           } else if (strName == "continue") {
-            AddLdsToken(LTK_CONTINUE, iPrintPos);
+            AddParserToken(LTK_CONTINUE, iPrintPos);
           
           // switch-case
           } else if (strName == "switch") {
-            AddLdsToken(LTK_SWITCH, iPrintPos);
+            AddParserToken(LTK_SWITCH, iPrintPos);
 
           } else if (strName == "case") {
-            AddLdsToken(LTK_CASE, iPrintPos);
+            AddParserToken(LTK_CASE, iPrintPos);
 
           } else if (strName == "default") {
-            AddLdsToken(LTK_DEFAULT, iPrintPos);
+            AddParserToken(LTK_DEFAULT, iPrintPos);
             
           // other
           } else if (strName == "var") {
-            AddLdsToken(LTK_VAR, iPrintPos, false);
+            AddParserToken(LTK_VAR, iPrintPos, false);
             
           } else if (strName == "const") {
-            AddLdsToken(LTK_VAR, iPrintPos, true);
+            AddParserToken(LTK_VAR, iPrintPos, true);
             
           } else if (strName == "static") {
-            AddLdsToken(LTK_STATIC, iPrintPos);
+            AddParserToken(LTK_STATIC, iPrintPos);
             
           } else if (strName == "function") {
-            AddLdsToken(LTK_FUNC, iPrintPos);
+            AddParserToken(LTK_FUNC, iPrintPos);
 
           // custom constants
           } else if (_mapLdsConstants.FindKeyIndex(strName) != -1) {
-            AddLdsToken(LTK_VAL, iPrintPos, _mapLdsConstants[strName]);
+            AddParserToken(LTK_VAL, iPrintPos, _mapLdsConstants[strName]);
 
           } else {
-            AddLdsToken(LTK_ID, iPrintPos, strName);
+            AddParserToken(LTK_ID, iPrintPos, strName);
           }
         
         // unknown characters
@@ -699,26 +623,26 @@ void CLdsScriptEngine::ParseScript(string strScript) {
     }
   }
 
-  AddLdsToken(LTK_END, _ctLen);
+  AddParserToken(LTK_END, _ctLen);
 };
 
 // Add expression token
-void CLdsScriptEngine::AddLdsToken(const ELdsToken &eType, const int &iPos) {
+void CLdsScriptEngine::AddParserToken(const ELdsToken &eType, const int &iPos) {
   _aetTokens.Add(CLdsToken(eType, iPos, -1));
 };
 
-void CLdsScriptEngine::AddLdsToken(const ELdsToken &eType, const int &iPos, const int &iValue) {
+void CLdsScriptEngine::AddParserToken(const ELdsToken &eType, const int &iPos, const int &iValue) {
   _aetTokens.Add(CLdsToken(eType, iPos, iValue, -1));
 };
 
-void CLdsScriptEngine::AddLdsToken(const ELdsToken &eType, const int &iPos, const double &dValue) {
+void CLdsScriptEngine::AddParserToken(const ELdsToken &eType, const int &iPos, const double &dValue) {
   _aetTokens.Add(CLdsToken(eType, iPos, dValue, -1));
 };
 
-void CLdsScriptEngine::AddLdsToken(const ELdsToken &eType, const int &iPos, const string &strValue) {
+void CLdsScriptEngine::AddParserToken(const ELdsToken &eType, const int &iPos, const string &strValue) {
   _aetTokens.Add(CLdsToken(eType, iPos, strValue, -1));
 };
 
-void CLdsScriptEngine::AddLdsToken(const ELdsToken &eType, const int &iPos, const CLdsValue &valValue) {
+void CLdsScriptEngine::AddParserToken(const ELdsToken &eType, const int &iPos, const CLdsValue &valValue) {
   _aetTokens.Add(CLdsToken(eType, iPos, valValue, -1));
 };

@@ -76,7 +76,7 @@ class LDS_API ILdsValueBase {
     // Perform a unary operation
     virtual class CLdsValueRef UnaryOp(CLdsValueRef &valRef, CCompAction &ca) = 0;
     // Perform a binary operation
-    virtual class CLdsValueRef BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, CCompAction &ca) = 0;
+    virtual class CLdsValueRef BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, const CLdsToken &tkn) = 0;
   
     // Conditions
     virtual bool IsTrue(void) = 0;
@@ -137,11 +137,6 @@ class LDS_API CLdsValue {
     // Type assertion (for function arguments)
     CLdsValue &Assert(const ELdsValueType &eDesired);
     CLdsValue &AssertNumber(void);
-
-    // Print the value
-    inline string Print(void) {
-      return val_pBase->Print();
-    };
 
     // Conditions
     bool operator==(const CLdsValue &valOther) const;

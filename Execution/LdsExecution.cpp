@@ -79,7 +79,7 @@ void Exec_Val(void) {
       avalArray.New(ctValues);
       
       // get array entries
-      for (int iPopVal = ctValues-1; iPopVal >= 0; iPopVal--) {
+      for (int iPopVal = ctValues - 1; iPopVal >= 0; iPopVal--) {
         avalArray[iPopVal] = _pavalStack->Pop().vr_val;
       }
       

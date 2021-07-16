@@ -493,7 +493,7 @@ void CLdsScriptEngine::LdsReadString(void *pStream, string &str) {
   _pLdsRead(pStream, &ctLen, sizeof(int));
 
   // make a new string
-  char *strRead = new char[ctLen+1];
+  char *strRead = new char[ctLen + 1];
   strRead[ctLen] = 0;
       
   // read the string

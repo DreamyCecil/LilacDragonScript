@@ -27,7 +27,7 @@ extern CLdsThread *_psthCurrent;
 // Debug output
 LdsReturn LdsDebugOut(LDS_ARGS) {
   CLdsValue valPrint = LDS_NEXT_ARG;
-  _pldsCurrent->LdsOut("%s\n", valPrint.Print().c_str());
+  _pldsCurrent->LdsOut("%s\n", valPrint->Print().c_str());
   
   return valPrint;
 };

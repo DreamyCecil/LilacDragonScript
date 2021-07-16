@@ -30,7 +30,7 @@ void CLdsStruct::Clear(void) {
 // Print one variable
 string CLdsStruct::Print(int iVar) {
   // print value
-  string strValue = mapVars.GetValue(iVar).var_valValue.Print();
+  string strValue = mapVars.GetValue(iVar).var_valValue->Print();
   
   // var = 'val'
   string strVar = mapVars.GetKey(iVar) + " = '" + strValue + "'";

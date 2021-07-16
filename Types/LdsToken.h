@@ -126,7 +126,7 @@ class LDS_API CLdsToken {
       lt_eType(iType), lt_iPos(iLine), lt_valValue(val), lt_iArg(iArg) {};
 
     // Token position
-    string PrintPos(void) {
+    string PrintPos(void) const {
       return LdsPrintPos(lt_iPos);
     };
 

@@ -32,7 +32,7 @@ CLdsValueRef CLdsFloatType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
 };
 
 // Perform a binary operation
-CLdsValueRef CLdsFloatType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, CCompAction &ca) {
+CLdsValueRef CLdsFloatType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, const CLdsToken &tkn) {
   // use integer's binary function
-  return CLdsIntType(0).BinaryOp(valRef1, valRef2, ca);
+  return CLdsIntType(0).BinaryOp(valRef1, valRef2, tkn);
 };

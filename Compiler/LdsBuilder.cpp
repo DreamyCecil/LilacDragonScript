@@ -24,7 +24,7 @@ SOFTWARE. */
 void CLdsScriptEngine::LdsBuild(bool bExpression) {
   _bnNode = CBuildNode();
   _iBuildPos = 0;
-  _ctBuildLen = _aetTokens.Count()-1;
+  _ctBuildLen = _aetTokens.Count() - 1;
 
   _bBuildBreak = false;
   _bBuildCont = false;
@@ -35,8 +35,9 @@ void CLdsScriptEngine::LdsBuild(bool bExpression) {
   if (bExpression) {
     ExpressionBuilder(LBF_NONE);
 
-    if (_iBuildPos < _ctBuildLen-1) {
-      LdsThrow(LEB_STOPPED, "Stopped building at %s (%d tokens out of %d)", _aetTokens[_iBuildPos].PrintPos().c_str(), _iBuildPos+1, _ctBuildLen);
+    if (_iBuildPos < _ctBuildLen - 1) {
+      string strPos = _aetTokens[_iBuildPos].PrintPos();
+      LdsThrow(LEB_STOPPED, "Stopped building at %s (%d tokens out of %d)", strPos.c_str(), _iBuildPos + 1, _ctBuildLen);
     }
     return;
   }
@@ -62,12 +63,12 @@ void CLdsScriptEngine::StatementBuilder(void) {
     LdsThrow(LEB_EMPTY, "No parser tokens");
   }
 
-  CLdsToken &et = _aetTokens[_iBuildPos++];
+  const CLdsToken &et = _aetTokens[_iBuildPos++];
 
   switch (et.lt_eType) {
     // return from the script with the value
     case LTK_RETURN: {
-      CLdsToken &etNext = _aetTokens[_iBuildPos];
+      const CLdsToken &etNext = _aetTokens[_iBuildPos];
       
       // no return value
       if (etNext.lt_eType == LTK_SEMICOL) {
@@ -90,7 +91,7 @@ void CLdsScriptEngine::StatementBuilder(void) {
       StatementBuilder();
       CBuildNode bnThen = _bnNode;
 
-      CLdsToken &etNext = _aetTokens[_iBuildPos];
+      const CLdsToken &etNext = _aetTokens[_iBuildPos];
     
       // else condition
       if (etNext.lt_eType == LTK_ELSE) {
@@ -116,7 +117,8 @@ void CLdsScriptEngine::StatementBuilder(void) {
       ExpressionBuilder(LBF_NONE);
       CBuildNode bnExp = _bnNode;
     
-      CLdsToken &etNext = _aetTokens[_iBuildPos++];
+      CLdsToken etNext = _aetTokens[_iBuildPos++];
+
       if (etNext.lt_eType != LTK_CUR_OPEN) {
         LdsThrow(LEB_OPENCB, "Expected a '{' at %s", etNext.PrintPos().c_str());
       }
@@ -218,7 +220,7 @@ void CLdsScriptEngine::StatementBuilder(void) {
     
       // build statement within the curly brackets
       while (_iBuildPos < _ctBuildLen) {
-        CLdsToken &etNext = _aetTokens[_iBuildPos];
+        const CLdsToken &etNext = _aetTokens[_iBuildPos];
       
         // block end
         if (etNext.lt_eType == LTK_CUR_CLOSE) {
@@ -258,7 +260,7 @@ void CLdsScriptEngine::StatementBuilder(void) {
       CBuildNode bnLoop = _bnNode;
     
       // while check
-      CLdsToken &etNext = _aetTokens[_iBuildPos];
+      const CLdsToken &etNext = _aetTokens[_iBuildPos];
     
       if (etNext.lt_eType != LTK_WHILE) {
         LdsThrow(LEB_WHILE, "Expected a 'while' after 'do' block at %s", etNext.PrintPos().c_str());
@@ -278,9 +280,10 @@ void CLdsScriptEngine::StatementBuilder(void) {
     // for loop
     case LTK_FOR: {
       // see if there's a parenthesis
-      CLdsToken &etNext = _aetTokens[_iBuildPos];
+      CLdsToken etNext = _aetTokens[_iBuildPos];
     
       bool bPar = (etNext.lt_eType == LTK_PAR_OPEN);
+
       if (bPar) {
         _iBuildPos++;
       }
@@ -370,7 +373,7 @@ void CLdsScriptEngine::StatementBuilder(void) {
           break;
         
         default:
-          CLdsToken &etNext = _aetTokens[_iBuildPos];
+          const CLdsToken &etNext = _aetTokens[_iBuildPos];
         
           // assignment
           if (etNext.lt_eType == LTK_SET) {
@@ -390,15 +393,16 @@ void CLdsScriptEngine::StatementBuilder(void) {
   }
 
   // allow a semicolon after statements
-  et = _aetTokens[_iBuildPos];
-  if (et.lt_eType == LTK_SEMICOL) {
+  const CLdsToken &etSemicolon = _aetTokens[_iBuildPos];
+
+  if (etSemicolon.lt_eType == LTK_SEMICOL) {
     _iBuildPos++;
   }
 };
 
 // Build definitions
 bool CLdsScriptEngine::DefinitionBuilder(void) {
-  CLdsToken &et = _aetTokens[_iBuildPos++];
+  const CLdsToken &et = _aetTokens[_iBuildPos++];
   
   switch (et.lt_eType) {
     // variable definition
@@ -407,7 +411,7 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
       bool bConst = (et->GetIndex() >= 1);
       
       do {
-        CLdsToken &etNext = _aetTokens[_iBuildPos++];
+        CLdsToken etNext = _aetTokens[_iBuildPos++];
       
         if (etNext.lt_eType != LTK_ID) {
           LdsThrow(LEB_ID, "Expected a variable name at %s", etNext.PrintPos().c_str());
@@ -456,7 +460,7 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
     
     // function definition
     case LTK_FUNC: {
-      CLdsToken &etNext = _aetTokens[_iBuildPos++];
+      CLdsToken etNext = _aetTokens[_iBuildPos++];
     
       if (etNext.lt_eType != LTK_ID) {
         LdsThrow(LEB_ID, "Expected a function name at %s", etNext.PrintPos().c_str());
@@ -555,7 +559,7 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
       int iDirType = et->GetIndex();
       
       // get directive value
-      CLdsToken &etNext = _aetTokens[_iBuildPos++];
+      const CLdsToken &etNext = _aetTokens[_iBuildPos++];
     
       if (etNext.lt_eType != LTK_VAL) {
         LdsThrow(LEB_VALUE, "Expected a value at %s", etNext.PrintPos().c_str());
@@ -594,9 +598,9 @@ void CLdsScriptEngine::ExpressionBuilder(LdsFlags ubFlags) {
     LdsThrow(LEB_EMPTY, "No parser tokens");
   }
 
-  CLdsToken &et = _aetTokens[_iBuildPos];
+  const CLdsToken &et = _aetTokens[_iBuildPos];
   
-  // build scope identifiers
+  // build scope identifiers (advances position)
   if (!ScopeBuilder()) {
     // only identifiers are allowed
     if (ubFlags & LBF_SCOPE) {
@@ -606,7 +610,48 @@ void CLdsScriptEngine::ExpressionBuilder(LdsFlags ubFlags) {
     switch (et.lt_eType) {
       // values
       case LTK_VAL: {
-        _bnNode = CBuildNode(EBN_VAL, et.lt_iPos, et.lt_valValue, -1);
+        CLdsValue val = et.lt_valValue;
+        
+        // go through tokens if it's a string value
+        if (val->GetType() == EVT_STRING)
+        {
+          while (_iBuildPos < _ctBuildLen) {
+            // get token after the string
+            CLdsToken etNext = _aetTokens[_iBuildPos];
+            bool bOperator = false;
+
+            // if it's an operator
+            if (etNext.lt_eType == LTK_OPERATOR) {
+              // if followed by an addition
+              if (etNext->GetIndex() == LOP_ADD) {
+                // skip the addition
+                etNext = _aetTokens[++_iBuildPos];
+                bOperator = true;
+
+              // something else
+              } else {
+                break;
+              }
+            }
+          
+            // if followed by another string
+            if (etNext.lt_eType == LTK_VAL && etNext->GetType() == EVT_STRING) {
+              // concatenate them
+              val = val->Print() + etNext->Print();
+            
+            // something else
+            } else {
+              if (bOperator) {
+                _iBuildPos--;
+              }
+              break;
+            }
+
+            _iBuildPos++;
+          }
+        }
+
+        _bnNode = CBuildNode(EBN_VAL, et.lt_iPos, val, -1);
       } break;
 
       // arrays
@@ -618,7 +663,7 @@ void CLdsScriptEngine::ExpressionBuilder(LdsFlags ubFlags) {
       
         while (_iBuildPos < _ctBuildLen) {
           // check if reached the closing bracket
-          CLdsToken &etNext = _aetTokens[_iBuildPos];
+          CLdsToken etNext = _aetTokens[_iBuildPos];
         
           if (etNext.lt_eType == LTK_SQ_CLOSE) {
             _iBuildPos++;
@@ -662,10 +707,10 @@ void CLdsScriptEngine::ExpressionBuilder(LdsFlags ubFlags) {
           iType = 2;
           
           // expect structure opening
-          et = _aetTokens[_iBuildPos++];
+          const CLdsToken &etOpening = _aetTokens[_iBuildPos++];
           
-          if (et.lt_eType != LTK_CUR_OPEN) {
-            LdsThrow(LEB_OPENCB, "Expected a '{' at %s", et.PrintPos().c_str());
+          if (etOpening.lt_eType != LTK_CUR_OPEN) {
+            LdsThrow(LEB_OPENCB, "Expected a '{' at %s", etOpening.PrintPos().c_str());
           }
         }
       
@@ -674,7 +719,7 @@ void CLdsScriptEngine::ExpressionBuilder(LdsFlags ubFlags) {
       
         while (_iBuildPos < _ctBuildLen) {
           // check if reached the closing bracket
-          CLdsToken &etNext = _aetTokens[_iBuildPos++];
+          CLdsToken etNext = _aetTokens[_iBuildPos++];
         
           if (etNext.lt_eType == LTK_CUR_CLOSE) {
             bClosed = true;
@@ -733,10 +778,10 @@ void CLdsScriptEngine::ExpressionBuilder(LdsFlags ubFlags) {
       // inside the parentheses
       case LTK_PAR_OPEN: {
         ExpressionBuilder(LBF_NONE);
-        et = _aetTokens[_iBuildPos++];
+        const CLdsToken &etClosing = _aetTokens[_iBuildPos++];
 
-        if (et.lt_eType != LTK_PAR_CLOSE) {
-          LdsThrow(LEB_CLOSEP, "Expected ')' at %s", et.PrintPos().c_str());
+        if (etClosing.lt_eType != LTK_PAR_CLOSE) {
+          LdsThrow(LEB_CLOSEP, "Expected ')' at %s", etClosing.PrintPos().c_str());
         }
       } break;
 
@@ -786,23 +831,23 @@ void CLdsScriptEngine::ExpressionBuilder(LdsFlags ubFlags) {
 
   // build next operation
   if (!(ubFlags & LBF_NOOPS)) {
-    et = _aetTokens[_iBuildPos];
+    const CLdsToken &etOperator = _aetTokens[_iBuildPos];
 
-    if (et.lt_eType == LTK_OPERATOR) {
+    if (etOperator.lt_eType == LTK_OPERATOR) {
       _iBuildPos++;
-      OperationBuilder(et);
+      OperationBuilder(etOperator);
     }
   }
 };
 
 // Build identifiers
 bool CLdsScriptEngine::ScopeBuilder(void) {
-  CLdsToken &et = _aetTokens[_iBuildPos++];
+  const CLdsToken &et = _aetTokens[_iBuildPos++];
   
   // variables or functions
   switch (et.lt_eType) {
     case LTK_ID: {
-      CLdsToken &etNext = _aetTokens[_iBuildPos];
+      CLdsToken etNext = _aetTokens[_iBuildPos];
 
       // function opening
       if (etNext.lt_eType == LTK_PAR_OPEN) {
@@ -860,7 +905,7 @@ bool CLdsScriptEngine::ScopeBuilder(void) {
 
 // Build postfix operations
 bool CLdsScriptEngine::PostfixBuilder(bool bChained) {
-  CLdsToken &et = _aetTokens[_iBuildPos++];
+  const CLdsToken &et = _aetTokens[_iBuildPos++];
   
   // built value/variable
   CBuildNode bnVal = _bnNode;
@@ -890,14 +935,14 @@ bool CLdsScriptEngine::PostfixBuilder(bool bChained) {
         bnID = _bnNode;
 
         // closing bracket
-        CLdsToken &etNext = _aetTokens[_iBuildPos++];
+        const CLdsToken &etNext = _aetTokens[_iBuildPos++];
 
         if (etNext.lt_eType != LTK_SQ_CLOSE) {
           LdsThrow(LEB_CLOSESB, "Unclosed '[]' at %s", etNext.PrintPos().c_str());
         }
       } else {
         // identifier name
-        CLdsToken &etNext = _aetTokens[_iBuildPos++];
+        const CLdsToken &etNext = _aetTokens[_iBuildPos++];
 
         if (etNext.lt_eType != LTK_ID) {
           LdsThrow(LEB_ID, "Expected a variable name at %s", etNext.PrintPos().c_str());

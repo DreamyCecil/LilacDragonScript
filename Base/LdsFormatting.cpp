@@ -67,7 +67,7 @@ string LdsFloatStr(const double &dNum) {
     return str;
   }
 
-  int ctLen = strlen(str.c_str())-1;
+  int ctLen = str.length() - 1;
 
   // remove zeros from the end
   while (str.substr(ctLen, 1) == "0") {
@@ -91,7 +91,7 @@ string LdsPrintPos(const int &iPos) {
   string strCol = "..";
 
   if (iCol < 31999) {
-    strCol = LdsPrintF("%d", iCol+1);
+    strCol = LdsPrintF("%d", iCol + 1);
   }
 
   return LdsPrintF("line %d, col %s", iLine, strCol.c_str());

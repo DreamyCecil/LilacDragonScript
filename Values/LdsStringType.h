@@ -54,7 +54,7 @@ class LDS_API CLdsStringType : public ILdsValueBase {
     // Perform a unary operation
     virtual CLdsValueRef UnaryOp(CLdsValueRef &valRef, CCompAction &ca);
     // Perform a binary operation
-    virtual CLdsValueRef BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, CCompAction &ca);
+    virtual CLdsValueRef BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, const CLdsToken &tkn);
 
     // Conditions
     virtual bool IsTrue(void) {

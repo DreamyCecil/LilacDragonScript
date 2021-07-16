@@ -54,7 +54,7 @@ LdsReturn LDS_ConsolePrint(LDS_ARGS) {
   }
 
   CLdsValue valPrint = LDS_NEXT_ARG;
-  return printf("%s", valPrint.Print().c_str());
+  return printf("%s", valPrint->Print().c_str());
 };
 
 // Suspend execution for some time
@@ -152,7 +152,7 @@ static bool RunScript(string strFile, const bool &bInfo)
       printf("\n--------------------------------\n");
     }
 
-    printf("[RESULT]: %s\n\n", valResult.Print().c_str());
+    printf("[RESULT]: %s\n\n", valResult->Print().c_str());
   }
 
   // ran successfully

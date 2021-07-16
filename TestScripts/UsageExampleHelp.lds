@@ -23,7 +23,7 @@ SOFTWARE. */
 var strHelp = "Choose an action:\n"
 
 // actions
-"1 - run tests of all scrips\n"
+"1 - run tests of all scripts\n"
 "2 - run a specific script\n"
 "3 - quit\n"
 

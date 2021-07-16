@@ -38,7 +38,7 @@ string CLdsArrayType::Print(void) {
     }
           
     // print array entry
-    strArray += aArray[iArray].Print();
+    strArray += aArray[iArray]->Print();
   }
         
   // array closing
@@ -65,12 +65,12 @@ CLdsValueRef CLdsArrayType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
 };
 
 // Perform a binary operation
-CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, CCompAction &ca) {
+CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, const CLdsToken &tkn) {
   // actual values and the operation
   CLdsValue val1 = valRef1.vr_val;
   CLdsValue val2 = valRef2.vr_val;
 
-  int iOperation = ca->GetIndex();
+  int iOperation = tkn->GetIndex();
 
   // types
   const string strType1 = val1->TypeName("a number", "a string", "an array", "a structure");
@@ -83,7 +83,7 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
     // operators
     case LOP_ADD: {
       if (val2->GetType() > EVT_FLOAT) {
-        LdsThrow(LEX_BINARY, "Cannot add %s to an array at %s", strType2.c_str(), ca.PrintPos().c_str());
+        LdsThrow(LEX_BINARY, "Cannot add %s to an array at %s", strType2.c_str(), tkn.PrintPos().c_str());
       }
         
       // expand the array
@@ -93,7 +93,7 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
         
     case LOP_SUB: {
       if (val2->GetType() > EVT_FLOAT) {
-        LdsThrow(LEX_BINARY, "Cannot subtract %s from an array at %s", strType2.c_str(), ca.PrintPos().c_str());
+        LdsThrow(LEX_BINARY, "Cannot subtract %s from an array at %s", strType2.c_str(), tkn.PrintPos().c_str());
       }
         
       // shrink the array
@@ -106,7 +106,7 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
     case LOP_LT: case LOP_LOE:
     case LOP_EQ: case LOP_NEQ:
       if (val2->GetType() != EVT_ARRAY) {
-        LdsThrow(LEX_BINARY, "Cannot compare an array with %s at %s", strType2.c_str(), ca.PrintPos().c_str());
+        LdsThrow(LEX_BINARY, "Cannot compare an array with %s at %s", strType2.c_str(), tkn.PrintPos().c_str());
       }
         
       switch (iOperation) {
@@ -121,12 +121,12 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
       
     // accessor
     case LOP_ACCESS: {
-      if (ca.lt_iArg >= 1) {
-        LdsThrow(LEX_BINARY, "Cannot use structure accessor on the array at %s", ca.PrintPos().c_str());
+      if (tkn.lt_iArg >= 1) {
+        LdsThrow(LEX_BINARY, "Cannot use structure accessor on the array at %s", tkn.PrintPos().c_str());
       }
         
       if (val2->GetType() > EVT_FLOAT) {
-        LdsThrow(LEX_BINARY, "Cannot use %s as an array accessor at %s", strType2.c_str(), ca.PrintPos().c_str());
+        LdsThrow(LEX_BINARY, "Cannot use %s as an array accessor at %s", strType2.c_str(), tkn.PrintPos().c_str());
       }
         
       // direct 'val1 = val1.aArray' empties its own array before getting a value from it
@@ -137,10 +137,10 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
     
       // out of bounds
       if (iSize <= 0) {
-        LdsThrow(LEX_ARRAYEMPTY, "Cannot index an empty array at %s", ca.PrintPos().c_str());
+        LdsThrow(LEX_ARRAYEMPTY, "Cannot index an empty array at %s", tkn.PrintPos().c_str());
 
       } else if (iArrayIndex < 0 || iArrayIndex >= iSize) {
-        LdsThrow(LEX_ARRAYOUT, "Array index '%d' is out of bounds [0, %d] at %s", iArrayIndex, iSize-1, ca.PrintPos().c_str());
+        LdsThrow(LEX_ARRAYOUT, "Array index '%d' is out of bounds [0, %d] at %s", iArrayIndex, iSize - 1, tkn.PrintPos().c_str());
       }
         
       val1 = aCopy[iArrayIndex];
@@ -152,7 +152,7 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
       valRef1.AddIndex(iArrayIndex);
     } break;
       
-    default: LdsThrow(LEX_BINARY, "Cannot perform a binary operation %d on %s and %s at %s", ca->GetIndex(), strType1.c_str(), strType2.c_str(), ca.PrintPos().c_str());
+    default: LdsThrow(LEX_BINARY, "Cannot perform a binary operation %d on %s and %s at %s", iOperation, strType1.c_str(), strType2.c_str(), tkn.PrintPos().c_str());
   }
 
   return CLdsValueRef(val1, valRef1.vr_pvar, pvalArrayAccess, valRef1.vr_strVar, valRef1.vr_strRef, valRef1.IsConst(), valRef1.IsGlobal());

@@ -146,7 +146,7 @@ EThreadStatus CLdsThread::Resume(void) {
       
       // print the current action
       if (IsDebug() && iType != LCA_DIR) {
-        sth_pldsEngine->LdsOut("[LDS DEBUG]: (%d/%d - %s) - '%s', %d, %s\n", iPos, iLen, strAction, ca.lt_valValue.Print().c_str(), ca.lt_iArg, ca.PrintPos().c_str());
+        sth_pldsEngine->LdsOut("[LDS DEBUG]: (%d/%d - %s) - '%s', %d, %s\n", iPos, iLen, strAction, ca->Print().c_str(), ca.lt_iArg, ca.PrintPos().c_str());
       }
   
       switch (iType) {

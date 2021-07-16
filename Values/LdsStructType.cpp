@@ -56,12 +56,12 @@ CLdsValueRef CLdsStructType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
 };
 
 // Perform a binary operation
-CLdsValueRef CLdsStructType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, CCompAction &ca) {
+CLdsValueRef CLdsStructType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, const CLdsToken &tkn) {
   // actual values and the operation
   CLdsValue val1 = valRef1.vr_val;
   CLdsValue val2 = valRef2.vr_val;
 
-  int iOperation = ca->GetIndex();
+  int iOperation = tkn->GetIndex();
 
   // types
   const string strType1 = val1->TypeName("a number", "a string", "an array", "a structure");
@@ -78,12 +78,12 @@ CLdsValueRef CLdsStructType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
     case LOP_ACCESS: {
       if (val2->GetType() != EVT_STRING) {
         // using array accessor on a structure
-        if (ca.lt_iArg <= 0) {
-          LdsThrow(LEX_STRUCTACC, "Cannot use %s as a structure accessor at %s", strType2.c_str(), ca.PrintPos().c_str());
+        if (tkn.lt_iArg <= 0) {
+          LdsThrow(LEX_STRUCTACC, "Cannot use %s as a structure accessor at %s", strType2.c_str(), tkn.PrintPos().c_str());
             
         // structure accessor
         } else {
-          LdsThrow(LEX_EXPECTACC, "Expected a structure variable name at %s", ca.PrintPos().c_str());
+          LdsThrow(LEX_EXPECTACC, "Expected a structure variable name at %s", tkn.PrintPos().c_str());
         }
       }
         
@@ -93,7 +93,7 @@ CLdsValueRef CLdsStructType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
       CLdsStruct sCopy = val1->GetStruct();
 
       if (sCopy.FindIndex(strVar) == -1) {
-        LdsThrow(LEX_STRUCTVAR, "Variable '%s' does not exist in the structure at %s", strVar.c_str(), ca.PrintPos().c_str());
+        LdsThrow(LEX_STRUCTVAR, "Variable '%s' does not exist in the structure at %s", strVar.c_str(), tkn.PrintPos().c_str());
       }
 
       val1 = sCopy[strVar];
@@ -111,7 +111,7 @@ CLdsValueRef CLdsStructType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
       valRef1.AddIndex(strVar);
     } break;
         
-    default: LdsThrow(LEX_BINARY, "Cannot perform a binary operation %d on %s and %s at %s", ca->GetIndex(), strType1.c_str(), strType2.c_str(), ca.PrintPos().c_str());
+    default: LdsThrow(LEX_BINARY, "Cannot perform a binary operation %d on %s and %s at %s", iOperation, strType1.c_str(), strType2.c_str(), tkn.PrintPos().c_str());
   }
 
   return CLdsValueRef(val1, valRef1.vr_pvar, pvalStructAccess, valRef1.vr_strVar, strStructVar, bConstVar, valRef1.IsGlobal());

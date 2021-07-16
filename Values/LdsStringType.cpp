@@ -49,27 +49,27 @@ CLdsValueRef CLdsStringType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
 };
 
 // Perform a binary operation
-CLdsValueRef CLdsStringType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, CCompAction &ca) {
+CLdsValueRef CLdsStringType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, const CLdsToken &tkn) {
   // actual values and the operation
   CLdsValue val1 = valRef1.vr_val;
   CLdsValue val2 = valRef2.vr_val;
 
-  int iOperation = ca->GetIndex();
+  int iOperation = tkn->GetIndex();
 
   // types
   const string strType1 = val1->TypeName("a number", "a string", "an array", "a structure");
   const string strType2 = val2->TypeName("a number", "a string", "an array", "a structure");
 
   switch (iOperation) {
-    // append strings
+    // append to the string
     case LOP_ADD: {
-      val1 = val1.Print() + val2.Print();
+      val1 = val1->Print() + val2->Print();
     } break;
 
     // remove characters from the end
     case LOP_SUB: {
       if (val2->GetType() == EVT_STRING) {
-        LdsThrow(LEX_BINARY, "Cannot subtract a string from a string at %s", ca.PrintPos().c_str());
+        LdsThrow(LEX_BINARY, "Cannot subtract a string from a string at %s", tkn.PrintPos().c_str());
       }
 
       string str = val1->GetString();
@@ -82,7 +82,7 @@ CLdsValueRef CLdsStringType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
     // copy the same string multiple times
     case LOP_MUL: {
       if (val2->GetType() == EVT_STRING) {
-        LdsThrow(LEX_BINARY, "Cannot multiply a string by a string at %s", ca.PrintPos().c_str());
+        LdsThrow(LEX_BINARY, "Cannot multiply a string by a string at %s", tkn.PrintPos().c_str());
       }
 
       string strMul = "";
@@ -110,7 +110,7 @@ CLdsValueRef CLdsStringType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
           break;
 
         default:
-          LdsThrow(LEX_BINARY, "Cannot compare a string with %s at %s", strType2.c_str(), ca.PrintPos().c_str());
+          LdsThrow(LEX_BINARY, "Cannot compare a string with %s at %s", strType2.c_str(), tkn.PrintPos().c_str());
       }
 
       val1 = bResult;
@@ -131,7 +131,7 @@ CLdsValueRef CLdsStringType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
           break;
 
         default:
-          LdsThrow(LEX_BINARY, "Cannot compare a string with %s at %s", strType2.c_str(), ca.PrintPos().c_str());
+          LdsThrow(LEX_BINARY, "Cannot compare a string with %s at %s", strType2.c_str(), tkn.PrintPos().c_str());
       }
 
       val1 = bResult;
@@ -139,14 +139,14 @@ CLdsValueRef CLdsStringType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
 
     // accessor
     case LOP_ACCESS: {
-      if (ca.lt_iArg >= 1) {
+      if (tkn.lt_iArg >= 1) {
         // TODO: Make it search for a certain substring and return amount of them in a string
         //       Example: "string".str - returns 1; "search for the sea"["sea"] - returns 2
-        LdsThrow(LEX_BINARY, "Cannot use structure accessor on a string at %s", ca.PrintPos().c_str());
+        LdsThrow(LEX_BINARY, "Cannot use structure accessor on a string at %s", tkn.PrintPos().c_str());
       }
 
       if (val2->GetType() > EVT_FLOAT) {
-        LdsThrow(LEX_BINARY, "Cannot use %s as an string accessor at %s", strType2.c_str(), ca.PrintPos().c_str());
+        LdsThrow(LEX_BINARY, "Cannot use %s as an string accessor at %s", strType2.c_str(), tkn.PrintPos().c_str());
       }
         
       string strCopy = val1->GetString();
@@ -156,17 +156,17 @@ CLdsValueRef CLdsStringType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
     
       // out of bounds
       if (iLength <= 0) {
-        LdsThrow(LEX_ARRAYEMPTY, "Cannot index an empty string at %s", ca.PrintPos().c_str());
+        LdsThrow(LEX_ARRAYEMPTY, "Cannot index an empty string at %s", tkn.PrintPos().c_str());
 
       } else if (iCharIndex < 0 || iCharIndex >= iLength) {
-        LdsThrow(LEX_ARRAYOUT, "Character index '%d' is out of bounds [0, %d] at %s", iCharIndex, iLength-1, ca.PrintPos().c_str());
+        LdsThrow(LEX_ARRAYOUT, "Character index '%d' is out of bounds [0, %d] at %s", iCharIndex, iLength - 1, tkn.PrintPos().c_str());
       }
         
       // get one character from the string
       val1 = LdsPrintF("%c", strCopy.c_str()[iCharIndex]);
     } break;
 
-    default: LdsThrow(LEX_BINARY, "Cannot perform a binary operation %d on %s and %s at %s", ca->GetIndex(), strType1.c_str(), strType2.c_str(), ca.PrintPos().c_str());
+    default: LdsThrow(LEX_BINARY, "Cannot perform a binary operation %d on %s and %s at %s", iOperation, strType1.c_str(), strType2.c_str(), tkn.PrintPos().c_str());
   }
 
   return CLdsValueRef(val1);
