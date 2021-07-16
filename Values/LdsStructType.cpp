@@ -50,7 +50,7 @@ string CLdsStructType::Print(void) {
 // Perform a unary operation
 CLdsValueRef CLdsStructType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
   // cannot do unary operations on structures
-  LdsThrow(LEX_UNARY, "Cannot perform a unary operation on a struct at %s", ca.PrintPos().c_str());
+  LdsThrow(LEX_UNARY, "Cannot perform a unary operation on a structure at %s", ca.PrintPos().c_str());
 
   return valRef;
 };
@@ -111,7 +111,7 @@ CLdsValueRef CLdsStructType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
       valRef1.AddIndex(strVar);
     } break;
         
-    default: LdsThrow(LEX_BINARY, "Cannot apply operator %d to %s and %s at %s", ca->GetIndex(), strType1.c_str(), strType2.c_str(), ca.PrintPos().c_str());
+    default: LdsThrow(LEX_BINARY, "Cannot perform a binary operation %d on %s and %s at %s", ca->GetIndex(), strType1.c_str(), strType2.c_str(), ca.PrintPos().c_str());
   }
 
   return CLdsValueRef(val1, valRef1.vr_pvar, pvalStructAccess, valRef1.vr_strVar, strStructVar, bConstVar, valRef1.IsGlobal());

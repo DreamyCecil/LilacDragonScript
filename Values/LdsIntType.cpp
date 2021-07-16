@@ -112,7 +112,7 @@ CLdsValueRef CLdsIntType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2,
     case LOP_EQ:  val1 = (dNum1 == dNum2); break;
     case LOP_NEQ: val1 = (dNum1 != dNum2); break;
       
-    default: LdsThrow(LEX_BINARY, "Cannot apply operator %d at %s", iOperation, ca.PrintPos().c_str());
+    default: LdsThrow(LEX_BINARY, "Cannot perform a binary operation %d on numbers at %s", iOperation, ca.PrintPos().c_str());
   }
 
   return CLdsValueRef(val1);

@@ -27,16 +27,20 @@ string CLdsStringType::Print(void) {
 
 // Perform a unary operation
 CLdsValueRef CLdsStringType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
-  // [Cecil] TEMP: Cannot do unary operations on strings
-  LdsThrow(LEX_UNARY, "Cannot perform a unary operation on a string value at %s", ca.PrintPos().c_str());
-  
   // actual value and the operation
   CLdsValue val = valRef.vr_val;
   int iOperation = ca->GetIndex();
 
   switch (iOperation) {
-    // TODO: Make string inversion
-    case UOP_INVERT: break;
+    // string inversion
+    case UOP_INVERT: {
+      string strString = val->GetString();
+      std::reverse(strString.begin(), strString.end());
+
+      val = strString;
+    } break;
+
+    default: LdsThrow(LEX_UNARY, "Cannot perform a unary operation %d on a string at %s", ca->GetIndex(), ca.PrintPos().c_str());
   }
 
   return CLdsValueRef(val);
@@ -160,7 +164,7 @@ CLdsValueRef CLdsStringType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
       val1 = LdsPrintF("%c", strCopy.c_str()[iCharIndex]);
     } break;
 
-    default: LdsThrow(LEX_BINARY, "Cannot apply operator %d to %s and %s at %s", ca->GetIndex(), strType1.c_str(), strType2.c_str(), ca.PrintPos().c_str());
+    default: LdsThrow(LEX_BINARY, "Cannot perform a binary operation %d on %s and %s at %s", ca->GetIndex(), strType1.c_str(), strType2.c_str(), ca.PrintPos().c_str());
   }
 
   return CLdsValueRef(val1);
