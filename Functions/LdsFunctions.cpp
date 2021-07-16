@@ -19,6 +19,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
 #include "StdH.h"
+#include "LdsFunctions.h"
 #include "LdsDefFunctions.h"
 #include "LdsMath.h"
 
@@ -94,8 +95,17 @@ void CLdsScriptEngine::AddCustomFunctions(CLdsFuncMap &mapFrom) {
   _mapLdsFunctions.AddFrom(mapFrom, true);
 };
 
-// Call the function
-LdsReturn CLdsScriptEngine::CallFunction(string strFunc, CLdsValueList &avalArgs) {
+// Current function call
+static CCompAction *_pcaFunctionCall = NULL;
+
+// Call function from the action
+LdsReturn CLdsScriptEngine::CallFunction(CCompAction *pcaAction, CLdsValueList &avalArgs)
+{
+  _pcaFunctionCall = pcaAction;
+
+  // function name
+  string strFunc = (*pcaAction)->GetString();
+
   // function is empty
   if (_mapLdsFunctions[strFunc].ef_pFunc == NULL) {
     LdsThrow(LEX_NOFUNC, "Function '%s' is NULL", strFunc.c_str());
@@ -115,4 +125,21 @@ LdsReturn CLdsScriptEngine::CallFunction(string strFunc, CLdsValueList &avalArgs
 
   delete[] pvalFuncArgs;
   return valValue;
+};
+
+// External function error
+void LdsError(const char *strFormat, ...) {
+  // function name and place
+  string strFunc = (*_pcaFunctionCall)->GetString();
+  string strPos = _pcaFunctionCall->PrintPos();
+
+  // format the error
+  va_list arg;
+  va_start(arg, strFormat);
+
+  string strError = LdsVPrintF(strFormat, arg);
+  va_end(arg);
+
+  // display function error
+  LdsThrow(LEX_CALL, "%s() at %s: %s", strFunc.c_str(), strPos.c_str(), strError.c_str());
 };

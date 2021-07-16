@@ -254,8 +254,7 @@ void Exec_Call(void) {
   CLdsValueList avalArgs = MakeValueList(*_pavalStack, _ca->lt_iArg);
 
   // call the function
-  string strFunc = (*_ca)->GetString();
-  CLdsValueRef valValue = _pldsCurrent->CallFunction(strFunc, avalArgs);
+  CLdsValueRef valValue = _pldsCurrent->CallFunction(_ca, avalArgs);
   
   _pavalStack->Push(valValue);
 };

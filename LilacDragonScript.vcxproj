@@ -131,6 +131,7 @@
     <ClInclude Include="Execution\LdsThread.h" />
     <ClInclude Include="Functions\LdsDefFunctions.h" />
     <ClInclude Include="Functions\LdsFunc.h" />
+    <ClInclude Include="Functions\LdsFunctions.h" />
     <ClInclude Include="Functions\LdsMath.h" />
     <ClInclude Include="LdsBase.h" />
     <ClInclude Include="LilacDragonScript.h" />

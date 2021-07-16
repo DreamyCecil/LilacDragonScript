@@ -20,25 +20,5 @@ SOFTWARE. */
 
 #pragma once
 
-#include "LdsBase.h"
-
-// Script value (any type)
-#include "Types/Values/LdsValue.h"
-#include "Types/LdsValueRef.h"
-
-#include "Types/Values/LdsStruct.h"
-#include "Types/Values/LdsValueTypes.h"
-
-// Script elements
-#include "Types/LdsToken.h"
-#include "Types/LdsBuildNode.h"
-#include "Types/LdsAction.h"
-
-// Script functions and variables
-#include "Functions/LdsFunc.h"
-#include "Functions/LdsFunctions.h"
-#include "Variables/LdsVar.h"
-
-// Script execution
-#include "Execution/LdsThread.h"
-#include "Execution/LdsHandler.h"
+// External function error
+LDS_API void LdsError(const char *strFormat, ...);

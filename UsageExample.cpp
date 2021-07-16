@@ -67,7 +67,7 @@ LdsReturn LDS_Sleep(LDS_ARGS) {
   }
   
   #ifndef WIN32
-  throw "Sleep() method is only available on Windows systems!";
+  LdsError("This method is only available on Windows systems!");
   #else
   Sleep(iMilliseconds);
   #endif

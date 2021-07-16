@@ -111,8 +111,8 @@ class LDS_API CLdsScriptEngine {
     // Add more functions and replace ones that already exist
     void AddCustomFunctions(CLdsFuncMap &mapFrom);
 
-    // Call the function
-    LdsReturn CallFunction(string strFunc, CLdsValueList &avalArgs);
+    // Call function from the action
+    LdsReturn CallFunction(CCompAction *pcaAction, CLdsValueList &avalArgs);
     
   // Variables
   public:
