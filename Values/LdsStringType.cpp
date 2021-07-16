@@ -20,6 +20,8 @@ SOFTWARE. */
 
 #include "StdH.h"
 
+#include <algorithm>
+
 // Print the value
 string CLdsStringType::Print(void) {
   return strValue;
