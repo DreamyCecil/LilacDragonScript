@@ -130,7 +130,6 @@
     <ClInclude Include="Execution\LdsInlineCall.h" />
     <ClInclude Include="Execution\LdsThread.h" />
     <ClInclude Include="Functions\LdsDefFunctions.h" />
-    <ClInclude Include="Functions\LdsFunc.h" />
     <ClInclude Include="Functions\LdsFunctions.h" />
     <ClInclude Include="Functions\LdsMath.h" />
     <ClInclude Include="LdsBase.h" />
@@ -140,17 +139,16 @@
     <ClInclude Include="StdH.h" />
     <ClInclude Include="Types\LdsAction.h" />
     <ClInclude Include="Types\LdsBuildNode.h" />
+    <ClInclude Include="Types\LdsStruct.h" />
     <ClInclude Include="Types\LdsToken.h" />
     <ClInclude Include="Types\LdsValueRef.h" />
-    <ClInclude Include="Types\Values\LdsArrayType.h" />
-    <ClInclude Include="Types\Values\LdsFloatType.h" />
-    <ClInclude Include="Types\Values\LdsIntType.h" />
-    <ClInclude Include="Types\Values\LdsStringType.h" />
-    <ClInclude Include="Types\Values\LdsStruct.h" />
-    <ClInclude Include="Types\Values\LdsStructType.h" />
-    <ClInclude Include="Types\Values\LdsValue.h" />
-    <ClInclude Include="Types\Values\LdsValueTypes.h" />
-    <ClInclude Include="Variables\LdsVar.h" />
+    <ClInclude Include="Values\LdsArrayType.h" />
+    <ClInclude Include="Values\LdsFloatType.h" />
+    <ClInclude Include="Values\LdsIntType.h" />
+    <ClInclude Include="Values\LdsStringType.h" />
+    <ClInclude Include="Values\LdsStructType.h" />
+    <ClInclude Include="Values\LdsValue.h" />
+    <ClInclude Include="Values\LdsValueTypes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Base\LdsCompatibility.cpp" />
@@ -170,14 +168,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Types\LdsStruct.cpp" />
     <ClCompile Include="Types\LdsValueRef.cpp" />
-    <ClCompile Include="Types\Values\LdsArrayType.cpp" />
-    <ClCompile Include="Types\Values\LdsFloatType.cpp" />
-    <ClCompile Include="Types\Values\LdsIntType.cpp" />
-    <ClCompile Include="Types\Values\LdsStringType.cpp" />
-    <ClCompile Include="Types\Values\LdsStruct.cpp" />
-    <ClCompile Include="Types\Values\LdsStructType.cpp" />
-    <ClCompile Include="Types\Values\LdsValue.cpp" />
     <ClCompile Include="UsageExample.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
@@ -185,6 +177,12 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="Values\LdsArrayType.cpp" />
+    <ClCompile Include="Values\LdsFloatType.cpp" />
+    <ClCompile Include="Values\LdsIntType.cpp" />
+    <ClCompile Include="Values\LdsStringType.cpp" />
+    <ClCompile Include="Values\LdsStructType.cpp" />
+    <ClCompile Include="Values\LdsValue.cpp" />
     <ClCompile Include="Variables\LdsVariables.cpp" />
   </ItemGroup>
   <ItemGroup>

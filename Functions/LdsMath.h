@@ -20,16 +20,12 @@ SOFTWARE. */
 
 #pragma once
 
-#include "../Types/Values/LdsValue.h"
+#include "../Values/LdsValue.h"
 #include "../Types/LdsValueRef.h"
 
 // Use STL log2 function or not
-#ifdef _MSC_VER
-  #if _MSC_VER >= 1700
-    #define USE_LOG2_FUNC 1
-  #else
-    #define USE_LOG2_FUNC 0
-  #endif
+#if defined(_MSC_VER) && _MSC_VER >= 1700
+  #define USE_LOG2_FUNC 1
 #else
   #define USE_LOG2_FUNC 0
 #endif

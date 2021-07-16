@@ -20,5 +20,7 @@ SOFTWARE. */
 
 #pragma once
 
+#include "../LdsScriptEngine.h"
+
 // External function error
 LDS_API void LdsError(const char *strFormat, ...);

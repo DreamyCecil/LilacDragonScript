@@ -22,13 +22,8 @@ SOFTWARE. */
 #include "LdsFormatting.h"
 
 // Secure printing function
-#ifdef _MSC_VER
-  #if _MSC_VER >= 1700
-    #define VSPRINTF_FUNC vsprintf_s
-  #else
-    #define VSPRINTF_FUNC vsprintf
-  #endif
-
+#if defined(_MSC_VER) && _MSC_VER >= 1700
+  #define VSPRINTF_FUNC vsprintf_s
 #else
   #define VSPRINTF_FUNC vsprintf
 #endif

@@ -20,7 +20,7 @@ SOFTWARE. */
 
 #pragma once
 
-#include "Values/LdsValue.h"
+#include "../Values/LdsValue.h"
 
 // Value reference index
 struct LDS_API SLdsRefIndex {

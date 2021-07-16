@@ -22,12 +22,13 @@ SOFTWARE. */
 
 #include "LdsBase.h"
 
-// Script value (any type)
-#include "Types/Values/LdsValue.h"
+// Script values (any type)
+#include "Types/LdsStruct.h"
+
+#include "Values/LdsValue.h"
 #include "Types/LdsValueRef.h"
 
-#include "Types/Values/LdsStruct.h"
-#include "Types/Values/LdsValueTypes.h"
+#include "Values/LdsValueTypes.h"
 
 // Script elements
 #include "Types/LdsToken.h"
@@ -35,9 +36,9 @@ SOFTWARE. */
 #include "Types/LdsAction.h"
 
 // Script functions and variables
-#include "Functions/LdsFunc.h"
+#include "Types/LdsFunc.h"
+#include "Types/LdsVar.h"
 #include "Functions/LdsFunctions.h"
-#include "Variables/LdsVar.h"
 
 // Script execution
 #include "Execution/LdsThread.h"

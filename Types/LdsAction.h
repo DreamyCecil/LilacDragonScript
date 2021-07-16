@@ -21,7 +21,7 @@ SOFTWARE. */
 #pragma once
 
 #include "LdsToken.h"
-#include "../Functions/LdsFunc.h"
+#include "LdsFunc.h"
 
 // Compiler action type
 enum ELdsAction {

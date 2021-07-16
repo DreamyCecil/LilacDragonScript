@@ -43,11 +43,14 @@
     <Filter Include="Header Files\Dreamy Structures">
       <UniqueIdentifier>{100b8579-72b0-4754-8d7e-0703d324a21c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Types\Values">
-      <UniqueIdentifier>{093e1064-5c47-438a-9b28-acb32e91937c}</UniqueIdentifier>
+    <Filter Include="Source Files\Variables">
+      <UniqueIdentifier>{65a75bf7-ea9d-45c5-b801-1831f5fc8066}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Types\Values">
-      <UniqueIdentifier>{a701c97b-1ac5-43cb-88b1-ede9063453f6}</UniqueIdentifier>
+    <Filter Include="Source Files\Values">
+      <UniqueIdentifier>{1719b623-84ad-4bb8-9837-a93aa1b6bbc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Values">
+      <UniqueIdentifier>{5cb27a99-4130-4530-bbc3-99e2634b8400}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -67,9 +70,6 @@
       <Filter>Header Files\Base</Filter>
     </ClInclude>
     <ClInclude Include="Functions\LdsDefFunctions.h">
-      <Filter>Header Files\Functions</Filter>
-    </ClInclude>
-    <ClInclude Include="Functions\LdsFunc.h">
       <Filter>Header Files\Functions</Filter>
     </ClInclude>
     <ClInclude Include="Functions\LdsMath.h">
@@ -99,9 +99,6 @@
     <ClInclude Include="Execution\LdsThread.h">
       <Filter>Header Files\Execution</Filter>
     </ClInclude>
-    <ClInclude Include="Variables\LdsVar.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DreamyStructures\DataArray.h">
       <Filter>Header Files\Dreamy Structures</Filter>
     </ClInclude>
@@ -123,38 +120,38 @@
     <ClInclude Include="DreamyStructures\DataLinkedList.h">
       <Filter>Header Files\Dreamy Structures</Filter>
     </ClInclude>
-    <ClInclude Include="Types\Values\LdsStruct.h">
-      <Filter>Header Files\Types\Values</Filter>
-    </ClInclude>
-    <ClInclude Include="Types\Values\LdsValue.h">
-      <Filter>Header Files\Types\Values</Filter>
-    </ClInclude>
-    <ClInclude Include="Types\Values\LdsValueTypes.h">
-      <Filter>Header Files\Types\Values</Filter>
-    </ClInclude>
     <ClInclude Include="StdH.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LilacDragonScript.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Types\Values\LdsFloatType.h">
-      <Filter>Header Files\Types\Values</Filter>
-    </ClInclude>
-    <ClInclude Include="Types\Values\LdsIntType.h">
-      <Filter>Header Files\Types\Values</Filter>
-    </ClInclude>
-    <ClInclude Include="Types\Values\LdsStringType.h">
-      <Filter>Header Files\Types\Values</Filter>
-    </ClInclude>
-    <ClInclude Include="Types\Values\LdsStructType.h">
-      <Filter>Header Files\Types\Values</Filter>
-    </ClInclude>
-    <ClInclude Include="Types\Values\LdsArrayType.h">
-      <Filter>Header Files\Types\Values</Filter>
-    </ClInclude>
     <ClInclude Include="Functions\LdsFunctions.h">
       <Filter>Header Files\Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\LdsStruct.h">
+      <Filter>Header Files\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Values\LdsArrayType.h">
+      <Filter>Header Files\Values</Filter>
+    </ClInclude>
+    <ClInclude Include="Values\LdsFloatType.h">
+      <Filter>Header Files\Values</Filter>
+    </ClInclude>
+    <ClInclude Include="Values\LdsIntType.h">
+      <Filter>Header Files\Values</Filter>
+    </ClInclude>
+    <ClInclude Include="Values\LdsStringType.h">
+      <Filter>Header Files\Values</Filter>
+    </ClInclude>
+    <ClInclude Include="Values\LdsStructType.h">
+      <Filter>Header Files\Values</Filter>
+    </ClInclude>
+    <ClInclude Include="Values\LdsValue.h">
+      <Filter>Header Files\Values</Filter>
+    </ClInclude>
+    <ClInclude Include="Values\LdsValueTypes.h">
+      <Filter>Header Files\Values</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -172,9 +169,6 @@
     </ClCompile>
     <ClCompile Include="Compiler\LdsParser.cpp">
       <Filter>Source Files\Compiler</Filter>
-    </ClCompile>
-    <ClCompile Include="Variables\LdsVariables.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Functions\LdsDefFunctions.cpp">
       <Filter>Source Files\Functions</Filter>
@@ -203,29 +197,32 @@
     <ClCompile Include="Types\LdsValueRef.cpp">
       <Filter>Source Files\Types</Filter>
     </ClCompile>
-    <ClCompile Include="Types\Values\LdsStruct.cpp">
-      <Filter>Source Files\Types\Values</Filter>
-    </ClCompile>
-    <ClCompile Include="Types\Values\LdsValue.cpp">
-      <Filter>Source Files\Types\Values</Filter>
-    </ClCompile>
     <ClCompile Include="StdH.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Types\Values\LdsArrayType.cpp">
-      <Filter>Source Files\Types\Values</Filter>
+    <ClCompile Include="Variables\LdsVariables.cpp">
+      <Filter>Source Files\Variables</Filter>
     </ClCompile>
-    <ClCompile Include="Types\Values\LdsFloatType.cpp">
-      <Filter>Source Files\Types\Values</Filter>
+    <ClCompile Include="Types\LdsStruct.cpp">
+      <Filter>Source Files\Types</Filter>
     </ClCompile>
-    <ClCompile Include="Types\Values\LdsIntType.cpp">
-      <Filter>Source Files\Types\Values</Filter>
+    <ClCompile Include="Values\LdsStructType.cpp">
+      <Filter>Source Files\Values</Filter>
     </ClCompile>
-    <ClCompile Include="Types\Values\LdsStringType.cpp">
-      <Filter>Source Files\Types\Values</Filter>
+    <ClCompile Include="Values\LdsValue.cpp">
+      <Filter>Source Files\Values</Filter>
     </ClCompile>
-    <ClCompile Include="Types\Values\LdsStructType.cpp">
-      <Filter>Source Files\Types\Values</Filter>
+    <ClCompile Include="Values\LdsArrayType.cpp">
+      <Filter>Source Files\Values</Filter>
+    </ClCompile>
+    <ClCompile Include="Values\LdsFloatType.cpp">
+      <Filter>Source Files\Values</Filter>
+    </ClCompile>
+    <ClCompile Include="Values\LdsIntType.cpp">
+      <Filter>Source Files\Values</Filter>
+    </ClCompile>
+    <ClCompile Include="Values\LdsStringType.cpp">
+      <Filter>Source Files\Values</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
