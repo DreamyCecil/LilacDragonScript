@@ -20,9 +20,14 @@ SOFTWARE. */
 
 // Script that displays help for the usage example console
 
-Out("Choose an action:\n");
-Out("1 - run tests of all scrips\n");
-Out("2 - run a specific script\n");
-Out("3 - quit\n");
+var strHelp = "Choose an action:\n"
 
-Out("\nEnter action number: ");
+// actions
+"1 - run tests of all scrips\n"
+"2 - run a specific script\n"
+"3 - quit\n"
+
+// input on the same line
++ "\nEnter action number: ";
+
+Out(strHelp);
