@@ -61,7 +61,7 @@ class LDS_API CLdsThread {
     void (*sth_pResult)(CLdsThread *psth); // function call in the end of the run
 
     // Constructor & destructor
-    CLdsThread(CActionList aca, CLdsScriptEngine *plds);
+    CLdsThread(const CActionList &aca, CLdsScriptEngine *plds);
     ~CLdsThread(void);
 
     // Clear the thread

@@ -593,7 +593,7 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
 };
 
 // Build one expression
-void CLdsScriptEngine::ExpressionBuilder(LdsFlags ubFlags) {
+void CLdsScriptEngine::ExpressionBuilder(const LdsFlags &ubFlags) {
   if (_ctBuildLen <= 0) {
     LdsThrow(LEB_EMPTY, "No parser tokens");
   }

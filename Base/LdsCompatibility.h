@@ -109,6 +109,9 @@ struct LDS_API SLdsError {
     le_eError(eError), le_strMessage(strMessage) {};
 };
 
+// Calculate simple hash value out of some string
+LDS_API LdsHash GetHash(const string &str);
+
 // Throw formatted exception
 LDS_API void LdsThrow(const ELdsError &eError, const char *strFormat, ...);
 

@@ -23,6 +23,18 @@ SOFTWARE. */
 
 #include <fstream>
 
+// Calculate simple hash value out of some string
+LdsHash GetHash(const string &str) {
+  char *strData = (char *)str.c_str();
+  LdsHash iHash = 0;
+
+  for (char *pChar = strData; *pChar != '\0'; pChar++) {
+    iHash = 31 * iHash + *pChar;
+  }
+
+  return iHash;
+};
+
 // Throw formatted exception
 void LdsThrow(const ELdsError &eError, const char *strFormat, ...) {
   va_list arg;

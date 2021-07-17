@@ -26,6 +26,14 @@ SOFTWARE. */
 struct LDS_API SLdsCache {
   CActionList acaCache; // list of actions
   bool bExpression; // not a whole script
+
+  // Constructors
+  SLdsCache(void) : bExpression(false) {};
+
+  SLdsCache(const CActionList &acaSetActions, const bool &bSetExpression) {
+    acaCache.CopyArray(acaSetActions);
+    bExpression = bSetExpression;
+  };
 };
 
 class LDS_API CLdsScriptEngine {
@@ -168,7 +176,7 @@ class LDS_API CLdsScriptEngine {
     // Build definitions
     bool DefinitionBuilder(void);
     // Build expression
-    void ExpressionBuilder(LdsFlags ubFlags);
+    void ExpressionBuilder(const LdsFlags &ubFlags);
     
     // Build identifiers
     bool ScopeBuilder(void);
@@ -183,16 +191,19 @@ class LDS_API CLdsScriptEngine {
     
   // Compiler
   public:
-    // TODO: Add compiled actions to this cache and use file name (or its hash) as a key
-    CDMap<string, SLdsCache> _mapScriptCache;
+    CDMap<LdsHash, SLdsCache> _mapScriptCache; // cached scripts by their hash value
+    bool _bUseScriptCaching; // cache scripts or not
     
     // General compilation
-    ELdsError LdsCompileGeneral(string strSource, CActionList &acaActions, bool bExpression);
+    ELdsError LdsCompileGeneral(const string &strSource, CActionList &acaActions, const bool &bExpression);
     
     // Compile the script
-    ELdsError LdsCompileScript(string strScript, CActionList &acaActions);
+    ELdsError LdsCompileScript(const string &strScript, CActionList &acaActions);
     // Compile the expression
-    ELdsError LdsCompileExpression(string strExpression, CActionList &acaActions);
+    ELdsError LdsCompileExpression(const string &strExpression, CActionList &acaActions);
+
+    // Cache a certain script
+    void LdsCacheScript(const string &strScript, CActionList &acaScript);
 
   private:
     // Get the variable
@@ -214,9 +225,9 @@ class LDS_API CLdsScriptEngine {
     // Execute the compiled expression
     CLdsValue LdsExecute(CActionList &acaActions);
     // Evalute the expression
-    ELdsError LdsEvaluate(string strExpression, CLdsValue &valResult);
+    ELdsError LdsEvaluate(const string &strExpression, CLdsValue &valResult);
     // Evaluate compiled expression
-    ELdsError LdsEvaluateCompiled(CActionList acaActions, CLdsValue &valResult);
+    ELdsError LdsEvaluateCompiled(CActionList &acaActions, CLdsValue &valResult);
     
   // Threads
   public:
@@ -225,10 +236,10 @@ class LDS_API CLdsScriptEngine {
     LONG64 _llCurrentTick; // current timer tick (used in I/O)
   
     // Create a new thread
-    CLdsThread *ThreadCreate(CActionList acaActions, CLdsVarMap &mapArgs);
+    CLdsThread *ThreadCreate(const CActionList &acaActions, CLdsVarMap &mapArgs);
 
     // Execute the compiled inline script
-    EThreadStatus ScriptExecute(CActionList acaActions, CLdsValue *pvalResult,
+    EThreadStatus ScriptExecute(const CActionList &acaActions, CLdsValue *pvalResult,
                                 CLdsVarMap &mapArgs = CLdsVarMap(), CLdsInFuncMap *pmapInline = NULL);
     
   public:
@@ -249,6 +260,9 @@ class LDS_API CLdsScriptEngine {
       _ctBuildLen(0),
       _bBuildBreak(false),
       _bBuildCont(false),
+
+      // Compiler
+      _bUseScriptCaching(false),
       
       // Threads
       _iThreadTickRate(64),
@@ -268,9 +282,11 @@ class LDS_API CLdsScriptEngine {
       
       // delete remaining threads
       int iThreads = _athhThreadHandlers.Count();
+
       while (--iThreads >= 0) {
         delete _athhThreadHandlers[iThreads].psthThread;
       }
+
       _athhThreadHandlers.Clear();
     };
     

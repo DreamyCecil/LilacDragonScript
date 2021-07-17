@@ -23,7 +23,7 @@ SOFTWARE. */
 extern CLdsThread *_psthCurrent;
 
 // Create a new thread
-CLdsThread *CLdsScriptEngine::ThreadCreate(CActionList acaActions, CLdsVarMap &mapArgs) {
+CLdsThread *CLdsScriptEngine::ThreadCreate(const CActionList &acaActions, CLdsVarMap &mapArgs) {
   CLdsThread *sthNew = new CLdsThread(acaActions, this);
   sthNew->sth_mapLocals.CopyMap(mapArgs);
   sthNew->sth_eStatus = ETS_RUNNING;
@@ -32,7 +32,7 @@ CLdsThread *CLdsScriptEngine::ThreadCreate(CActionList acaActions, CLdsVarMap &m
 };
 
 // Execute the compiled script
-EThreadStatus CLdsScriptEngine::ScriptExecute(CActionList acaActions, CLdsValue *pvalResult,
+EThreadStatus CLdsScriptEngine::ScriptExecute(const CActionList &acaActions, CLdsValue *pvalResult,
                                               CLdsVarMap &mapArgs, CLdsInFuncMap *pmapInline)
 {
   CLdsThread *psth = ThreadCreate(acaActions, mapArgs);

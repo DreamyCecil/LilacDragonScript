@@ -80,6 +80,9 @@ void SetupLDS(void) {
   // hook the error output function
   _ldsEngine.LdsOutputFunctions(NULL, ErrorOutput);
 
+  // cache scripts
+  _ldsEngine._bUseScriptCaching = true;
+
   // custom functions
   CLdsFuncMap mapFunc;
   mapFunc["Random"] = SLdsFunc(0, &LDS_Random);
@@ -245,8 +248,25 @@ int main() {
         RunScript(strInput, true);
         break;
 
+      // view cached scripts
+      case 3:
+        if (_ldsEngine._mapScriptCache.Count() <= 0) {
+          printf("No scripts has been cached\n");
+
+        } else {
+          for (int iCache = 0; iCache < _ldsEngine._mapScriptCache.Count(); iCache++) {
+            LdsHash iHash = _ldsEngine._mapScriptCache.GetKey(iCache);
+            CActionList &aca = _ldsEngine._mapScriptCache.GetValue(iCache).acaCache;
+
+            printf("%d - %.8X (%d actions)\n", iCache + 1, iHash, aca.Count());
+          }
+        }
+
+        printf("\n");
+        break;
+
       // quit
-      case 3: return 0;
+      case 4: return 0;
 
       default:
         printf("- Invalid action number\n\n");

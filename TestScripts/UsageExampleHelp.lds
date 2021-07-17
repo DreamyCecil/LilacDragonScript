@@ -25,7 +25,8 @@ var strHelp = "Choose an action:\n"
 // actions
 "1 - run tests of all scripts\n"
 "2 - run a specific script\n"
-"3 - quit\n"
+"3 - view cached scripts\n"
+"4 - quit\n"
 
 // input on the same line
 + "\nEnter action number: ";

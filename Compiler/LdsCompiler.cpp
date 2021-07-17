@@ -24,7 +24,21 @@ SOFTWARE. */
 static bool _bExpression = true;
 
 // General compilation
-ELdsError CLdsScriptEngine::LdsCompileGeneral(string strSource, CActionList &acaActions, bool bExpression) {
+ELdsError CLdsScriptEngine::LdsCompileGeneral(const string &strSource, CActionList &acaActions, const bool &bExpression) {
+  // calculate hash value of the script
+  LdsHash iScriptHash = GetHash(strSource);
+
+  // retrieve compiled script from the cache
+  if (_bUseScriptCaching) {
+    // check if it exists in the cache
+    int iInCache = _mapScriptCache.FindKeyIndex(iScriptHash);
+
+    if (iInCache != -1) {
+      acaActions = _mapScriptCache.GetValue(iInCache).acaCache;
+      return LER_OK;
+    }
+  }
+
   CActionList acaCompiled;
   _bExpression = bExpression;
 
@@ -38,18 +52,23 @@ ELdsError CLdsScriptEngine::LdsCompileGeneral(string strSource, CActionList &aca
     return leError.le_eError;
   }
 
+  // cache the script
+  if (_bUseScriptCaching) {
+    _mapScriptCache.Add(iScriptHash, SLdsCache(acaCompiled, bExpression));
+  }
+
   // copy compiled actions
   acaActions.MoveArray(acaCompiled);
   return LER_OK;
 };
 
 // Compile the script
-ELdsError CLdsScriptEngine::LdsCompileScript(string strScript, CActionList &acaActions) {
+ELdsError CLdsScriptEngine::LdsCompileScript(const string &strScript, CActionList &acaActions) {
   return LdsCompileGeneral(strScript, acaActions, false);
 };
 
 // Compile the expression
-ELdsError CLdsScriptEngine::LdsCompileExpression(string strExpression, CActionList &acaActions) {
+ELdsError CLdsScriptEngine::LdsCompileExpression(const string &strExpression, CActionList &acaActions) {
   return LdsCompileGeneral(strExpression, acaActions, true);
 };
 

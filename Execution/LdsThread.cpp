@@ -39,13 +39,12 @@ extern const char *_astrActionNames[LCA_SIZEOF] = {
 };
 
 // Constructor
-CLdsThread::CLdsThread(CActionList aca, CLdsScriptEngine *plds) :
+CLdsThread::CLdsThread(const CActionList &aca, CLdsScriptEngine *plds) :
   sth_pldsEngine(plds), sth_eFlags(ELdsThreadFlags(0)),
   sth_acaActions(aca), sth_iPos(0),
   sth_eStatus(ETS_FINISHED), sth_eError(LER_OK),
   sth_pReference(NULL), sth_pPreRun(NULL), sth_pResult(NULL)
 {
-  
 };
 
 // Destructor
