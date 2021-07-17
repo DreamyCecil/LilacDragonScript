@@ -135,7 +135,7 @@ void CLdsScriptEngine::LdsReadAction(void *pStream, CCompAction &caAction) {
 void CLdsScriptEngine::LdsWriteInlineFunc(void *pStream, SLdsInlineFunc &inFunc) {
   // write argument count
   int ctArgs = inFunc.in_astrArgs.Count();
-  _pLdsWrite(pStream, &ctArgs, sizeof(ctArgs));
+  _pLdsWrite(pStream, &ctArgs, sizeof(int));
 
   for (int iArg = 0; iArg < ctArgs; iArg++) {
     // write argument name
@@ -144,7 +144,7 @@ void CLdsScriptEngine::LdsWriteInlineFunc(void *pStream, SLdsInlineFunc &inFunc)
 
   // write inline functions count
   int ctFunc = inFunc.in_mapInlineFunc.Count();
-  _pLdsWrite(pStream, &ctFunc, sizeof(ctFunc));
+  _pLdsWrite(pStream, &ctFunc, sizeof(int));
 
   for (int iFunc = 0; iFunc < ctFunc; iFunc++) {
     // write function name
@@ -162,7 +162,7 @@ void CLdsScriptEngine::LdsWriteInlineFunc(void *pStream, SLdsInlineFunc &inFunc)
 void CLdsScriptEngine::LdsReadInlineFunc(void *pStream, SLdsInlineFunc &inFunc) {
   // read argument count
   int ctArgs = 0;
-  _pLdsRead(pStream, &ctArgs, sizeof(ctArgs));
+  _pLdsRead(pStream, &ctArgs, sizeof(int));
 
   for (int iArg = 0; iArg < ctArgs; iArg++) {
     // read argument name
@@ -174,7 +174,7 @@ void CLdsScriptEngine::LdsReadInlineFunc(void *pStream, SLdsInlineFunc &inFunc) 
 
   // read inline functions count
   int ctFunc = 0;
-  _pLdsRead(pStream, &ctFunc, sizeof(ctFunc));
+  _pLdsRead(pStream, &ctFunc, sizeof(int));
 
   for (int iFunc = 0; iFunc < ctFunc; iFunc++) {
     // read function name
@@ -298,10 +298,10 @@ void CLdsScriptEngine::LdsReadValue(void *pStream, CLdsValue &val) {
 
     // float number
     case EVT_FLOAT: {
-      float fNumber = 0.0f;
-      _pLdsRead(pStream, &fNumber, sizeof(float));
+      double dNumber = 0.0;
+      _pLdsRead(pStream, &dNumber, sizeof(double));
 
-      val = fNumber;
+      val = dNumber;
     } break;
 
     // string
@@ -509,6 +509,33 @@ void CLdsScriptEngine::LdsReadString(void *pStream, string &str) {
 
 // Write the script engine
 void CLdsScriptEngine::LdsWriteEngine(void *pStream) {
+  // write script caching
+  char bCaching = _bUseScriptCaching;
+  _pLdsWrite(pStream, &bCaching, sizeof(char));
+
+  // write cached scripts
+  if (_bUseScriptCaching) {
+    CDMap<LdsHash, SLdsCache> &mapCache = _mapScriptCache;
+    int ctCached = mapCache.Count();
+
+    // write amount of cached scripts
+    _pLdsWrite(pStream, &ctCached, sizeof(int));
+
+    for (int iCache = 0; iCache < ctCached; iCache++) {
+      // write script hash
+      LdsHash iHash = mapCache.GetKey(iCache);
+      _pLdsWrite(pStream, &iHash, sizeof(LdsHash));
+
+      // write compiled script
+      SLdsCache &scCache = mapCache.GetValue(iCache);
+
+      LdsWriteProgram(pStream, scCache.acaCache);
+
+      char bExpression = scCache.bExpression;
+      _pLdsWrite(pStream, &bExpression, sizeof(char));
+    }
+  }
+
   // write variable count
   int ctVars = _mapLdsVariables.Count();
   _pLdsWrite(pStream, &ctVars, sizeof(int));
@@ -525,6 +552,7 @@ void CLdsScriptEngine::LdsWriteEngine(void *pStream) {
   int ctThreads = _athhThreadHandlers.Count();
   _pLdsWrite(pStream, &ctThreads, sizeof(int));
 
+  // write threads
   for (int iThread = 0; iThread < ctThreads; iThread++) {
     SLdsHandler &thh = _athhThreadHandlers[iThread];
 
@@ -539,6 +567,35 @@ void CLdsScriptEngine::LdsWriteEngine(void *pStream) {
 
 // Read the script engine
 void CLdsScriptEngine::LdsReadEngine(void *pStream) {
+  // read script caching
+  char bCaching = false;
+  _pLdsRead(pStream, &bCaching, sizeof(char));
+
+  _bUseScriptCaching = (bCaching != 0);
+
+  // read cached scripts
+  if (_bUseScriptCaching) {
+    // read amount of cached scripts
+    int ctCached = 0;
+    _pLdsRead(pStream, &ctCached, sizeof(int));
+
+    for (int iCache = 0; iCache < ctCached; iCache++) {
+      // read script hash
+      LdsHash iHash;
+      _pLdsRead(pStream, &iHash, sizeof(LdsHash));
+
+      // read compiled script
+      CActionList acaCache;
+      LdsReadProgram(pStream, acaCache);
+
+      char bExpression = false;
+      _pLdsRead(pStream, &bExpression, sizeof(char));
+
+      // add to the cache list
+      _mapScriptCache.Add(iHash, SLdsCache(acaCache, bExpression != 0));
+    }
+  }
+
   // read variable count
   int ctVars = 0;
   _pLdsRead(pStream, &ctVars, sizeof(int));
@@ -555,6 +612,7 @@ void CLdsScriptEngine::LdsReadEngine(void *pStream) {
   int ctThreads = 0;
   _pLdsRead(pStream, &ctThreads, sizeof(int));
 
+  // read threads
   for (int iThread = 0; iThread < ctThreads; iThread++) {
     // read wait times
     LONG64 llStart = 0;

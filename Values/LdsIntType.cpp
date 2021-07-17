@@ -36,7 +36,6 @@ CLdsValueRef CLdsIntType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
       valRef.vr_val = -val->GetNumber();
       break;
 
-    // TODO: Make string inversion
     case UOP_INVERT: {
       bool bInvert = (val->GetIndex() > 0);
       valRef.vr_val = !bInvert;
