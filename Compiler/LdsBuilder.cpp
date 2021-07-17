@@ -1009,13 +1009,33 @@ void CLdsScriptEngine::OperationBuilder(CLdsToken etFirst) {
         continue;
       }
 
-      // add binary operation
-      CNodeList abn;
-      abn.Add(abnNodes[iOperator]);
-      abn.Add(abnNodes[iOperator + 1]);
+      // get two values for the operation
+      CBuildNode &bnNode1 = abnNodes[iOperator];
+      CBuildNode &bnNode2 = abnNodes[iOperator + 1];
 
-      abnNodes[iOperator] = CBuildNode(EBN_BIN, et.lt_iPos, et.lt_valValue, -1, &abn);
-      abn.Clear();
+      // if they are actually both pure values
+      if (bnNode1.lt_eType == EBN_VAL && bnNode2.lt_eType == EBN_VAL) {
+        // perform operation in place
+        CLdsToken tknOp(LTK_OPERATOR, et.lt_iPos, et.lt_valValue, -1);
+
+        CLdsValueRef valRef1(bnNode1.lt_valValue);
+        CLdsValueRef valRef2(bnNode2.lt_valValue);
+
+        valRef1 = valRef1.vr_val->BinaryOp(valRef1, valRef2, tknOp);
+
+        // add pure value
+        abnNodes[iOperator] = CBuildNode(EBN_VAL, et.lt_iPos, valRef1.vr_val, -1);
+
+      // if has identifiers or other operations
+      } else {
+        // add binary operation
+        CNodeList abn;
+        abn.Add(bnNode1);
+        abn.Add(bnNode2);
+
+        abnNodes[iOperator] = CBuildNode(EBN_BIN, et.lt_iPos, et.lt_valValue, -1, &abn);
+        abn.Clear();
+      }
 
       // remove the other node with this operation
       abnNodes.Delete(iOperator + 1);
