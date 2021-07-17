@@ -123,8 +123,8 @@ void Exec_Unary(void) {
   CLdsValueRef valRef = _pavalStack->Pop();
   
   // value to return
-  CLdsValueRef valRefReturn = valRef.vr_val->UnaryOp(valRef, *_ca);
-  _pavalStack->Push(valRefReturn);
+  valRef = valRef.vr_val->UnaryOp(valRef, *_ca);
+  _pavalStack->Push(valRef);
 };
 
 // Binary operations
@@ -134,8 +134,8 @@ void Exec_Binary(void) {
   CLdsValueRef valRef1 = _pavalStack->Pop();
   
   // value to return
-  CLdsValueRef valRefReturn = valRef1.vr_val->BinaryOp(valRef1, valRef2, *_ca);
-  _pavalStack->Push(valRefReturn);
+  valRef1 = valRef1.vr_val->BinaryOp(valRef1, valRef2, *_ca);
+  _pavalStack->Push(valRef1);
 };
 
 // Get variable value

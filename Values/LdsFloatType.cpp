@@ -27,8 +27,32 @@ string CLdsFloatType::Print(void) {
 
 // Perform a unary operation
 CLdsValueRef CLdsFloatType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
-  // use integer's unary function
-  return CLdsIntType(0).UnaryOp(valRef, ca);
+  // actual value and the operation
+  CLdsValue val = valRef.vr_val;
+  int iOperation = ca->GetIndex();
+
+  switch (iOperation) {
+    case UOP_NEGATE:
+      val = -val->GetNumber();
+      break;
+
+    case UOP_INVERT: {
+      bool bInvert = (val->GetNumber() > 0.5);
+      val = (int)!bInvert;
+    } break;
+
+    case UOP_BINVERT: {
+      double dInvert = val->GetNumber();
+
+      // invert bits of the double
+      LONG64 iInvert = ~(reinterpret_cast<LONG64 &>(dInvert));
+      dInvert = reinterpret_cast<double &>(iInvert);
+
+      val = dInvert;
+    } break;
+  }
+
+  return CLdsValueRef(val);
 };
 
 // Perform a binary operation

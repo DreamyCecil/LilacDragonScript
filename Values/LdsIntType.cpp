@@ -33,17 +33,17 @@ CLdsValueRef CLdsIntType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
 
   switch (iOperation) {
     case UOP_NEGATE:
-      valRef.vr_val = -val->GetNumber();
+      val = -val->GetIndex();
       break;
 
     case UOP_INVERT: {
       bool bInvert = (val->GetIndex() > 0);
-      valRef.vr_val = !bInvert;
+      val = (int)!bInvert;
     } break;
 
     case UOP_BINVERT: {
       int iInvert = val->GetIndex();
-      valRef.vr_val = ~iInvert;
+      val = ~iInvert;
     } break;
   }
 

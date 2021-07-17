@@ -26,10 +26,12 @@ static bool _bExpression = true;
 // General compilation
 ELdsError CLdsScriptEngine::LdsCompileGeneral(const string &strSource, CActionList &acaActions, const bool &bExpression) {
   // calculate hash value of the script
-  LdsHash iScriptHash = GetHash(strSource);
+  LdsHash iScriptHash;
 
   // retrieve compiled script from the cache
   if (_bUseScriptCaching) {
+    iScriptHash = GetHash(strSource);
+
     // check if it exists in the cache
     int iInCache = _mapScriptCache.FindKeyIndex(iScriptHash);
 
