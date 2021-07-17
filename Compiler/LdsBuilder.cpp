@@ -618,21 +618,6 @@ void CLdsScriptEngine::ExpressionBuilder(LdsFlags ubFlags) {
           while (_iBuildPos < _ctBuildLen) {
             // get token after the string
             CLdsToken etNext = _aetTokens[_iBuildPos];
-            bool bOperator = false;
-
-            // if it's an operator
-            if (etNext.lt_eType == LTK_OPERATOR) {
-              // if followed by an addition
-              if (etNext->GetIndex() == LOP_ADD) {
-                // skip the addition
-                etNext = _aetTokens[++_iBuildPos];
-                bOperator = true;
-
-              // something else
-              } else {
-                break;
-              }
-            }
           
             // if followed by another string
             if (etNext.lt_eType == LTK_VAL && etNext->GetType() == EVT_STRING) {
@@ -641,9 +626,6 @@ void CLdsScriptEngine::ExpressionBuilder(LdsFlags ubFlags) {
             
             // something else
             } else {
-              if (bOperator) {
-                _iBuildPos--;
-              }
               break;
             }
 
