@@ -77,20 +77,44 @@ CLdsValueRef CLdsIntType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2,
   int iNum2 = val2->GetIndex();
 
   switch (iOperation) {
-    // operators
-    case LOP_ADD: val1 = (iNum1 + iNum2); break;
-    case LOP_SUB: val1 = (iNum1 - iNum2); break;
-    case LOP_MUL: val1 = (iNum1 * iNum2); break;
-    case LOP_DIV: val1 = (iNum1 / iNum2); break;
+    case LOP_ADD: case LOP_SUB: case LOP_MUL: case LOP_DIV: case LOP_FMOD:
+    case LOP_GT: case LOP_GOE: case LOP_LT: case LOP_LOE: case LOP_EQ: case LOP_NEQ: {
+      // prioritize float numbers
+      if (val2->GetType() == EVT_FLOAT) {
+        return val2->BinaryOp(valRef1, valRef2, tkn);
+      }
+
+      // integers
+      switch (iOperation) {
+        // operators
+        case LOP_ADD: val1 = (iNum1 + iNum2); break;
+        case LOP_SUB: val1 = (iNum1 - iNum2); break;
+        case LOP_MUL: val1 = (iNum1 * iNum2); break;
+        case LOP_DIV: val1 = (iNum1 / iNum2); break;
     
-    case LOP_FMOD: {
-      if (iNum2 != 0) {
-        val1 = (iNum1 % iNum2);
-      } else {
-        val1 = 0;
+        case LOP_FMOD: {
+          if (iNum2 != 0) {
+            val1 = (iNum1 % iNum2);
+          } else {
+            val1 = 0;
+          }
+        } break;
+      
+        // conditional operators
+        case LOP_AND: val1 = (iNum1 > 0 && iNum2 > 0); break;
+        case LOP_OR:  val1 = (iNum1 > 0 || iNum2 > 0); break;
+        case LOP_XOR: val1 = XOR_CHECK(iNum1 >= 0, iNum2 > 0); break;
+
+        case LOP_GT:  val1 = (iNum1 >  iNum2); break;
+        case LOP_GOE: val1 = (iNum1 >= iNum2); break;
+        case LOP_LT:  val1 = (iNum1 <  iNum2); break;
+        case LOP_LOE: val1 = (iNum1 <= iNum2); break;
+        case LOP_EQ:  val1 = (iNum1 == iNum2); break;
+        case LOP_NEQ: val1 = (iNum1 != iNum2); break;
       }
     } break;
-      
+
+    // integer division
     case LOP_IDIV: {
       if (iNum2 != 0) {
         val1 = (iNum1 / iNum2);
@@ -98,25 +122,13 @@ CLdsValueRef CLdsIntType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2,
         val1 = 0;
       }
     } break;
-        
+
     // bitwise operators
     case LOP_SH_L:  val1 = (iNum1 << iNum2); break;
     case LOP_SH_R:  val1 = (iNum1 >> iNum2); break;
     case LOP_B_AND: val1 = (iNum1 &  iNum2); break;
     case LOP_B_XOR: val1 = (iNum1 ^  iNum2); break;
     case LOP_B_OR:  val1 = (iNum1 |  iNum2); break;
-
-    // conditional operators
-    case LOP_AND: val1 = (iNum1 > 0 && iNum2 > 0); break;
-    case LOP_OR:  val1 = (iNum1 > 0 || iNum2 > 0); break;
-    case LOP_XOR: val1 = XOR_CHECK(iNum1 >= 0, iNum2 > 0); break;
-
-    case LOP_GT:  val1 = (iNum1 >  iNum2); break;
-    case LOP_GOE: val1 = (iNum1 >= iNum2); break;
-    case LOP_LT:  val1 = (iNum1 <  iNum2); break;
-    case LOP_LOE: val1 = (iNum1 <= iNum2); break;
-    case LOP_EQ:  val1 = (iNum1 == iNum2); break;
-    case LOP_NEQ: val1 = (iNum1 != iNum2); break;
       
     default: LdsBinaryError(val1, val2, tkn);
   }
