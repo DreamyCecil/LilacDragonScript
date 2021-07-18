@@ -153,6 +153,12 @@
     <ClInclude Include="Values\LdsValueTypes.h">
       <Filter>Header Files\Values</Filter>
     </ClInclude>
+    <ClInclude Include="Types\LdsFunc.h">
+      <Filter>Header Files\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\LdsVar.h">
+      <Filter>Header Files\Types</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Base\LdsCompatibility.cpp">

@@ -139,9 +139,11 @@
     <ClInclude Include="StdH.h" />
     <ClInclude Include="Types\LdsAction.h" />
     <ClInclude Include="Types\LdsBuildNode.h" />
+    <ClInclude Include="Types\LdsFunc.h" />
     <ClInclude Include="Types\LdsStruct.h" />
     <ClInclude Include="Types\LdsToken.h" />
     <ClInclude Include="Types\LdsValueRef.h" />
+    <ClInclude Include="Types\LdsVar.h" />
     <ClInclude Include="Values\LdsArrayType.h" />
     <ClInclude Include="Values\LdsFloatType.h" />
     <ClInclude Include="Values\LdsIntType.h" />
