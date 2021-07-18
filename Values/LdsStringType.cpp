@@ -73,7 +73,7 @@ CLdsValueRef CLdsStringType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
       }
 
       string str = val1->GetString();
-      int ctStr = strlen(str.c_str());
+      int ctStr = str.length();
       int ctSub = val2->GetIndex();
 
       val1 = str.substr(0, ctStr - ctSub);

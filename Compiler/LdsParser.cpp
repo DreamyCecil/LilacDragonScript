@@ -92,7 +92,7 @@ void CLdsScriptEngine::ParseScript(string strScript) {
   _aetTokens.Clear();
   string str = strScript;
 
-  _ctLen = strlen(str.c_str());
+  _ctLen = str.length();
   
   _iLine = 1;
   _iLineStart = 0;

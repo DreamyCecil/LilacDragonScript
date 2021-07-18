@@ -99,12 +99,12 @@ void Exec_Val(void) {
         // variable name
         string strVar = _pavalStack->Pop().vr_val->GetString();
         // constant variable
-        int iConst = _pavalStack->Pop().vr_val->GetIndex();
+        bool bConst = _pavalStack->Pop().vr_val->IsTrue();
         // value
         CLdsValue val = _pavalStack->Pop().vr_val;
         
         // add the variable
-        mapVars[strVar] = SLdsVar(val, (iConst >= 1));
+        mapVars[strVar] = SLdsVar(val, bConst);
       }
       
       // fill the structure

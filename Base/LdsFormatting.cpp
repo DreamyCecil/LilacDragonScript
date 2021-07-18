@@ -28,16 +28,6 @@ SOFTWARE. */
   #define VSPRINTF_FUNC vsprintf
 #endif
 
-// Resize raw string
-void LdsResizeString(char **pMem, int ctSize) {
-  char *pNew = new char[ctSize];
-
-  memcpy(pNew, &pMem, ctSize);
-  delete[] &pMem;
-
-  *pMem = pNew;
-};
-
 // Format a string
 string LdsPrintF(const char *strFormat, ...) {
   va_list arg;

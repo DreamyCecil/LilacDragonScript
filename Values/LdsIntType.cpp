@@ -37,8 +37,7 @@ CLdsValueRef CLdsIntType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
       break;
 
     case UOP_INVERT: {
-      bool bInvert = (val->GetIndex() > 0);
-      val = (int)!bInvert;
+      val = (int)!val->IsTrue();
     } break;
 
     case UOP_BINVERT: {

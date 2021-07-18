@@ -408,7 +408,7 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
     // variable definition
     case LTK_VAR: {
       CNodeList abnNodes;
-      bool bConst = (et->GetIndex() >= 1);
+      bool bConst = et->IsTrue();
       
       do {
         CLdsToken etNext = _aetTokens[_iBuildPos++];
@@ -712,7 +712,7 @@ void CLdsScriptEngine::ExpressionBuilder(const LdsFlags &ubFlags) {
           bool bConst = false;
           
           if (etNext.lt_eType == LTK_VAR) {
-            bConst = (etNext->GetIndex() >= 1);
+            bConst = etNext->IsTrue();
             
             etNext = _aetTokens[_iBuildPos++];
           }

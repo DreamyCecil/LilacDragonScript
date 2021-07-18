@@ -238,7 +238,7 @@ EThreadStatus CLdsThread::Resume(void) {
           switch (iDirType) {
             // debug context level
             case THD_DEBUGCONTEXT:
-              SetFlag(THF_DEBUG, (val->GetIndex() > 0));
+              SetFlag(THF_DEBUG, val->IsTrue());
               break;
           }
         } break;
