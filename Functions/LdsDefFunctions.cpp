@@ -25,7 +25,7 @@ extern CLdsScriptEngine *_pldsCurrent;
 extern CLdsThread *_psthCurrent;
 
 // Debug output
-LdsReturn LdsDebugOut(LDS_ARGS) {
+LDS_FUNC(LDS_DebugOut) {
   CLdsValue valPrint = LDS_NEXT_ARG;
   _pldsCurrent->LdsOut("%s\n", valPrint->Print().c_str());
   
@@ -33,14 +33,19 @@ LdsReturn LdsDebugOut(LDS_ARGS) {
 };
 
 // Print a hexadecimal number
-LdsReturn LdsPrintHex(LDS_ARGS) {
+LDS_FUNC(LDS_PrintHex) {
   int iPrint = LDS_NEXT_INT;
   
   return LdsPrintF("%X", iPrint);
 };
 
+// Get hash value from a string
+LDS_FUNC(LDS_HashString) {
+  return (int)GetHash(LDS_NEXT_STR);
+};
+
 // Pause the script execution
-LdsReturn LdsWait(LDS_ARGS) {
+LDS_FUNC(LDS_Wait) {
   double dWaitTime = LDS_NEXT_NUM;
   
   // current tick and wait ticks

@@ -142,14 +142,3 @@ class LDS_API CLdsValue {
     bool operator==(const CLdsValue &valOther) const;
     bool operator!=(const CLdsValue &valOther) const;
 };
-
-// LDS function arguments
-#define LDS_ARGS CLdsValue *_LDS_FuncArgs
-
-// Get value of the next function argument
-#define LDS_NEXT_ARG    (*_LDS_FuncArgs++)
-#define LDS_NEXT_INT    (LDS_NEXT_ARG.AssertNumber()->GetIndex())
-#define LDS_NEXT_NUM    (LDS_NEXT_ARG.AssertNumber()->GetNumber())
-#define LDS_NEXT_STR    (LDS_NEXT_ARG.Assert(EVT_STRING)->GetString())
-#define LDS_NEXT_ARRAY  (LDS_NEXT_ARG.Assert(EVT_ARRAY)->GetArray())
-#define LDS_NEXT_STRUCT (LDS_NEXT_ARG.Assert(EVT_STRUCT)->GetStruct())

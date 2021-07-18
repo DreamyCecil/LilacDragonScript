@@ -191,7 +191,7 @@ class LDS_API CLdsScriptEngine {
     
   // Compiler
   public:
-    CDMap<LdsHash, SLdsCache> _mapScriptCache; // cached scripts by their hash value
+    CScriptCache _mapScriptCache; // cached scripts by their hash value (used in I/O)
     bool _bUseScriptCaching; // cache scripts or not
     
     // General compilation

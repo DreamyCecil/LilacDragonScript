@@ -158,12 +158,12 @@ CLdsValueRef CLdsStringType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
       if (iLength <= 0) {
         LdsThrow(LEX_ARRAYEMPTY, "Cannot index an empty string at %s", tkn.PrintPos().c_str());
 
-      } else if (iCharIndex < 0 || iCharIndex >= iLength) {
-        LdsThrow(LEX_ARRAYOUT, "Character index '%d' is out of bounds [0, %d] at %s", iCharIndex, iLength - 1, tkn.PrintPos().c_str());
+      } else if (iCharIndex < 0 || iCharIndex > iLength) {
+        LdsThrow(LEX_ARRAYOUT, "Character index '%d' is out of bounds [0, %d] at %s", iCharIndex, iLength, tkn.PrintPos().c_str());
       }
         
-      // get one character from the string
-      val1 = LdsPrintF("%c", strCopy.c_str()[iCharIndex]);
+      // get one character from the string (including terminating null character)
+      val1 = (int)strCopy[iCharIndex];
     } break;
 
     default: LdsThrow(LEX_BINARY, "Cannot perform a binary operation %d on %s and %s at %s", iOperation, strType1.c_str(), strType2.c_str(), tkn.PrintPos().c_str());

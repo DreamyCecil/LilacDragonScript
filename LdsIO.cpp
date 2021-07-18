@@ -515,7 +515,7 @@ void CLdsScriptEngine::LdsWriteEngine(void *pStream) {
 
   // write cached scripts
   if (_bUseScriptCaching) {
-    CDMap<LdsHash, SLdsCache> &mapCache = _mapScriptCache;
+    CScriptCache &mapCache = _mapScriptCache;
     int ctCached = mapCache.Count();
 
     // write amount of cached scripts

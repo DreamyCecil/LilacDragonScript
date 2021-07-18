@@ -20,7 +20,7 @@ SOFTWARE. */
 
 #pragma once
 
-#include "../LdsTypes.h"
+#include "../Functions/LdsFunctions.h"
 
 // List of function arguments
 typedef CDList<string> CLdsInlineArgs;

@@ -18,18 +18,33 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#pragma once
+// Script that calculates hash values of strings using different methods
 
-#include "LdsFunctions.h"
+// custom hashing function
+function HashCopy(strData, iFactor) {
+  var iHash = 0;
+  var ctChar = 0;
 
-// Debug output
-LDS_FUNC(LDS_DebugOut);
+  for (var iChar = strData[iChar]; iChar != 0; iChar = strData[++ctChar]) {
+    // hash it
+    iHash = iFactor * iHash + iChar;
+  }
 
-// Print a hexadecimal number
-LDS_FUNC(LDS_PrintHex);
+  return iHash;
+}
 
-// Get hash value from a string
-LDS_FUNC(LDS_HashString);
+// hash a bunch of words
+var aWords = ["Lilac", "Dragon", "Script", "That's not a word, that's a sentence."];
 
-// Pause the script execution
-LDS_FUNC(LDS_Wait);
+for (var i = 0; i < 4; i++) {
+  // print the current word
+  Out(aWords[i] + ":\n");
+  
+  // get hashes from the default function, its copy and with a different hashing factor
+  var strHashDefault   = PrintHex(Hash(aWords[i]));
+  var strHashCustom    = PrintHex(HashCopy(aWords[i], 31));
+  var strHashDifferent = PrintHex(HashCopy(aWords[i], 37));
+  
+  // print them out
+  Out(strHashDefault + ", " + strHashCustom + ", " + strHashDifferent + "\n");
+}
