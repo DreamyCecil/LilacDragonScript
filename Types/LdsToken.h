@@ -51,7 +51,7 @@ enum ELdsToken {
   LTK_COMMA,   // comma
   LTK_SEMICOL, // statement end
   LTK_COLON,   // special expression end
-  LTK_DIR,     // pre-run thread directive
+  LTK_HASH,    // hash symbol
   
   LTK_IF,   // if
   LTK_ELSE, // else

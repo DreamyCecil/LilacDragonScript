@@ -554,25 +554,36 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
     } break;
     
     // thread directive
-    case LTK_DIR: {
-      // directive type
-      int iDirType = et->GetIndex();
+    case LTK_HASH: {
+      // get directive name
+      CLdsToken etNext = _aetTokens[_iBuildPos++];
+
+      if (etNext.lt_eType != LTK_ID) {
+        LdsThrow(LEP_DIRNAME, "Expected a directive name at %s", etNext.PrintPos().c_str());
+      }
+
+      string strDir = etNext->GetString();
+
+      // determine directive type by its name
+      int iDirType = -1;
+      int iDesiredVal = -1;
+          
+      if (strDir == "context") {
+        iDirType = THD_DEBUGCONTEXT;
+        iDesiredVal = EVT_INDEX;
+            
+      } else {
+        LdsThrow(LEP_DIR, "Unknown directive '%s' at %s", strDir.c_str(), etNext.PrintPos().c_str());
+      }
       
       // get directive value
-      const CLdsToken &etNext = _aetTokens[_iBuildPos++];
+      etNext = _aetTokens[_iBuildPos++];
     
       if (etNext.lt_eType != LTK_VAL) {
         LdsThrow(LEB_VALUE, "Expected a value at %s", etNext.PrintPos().c_str());
       }
       
       CLdsValue valDir = etNext.lt_valValue;
-      
-      // assert value type
-      int iDesiredVal = -1;
-      
-      switch (iDirType) {
-        case THD_DEBUGCONTEXT: iDesiredVal = EVT_INDEX; break;
-      }
       
       // wrong type
       if (iDesiredVal != -1 && valDir->GetType() != iDesiredVal) {

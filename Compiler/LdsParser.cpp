@@ -386,49 +386,9 @@ void CLdsScriptEngine::ParseScript(string strScript) {
         }
       } break;
       
-      // thread directive
+      // hash symbol
       case '#': {
-        cChar = cNextChar;
-        
-        // start directive names with an underscore or letters
-        if (cChar == '_'
-        || (cChar >= 'a' && cChar <= 'z')
-        || (cChar >= 'A' && cChar <= 'Z')) {
-          // parse name symbols
-          UNTIL_END {
-            cChar = str[_iPos];
-            
-            // allow underscore, letters and numbers
-            if (cChar == '_'
-            || (cChar >= '0' && cChar <= '9')
-            || (cChar >= 'a' && cChar <= 'z')
-            || (cChar >= 'A' && cChar <= 'Z')) {
-              _iPos++;
-              
-            // invalid symbol
-            } else {
-              break;
-            }
-          }
-          
-          // copy the name (excluding '#')
-          string strDir = str.substr(iStart + 1, _iPos - iStart - 1);
-          
-          // determine directive type by its name
-          int iDirType = -1;
-          
-          if (strDir == "context") {
-            iDirType = THD_DEBUGCONTEXT;
-            
-          } else {
-            LdsThrow(LEP_DIR, "Unknown directive '%s' at %s", strDir.c_str(), LdsPrintPos(iPrintPos).c_str());
-          }
-          
-          AddParserToken(LTK_DIR, iPrintPos, iDirType);
-          
-        } else {
-          LdsThrow(LEP_DIRNAME, "Expected a directive name at %s", LdsPrintPos(iPrintPos).c_str());
-        }
+        AddParserToken(LTK_HASH, iPrintPos);
       } break;
 
       // constants
