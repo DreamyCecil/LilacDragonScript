@@ -71,7 +71,7 @@ CLdsValue CLdsScriptEngine::LdsExecute(CActionList &acaActions) {
 
 // Evaluate the expression
 ELdsError CLdsScriptEngine::LdsEvaluate(const string &strExpression, CLdsValue &valResult) {
-  valResult = 0.0f;
+  valResult = 0;
 
   // try to compile
   CActionList acaActions;
@@ -100,7 +100,7 @@ ELdsError CLdsScriptEngine::LdsEvaluate(const string &strExpression, CLdsValue &
 
 // Evaluate compiled expression
 ELdsError CLdsScriptEngine::LdsEvaluateCompiled(CActionList &acaActions, CLdsValue &valResult) {
-  valResult = 0.0f;
+  valResult = 0;
 
   // try to execute
   try {

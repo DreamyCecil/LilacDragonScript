@@ -45,8 +45,8 @@ CLdsValueRef CLdsFloatType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
     case UOP_BINVERT: {
       double dInvert = val->GetNumber();
 
-      LONG64 iInvert = ~(reinterpret_cast<LONG64 &>(dInvert));
-      dInvert = reinterpret_cast<double &>(iInvert);
+      LONG64 llInvert = ~(reinterpret_cast<LONG64 &>(dInvert));
+      dInvert = reinterpret_cast<double &>(llInvert);
 
       val = dInvert;
     } break;

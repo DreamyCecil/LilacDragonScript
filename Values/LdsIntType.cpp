@@ -86,10 +86,10 @@ CLdsValueRef CLdsIntType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2,
     case LOP_DIV: val1 = (dNum1 / dNum2); break;
     
     case LOP_FMOD: {
-      if (dNum2 != 0.0f) {
+      if (dNum2 != 0.0) {
         val1 = fmod(dNum1, dNum2);
       } else {
-        val1 = 0.0f;
+        val1 = 0.0;
       }
     } break;
       

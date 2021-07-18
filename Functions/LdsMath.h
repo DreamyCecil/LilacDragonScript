@@ -75,7 +75,7 @@ inline LdsReturn LdsRoot(LDS_ARGS) {
   dNum = fabs(dNum);
 
   // example: (8, 3) = 2; (-8, 3) = -2
-  return pow(dNum, 1.0f / dBase) * dSign;
+  return pow(dNum, 1.0 / dBase) * dSign;
 };
 
 inline LdsReturn LdsPow(LDS_ARGS) {

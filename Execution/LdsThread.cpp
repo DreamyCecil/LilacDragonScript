@@ -102,7 +102,7 @@ EThreadStatus CLdsThread::Resume(void) {
 
   // nothing to execute
   if (aca.Count() <= 0) {
-    sth_valResult = 0.0f;
+    sth_valResult = 0;
     sth_eStatus = ETS_FINISHED;
     return ETS_FINISHED;
   }
@@ -127,7 +127,7 @@ EThreadStatus CLdsThread::Resume(void) {
       return sth_eStatus;
   }
 
-  sth_valResult = 0.0f;
+  sth_valResult = 0;
   sth_eStatus = ETS_RUNNING;
   
   int iPos = sth_iPos;
@@ -379,7 +379,7 @@ CLdsValueRef CLdsThread::GetResult(void) {
   }
   
   if (paval->Count() <= 0) {
-    return CLdsValueRef(0.0f);
+    return CLdsValueRef(0);
   }
   
   return paval->Pop();

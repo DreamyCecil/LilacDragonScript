@@ -73,7 +73,7 @@ void Exec_Val(void) {
     
     // array
     if (iContainer == 0) {
-      CLdsValue valArray = CLdsValue(ctValues, 0.0f);
+      CLdsValue valArray = CLdsValue(ctValues, 0);
       
       CLdsArray avalArray;
       avalArray.New(ctValues);
