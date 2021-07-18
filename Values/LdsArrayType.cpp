@@ -170,7 +170,7 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
       valRef1.AddIndex(iArrayIndex);
     } break;
       
-    default: LdsThrow(LEX_BINARY, "Cannot perform a binary operation %d on %s and %s at %s", iOperation, strType1.c_str(), strType2.c_str(), tkn.PrintPos().c_str());
+    default: LdsBinaryError(val1, val2, tkn);
   }
 
   return CLdsValueRef(val1, valRef1.vr_pvar, pvalArrayAccess, valRef1.vr_strVar, valRef1.vr_strRef, valRef1.IsConst(), valRef1.IsGlobal());

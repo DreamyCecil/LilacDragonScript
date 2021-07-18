@@ -67,6 +67,67 @@ CLdsValueRef CLdsFloatType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
 
 // Perform a binary operation
 CLdsValueRef CLdsFloatType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, const CLdsToken &tkn) {
-  // use integer's binary function
-  return CLdsIntType(0).BinaryOp(valRef1, valRef2, tkn);
+  // actual values and the operation
+  CLdsValue val1 = valRef1.vr_val;
+  CLdsValue val2 = valRef2.vr_val;
+
+  int iOperation = tkn->GetIndex();
+  
+  // prioritize strings
+  if (val2->GetType() == EVT_STRING) {
+    return val2->BinaryOp(valRef1, valRef2, tkn);
+  }
+
+  // get numbers
+  double dNum1 = val1->GetNumber();
+  double dNum2 = val2->GetNumber();
+  int iNum1 = (int)dNum1;
+  int iNum2 = (int)dNum2;
+
+  switch (iOperation) {
+    // operators
+    case LOP_ADD: val1 = (dNum1 + dNum2); break;
+    case LOP_SUB: val1 = (dNum1 - dNum2); break;
+    case LOP_MUL: val1 = (dNum1 * dNum2); break;
+    case LOP_DIV: val1 = (dNum1 / dNum2); break;
+    
+    case LOP_FMOD: {
+      if (dNum2 != 0.0) {
+        val1 = fmod(dNum1, dNum2);
+      } else {
+        val1 = 0.0;
+      }
+    } break;
+      
+    case LOP_IDIV: {
+      if (iNum2 != 0) {
+        val1 = (iNum1 / iNum2);
+      } else {
+        val1 = 0;
+      }
+    } break;
+        
+    // bitwise operators
+    case LOP_SH_L:  val1 = (iNum1 << iNum2); break;
+    case LOP_SH_R:  val1 = (iNum1 >> iNum2); break;
+    case LOP_B_AND: val1 = (iNum1 &  iNum2); break;
+    case LOP_B_XOR: val1 = (iNum1 ^  iNum2); break;
+    case LOP_B_OR:  val1 = (iNum1 |  iNum2); break;
+
+    // conditional operators
+    case LOP_AND: val1 = (dNum1 > 0.0 && dNum2 > 0.0); break;
+    case LOP_OR:  val1 = (dNum1 > 0.0 || dNum2 > 0.0); break;
+    case LOP_XOR: val1 = XOR_CHECK(dNum1 >= 0.0, dNum2 > 0.0); break;
+
+    case LOP_GT:  val1 = (dNum1 >  dNum2); break;
+    case LOP_GOE: val1 = (dNum1 >= dNum2); break;
+    case LOP_LT:  val1 = (dNum1 <  dNum2); break;
+    case LOP_LOE: val1 = (dNum1 <= dNum2); break;
+    case LOP_EQ:  val1 = (dNum1 == dNum2); break;
+    case LOP_NEQ: val1 = (dNum1 != dNum2); break;
+      
+    default: LdsBinaryError(val1, val2, tkn);
+  }
+
+  return CLdsValueRef(val1);
 };

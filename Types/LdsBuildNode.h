@@ -82,13 +82,17 @@ class LDS_API CBuildNode : public CLdsToken {
     CBuildNode(void) : CLdsToken() {};
 
     // Value constructor
-    CBuildNode(EBuildNode eType, int iPos, CLdsValue valValue, int iArg, CNodeList *abnNodes = NULL) :
+    CBuildNode(const EBuildNode &eType, const int &iPos, const CLdsValue &valValue, const int &iArg, CNodeList *abnNodes = NULL) :
       CLdsToken(eType, iPos, valValue, iArg)
     {
       if (abnNodes != NULL) {
         CopyNodes(*abnNodes);
       }
     };
+    
+    // Int constructor
+    CBuildNode(const EBuildNode &eType, const int &iPos, const int &iValue, const int &iArg, CNodeList *abnNodes = NULL) :
+      CBuildNode(eType, iPos, CLdsValue(iValue), iArg, abnNodes) {};
     
     // Copy constructor
     CBuildNode(const CBuildNode &bnOther) : CLdsToken() {

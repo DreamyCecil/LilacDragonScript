@@ -59,7 +59,7 @@ struct LDS_API SLdsRefIndex {
 class LDS_API CLdsValueRef {
   public:
     CLdsValue vr_val; // value itself
-  
+
     SLdsVar *vr_pvar; // variable reference (from CLdsScriptEngine::_mapLdsVariables or CLdsThread::sth_mapLocals)
     CLdsValue *vr_pvalAccess; // array/structure value reference
 
@@ -72,16 +72,16 @@ class LDS_API CLdsValueRef {
       VRF_CONST  = (1 << 0), // reference is a constant variable (for structure variables)
       VRF_GLOBAL = (1 << 1), // referencing a global variable (from CLdsScriptEngine::_mapLdsVariables; for I/O)
     } vr_eFlags;
-  
+
     // Default constructor
     CLdsValueRef(void) : vr_val(0), ARGS_TEMP(NULL, NULL, "", "", false, false);
-  
+
     // Value constructors
     CONSTRUCTOR_TEMP(CLdsValue);
     CONSTRUCTOR_TEMP(int);
     CONSTRUCTOR_TEMP(double);
     CONSTRUCTOR_TEMP(string);
-  
+
     // Full constructors
     CONSTRUCTOR_FULL(CLdsValue);
     CONSTRUCTOR_FULL(int);

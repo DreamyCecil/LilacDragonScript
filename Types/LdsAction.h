@@ -64,12 +64,17 @@ class LDS_API CCompAction : public CLdsToken {
   public:
     SLdsInlineFunc ca_inFunc; // inline function
     
-    // Constructors
+    // Default constructor
     CCompAction(void) : CLdsToken() {};
     
+    // Constructors
     CCompAction(const int &iType, const int &iLine, const int &iArg) :
       CLdsToken(iType, iLine, iArg) {};
       
     CCompAction(const int &iType, const int &iLine, const CLdsValue &val, const int &iArg) :
       CLdsToken(iType, iLine, val, iArg) {};
+
+    // Int constructor
+    CCompAction(const int &iType, const int &iLine, const int &iValue, const int &iArg) :
+      CCompAction(iType, iLine, CLdsValue(iValue), iArg) {};
 };

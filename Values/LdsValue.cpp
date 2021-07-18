@@ -35,6 +35,15 @@ string TypeName(const ELdsValueType &eType,
   return "<undefined>";
 };
 
+// Binary operation error
+void LdsBinaryError(const CLdsValue &val1, const CLdsValue &val2, const CLdsToken &tkn) {
+  string strType1 = val1->TypeName("a number", "a string", "an array", "a structure");
+  string strType2 = val2->TypeName("a number", "a string", "an array", "a structure");
+
+  LdsThrow(LEX_BINARY, "Cannot perform a binary operation %d on %s and %s at %s",
+           tkn->GetIndex(), strType1.c_str(), strType2.c_str(), tkn.PrintPos().c_str());
+};
+
 // Constructor
 CLdsValue::CLdsValue(void) :
   val_pBase(new CLdsIntType(0)) {};

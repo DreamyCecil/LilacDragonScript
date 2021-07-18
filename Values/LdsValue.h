@@ -43,6 +43,9 @@ LDS_API string TypeName(const ELdsValueType &eType,
   virtual string TypeName(const string &_Number, const string &_String, \
                           const string &_Array, const string &_Struct)
 
+// Binary operation error
+LDS_API void LdsBinaryError(const CLdsValue &val1, const CLdsValue &val2, const CLdsToken &tkn);
+
 // Script value base
 class LDS_API ILdsValueBase {
   public:

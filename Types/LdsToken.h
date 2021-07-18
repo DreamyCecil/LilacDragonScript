@@ -76,7 +76,7 @@ enum ELdsOperator {
   LOP_SET = 0x00, // = assignment
   
   LOP_MUL  = 0x01, // * multiplication
-  LOP_DIV  = 0x02, // / float division
+  LOP_DIV  = 0x02, // / division
   LOP_FMOD = 0x03, // % modulo
   LOP_IDIV = 0x04, // integer division
   
@@ -119,17 +119,17 @@ class LDS_API CLdsToken {
     int lt_eType; // token type
     int lt_iPos; // token place
     int lt_iArg; // token argument
-    
+
     CLdsValue lt_valValue;
-    
+
   public:
     // Constructors
     CLdsToken(void) :
       lt_eType(LTK_END), lt_iPos(0), lt_valValue(), lt_iArg(-1) {};
-    
+
     CLdsToken(const int &iType, const int &iLine, const int &iArg) :
       lt_eType(iType), lt_iPos(iLine), lt_valValue(), lt_iArg(iArg) {};
-      
+
     CLdsToken(const int &iType, const int &iLine, const CLdsValue &val, const int &iArg) :
       lt_eType(iType), lt_iPos(iLine), lt_valValue(val), lt_iArg(iArg) {};
 

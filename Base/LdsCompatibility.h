@@ -120,6 +120,9 @@ struct LDS_API SLdsError {
   #define SSCANF_FUNC   sscanf
 #endif
 
+// XOR check
+#define XOR_CHECK(_Cond1, _Cond2) ((int(_Cond1) ^ int(_Cond2)) != 0)
+
 // Calculate simple hash value out of some string
 LDS_API LdsHash GetHash(const string &str);
 
