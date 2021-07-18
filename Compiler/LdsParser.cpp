@@ -20,13 +20,6 @@ SOFTWARE. */
 
 #include "StdH.h"
 
-// Secure scanning function
-#if defined(_MSC_VER) && _MSC_VER >= 1700
-  #define SSCANF_FUNC sscanf_s
-#else
-  #define SSCANF_FUNC sscanf
-#endif
-
 // Escape character prefix
 #define ESCAPE_CHAR '\\'
 
@@ -198,6 +191,10 @@ void CLdsScriptEngine::ParseScript(string strScript) {
 
       case '~':
         AddParserToken(LTK_UNARYOP, iPrintPos, UOP_BINVERT);
+        break;
+
+      case '$':
+        AddParserToken(LTK_UNARYOP, iPrintPos, UOP_STRINGIFY);
         break;
 
       // bitwise operators

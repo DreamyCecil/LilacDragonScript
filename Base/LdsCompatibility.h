@@ -109,6 +109,17 @@ struct LDS_API SLdsError {
     le_eError(eError), le_strMessage(strMessage) {};
 };
 
+// Secure string functions
+#if defined(_MSC_VER) && _MSC_VER >= 1700
+  #define VSPRINTF_FUNC vsprintf_s
+  #define SPRINTF_FUNC  sprintf_s
+  #define SSCANF_FUNC   sscanf_s
+#else
+  #define VSPRINTF_FUNC vsprintf
+  #define SPRINTF_FUNC  sprintf
+  #define SSCANF_FUNC   sscanf
+#endif
+
 // Calculate simple hash value out of some string
 LDS_API LdsHash GetHash(const string &str);
 

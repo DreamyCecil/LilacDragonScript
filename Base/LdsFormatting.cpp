@@ -21,13 +21,6 @@ SOFTWARE. */
 #include "StdH.h"
 #include "LdsFormatting.h"
 
-// Secure printing function
-#if defined(_MSC_VER) && _MSC_VER >= 1700
-  #define VSPRINTF_FUNC vsprintf_s
-#else
-  #define VSPRINTF_FUNC vsprintf
-#endif
-
 // Format a string
 string LdsPrintF(const char *strFormat, ...) {
   va_list arg;

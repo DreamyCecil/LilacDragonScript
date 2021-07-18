@@ -40,15 +40,25 @@ CLdsValueRef CLdsFloatType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
       bool bInvert = (val->GetNumber() > 0.5);
       val = (int)!bInvert;
     } break;
-
+    
+    // invert bits of the double
     case UOP_BINVERT: {
       double dInvert = val->GetNumber();
 
-      // invert bits of the double
       LONG64 iInvert = ~(reinterpret_cast<LONG64 &>(dInvert));
       dInvert = reinterpret_cast<double &>(iInvert);
 
       val = dInvert;
+    } break;
+    
+    // turn char index into a char string
+    case UOP_STRINGIFY: {
+      int iChar = val->GetIndex();
+
+      char strChar[2];
+      SPRINTF_FUNC(strChar, "%c", iChar);
+
+      val = string(strChar);
     } break;
   }
 

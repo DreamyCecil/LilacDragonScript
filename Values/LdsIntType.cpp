@@ -44,6 +44,16 @@ CLdsValueRef CLdsIntType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
       int iInvert = val->GetIndex();
       val = ~iInvert;
     } break;
+    
+    // turn char index into a char string
+    case UOP_STRINGIFY: {
+      int iChar = val->GetIndex();
+
+      char strChar[2];
+      SPRINTF_FUNC(strChar, "%c", iChar);
+
+      val = string(strChar);
+    } break;
   }
 
   return CLdsValueRef(val);

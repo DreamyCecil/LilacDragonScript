@@ -32,7 +32,7 @@ while (--ctRepeat >= 0) {
   var ctRnd = 10;
   
   while (--ctRnd >= 0) {
-    strRandom += strHello[Random() % 13];
+    strRandom += $strHello[Random() % 13];
   }
   
   // print the result

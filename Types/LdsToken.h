@@ -105,6 +105,14 @@ enum ELdsOperator {
   LOP_ACCESS = 0x61, // array or struct accessor
 };
 
+// Unary operations
+enum EUnaryOp {
+  UOP_NEGATE,    // - negation
+  UOP_INVERT,    // ! inversion
+  UOP_BINVERT,   // ~ bitwise inversion
+  UOP_STRINGIFY, // $ stringify value
+};
+
 // Script token template
 class LDS_API CLdsToken {
   public:

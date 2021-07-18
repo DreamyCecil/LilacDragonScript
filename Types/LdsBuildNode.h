@@ -62,13 +62,6 @@ enum EBuildNode {
   EBN_DIR, // thread directive
 };
 
-// Unary operations
-enum EUnaryOp {
-  UOP_NEGATE,  // - negation
-  UOP_INVERT,  // ! inversion
-  UOP_BINVERT, // ~ bitwise inversion
-};
-
 // Thread directives
 enum EThreadDir {
   THD_DEBUGCONTEXT, // debug output with a context level
