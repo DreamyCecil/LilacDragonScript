@@ -59,8 +59,8 @@ class LDS_API ILdsValueBase {
     // Print the value
     virtual string Print(void) = 0;
 
-    // Get pointer to the value (different only for the pointer type)
-    virtual ILdsValueBase *GetPointer(void) const { return (ILdsValueBase *)this; };
+    // Get pointer to the value's variable
+    virtual SLdsVar *GetPointer(void) const { return NULL; };
   
     // Get integer value
     virtual int GetIndex(void) { return 0; };

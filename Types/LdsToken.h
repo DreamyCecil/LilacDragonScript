@@ -111,6 +111,7 @@ enum EUnaryOp {
   UOP_INVERT,    // ! inversion
   UOP_BINVERT,   // ~ bitwise inversion
   UOP_STRINGIFY, // $ stringify value
+  UOP_POINTER,   // * turn into a pointer/value
 };
 
 // Script token template

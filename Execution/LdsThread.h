@@ -23,6 +23,9 @@ SOFTWARE. */
 #include "../LdsTypes.h"
 #include "LdsInlineCall.h"
 
+// Current action position
+extern LDS_API int LDS_iActionPos;
+
 // Thread status type
 enum EThreadStatus {
   ETS_RUNNING,  // executing now

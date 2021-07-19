@@ -787,10 +787,18 @@ void CLdsScriptEngine::ExpressionBuilder(const LdsFlags &ubFlags) {
 
           case LOP_SUB: {
             ExpressionBuilder(LBF_NOOPS);
-            CBuildNode bnNum = _bnNode;
+            CBuildNode bnVal = _bnNode;
 
             _bnNode = CBuildNode(EBN_UN, et.lt_iPos, UOP_NEGATE, -1);
-            _bnNode.AddReference(&bnNum);
+            _bnNode.AddReference(&bnVal);
+          } break;
+
+          case LOP_MUL: {
+            ExpressionBuilder(LBF_NOOPS);
+            CBuildNode bnVal = _bnNode;
+
+            _bnNode = CBuildNode(EBN_UN, et.lt_iPos, UOP_POINTER, -1);
+            _bnNode.AddReference(&bnVal);
           } break;
 
           default: LdsThrow(LEB_OPERATOR, "Unexpected operator token at %s", et.PrintPos().c_str());

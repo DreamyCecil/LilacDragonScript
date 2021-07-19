@@ -29,6 +29,9 @@ extern CCompAction &SetCurrentAction(CCompAction *pcaCurrent);
 // Currently active thread
 extern CLdsThread *_psthCurrent = NULL;
 
+// Current action position
+extern int LDS_iActionPos = 0;
+
 // Action names
 extern const char *_astrActionNames[LCA_SIZEOF] = {
   "UNKNOWN",
@@ -138,6 +141,9 @@ EThreadStatus CLdsThread::Resume(void) {
   try {
     while (iPos < iLen) {
       CCompAction &ca = SetCurrentAction(&aca[iPos++]);
+
+      // set current position within the script
+      LDS_iActionPos = ca.lt_iPos;
       
       // current action
       int iType = ca.lt_eType;

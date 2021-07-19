@@ -60,6 +60,11 @@ CLdsValueRef CLdsFloatType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
 
       val = string(strChar);
     } break;
+
+    // get pointer
+    case UOP_POINTER: {
+      val = CLdsPtrType(valRef.vr_pvar);
+    } break;
   }
 
   return CLdsValueRef(val);

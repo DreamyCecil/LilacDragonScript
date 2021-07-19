@@ -46,6 +46,9 @@ CLdsValue CLdsScriptEngine::LdsExecute(CActionList &acaActions) {
   
   while (iPos < ctActions) {
     CCompAction &ca = SetCurrentAction(&acaActions[iPos++]);
+
+    // set current position within the script
+    LDS_iActionPos = ca.lt_iPos;
     
     switch (ca.lt_eType) {
       case LCA_VAL: Exec_Val(); break;

@@ -20,16 +20,44 @@ SOFTWARE. */
 
 #include "StdH.h"
 
+// Constructor
+CLdsPtrType::CLdsPtrType(SLdsVar *pvar) {
+  // invalid variable
+  if (pvar == NULL) {
+    string strPos = LdsPrintPos(LDS_iActionPos);
+    LdsThrow(LEX_POINTER, "Cannot retrieve pointer to the variable at %s", strPos.c_str());
+  }
+
+  pvarValue = pvar;
+};
+
 // Print the value
 string CLdsPtrType::Print(void) {
   // TODO: Print index from the variable list or the variable name
-  return LdsPrintF("%p", pValue);
+  return LdsPrintF("%p", pvarValue);
 };
 
 // Perform a unary operation
 CLdsValueRef CLdsPtrType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
   // actual value and the operation
   CLdsValue val = valRef.vr_val;
+  int iOperation = ca->GetIndex();
+
+  switch (iOperation) {
+    // get value from the pointer
+    case UOP_POINTER: {
+      SLdsVar *pvar = val->GetPointer();
+
+      // invalid pointer
+      if (pvar == NULL) {
+        LdsThrow(LEX_POINTER, "Cannot retrieve value from the pointer at %s", ca.PrintPos().c_str());
+      }
+
+      val = pvar->var_valValue;
+    } break;
+
+    default: LdsThrow(LEX_UNARY, "Cannot perform a unary operation %d on a string at %s", ca->GetIndex(), ca.PrintPos().c_str());
+  }
 
   return CLdsValueRef(val);
 };
@@ -47,14 +75,19 @@ CLdsValueRef CLdsPtrType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2,
     return val2->BinaryOp(valRef1, valRef2, tkn);
   }
 
+  // not pointers
+  if (val1->GetType() != EVT_POINTER || val2->GetType() != EVT_POINTER) {
+    LdsBinaryError(val1, val2, tkn);
+  }
+
   // get value pointers
-  ILdsValueBase *pVal1 = val1->GetPointer();
-  ILdsValueBase *pVal2 = val2->GetPointer();
+  SLdsVar *pvar1 = val1->GetPointer();
+  SLdsVar *pvar2 = val2->GetPointer();
 
   switch (iOperation) {
     // conditional operators
-    case LOP_EQ:  val1 = (pVal1 == pVal2); break;
-    case LOP_NEQ: val1 = (pVal1 != pVal2); break;
+    case LOP_EQ:  val1 = (pvar1 == pvar2); break;
+    case LOP_NEQ: val1 = (pvar1 != pvar2); break;
       
     default: LdsBinaryError(val1, val2, tkn);
   }

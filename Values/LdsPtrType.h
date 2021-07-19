@@ -21,22 +21,26 @@ SOFTWARE. */
 #pragma once
 
 #include "LdsValue.h"
+#include "../Types/LdsVar.h"
 
 // Script pointer value
 class LDS_API CLdsPtrType : public ILdsValueBase {
   public:
-    ILdsValueBase *pValue; // value pointer
+    SLdsVar *pvarValue; // variable pointer
 
   public:
     // Default constructor
-    CLdsPtrType(void) : pValue(NULL) {};
+    CLdsPtrType(void) : pvarValue(NULL) {};
 
     // Constructor
-    CLdsPtrType(ILdsValueBase *pval) : pValue(pval) {};
+    CLdsPtrType(SLdsVar *pvar);
 
     // Create new instance of this value
     virtual ILdsValueBase *MakeCopy(void) const {
-      return new CLdsPtrType(pValue);
+      CLdsPtrType *pvalNew = new CLdsPtrType();
+      pvalNew->pvarValue = pvarValue;
+
+      return pvalNew;
     };
 
     // Get value type
@@ -46,7 +50,7 @@ class LDS_API CLdsPtrType : public ILdsValueBase {
 
     // Clear the value
     virtual void Clear(void) {
-      pValue = NULL;
+      pvarValue = NULL;
     };
   
   public:
@@ -56,19 +60,19 @@ class LDS_API CLdsPtrType : public ILdsValueBase {
     // Print the value
     virtual string Print(void);
 
-    // Get pointer to the value (different only for the pointer type)
-    virtual ILdsValueBase *GetPointer(void) const { return pValue; };
+    // Get pointer to the value's variable
+    virtual SLdsVar *GetPointer(void) const { return pvarValue; };
   
     // Get integer value
-    virtual int GetIndex(void) { return pValue->GetIndex(); };
+    virtual int GetIndex(void) { return pvarValue->var_valValue->GetIndex(); };
     // Get float value
-    virtual double GetNumber(void) { return pValue->GetNumber(); };
+    virtual double GetNumber(void) { return pvarValue->var_valValue->GetNumber(); };
     // Get string value
-    virtual string GetString(void) { return pValue->GetString(); };
+    virtual string GetString(void) { return pvarValue->var_valValue->GetString(); };
     // Get array value
-    virtual CLdsArray &GetArray(void) { return pValue->GetArray(); };
+    virtual CLdsArray &GetArray(void) { return pvarValue->var_valValue->GetArray(); };
     // Get structure value
-    virtual CLdsStruct &GetStruct(void) { return pValue->GetStruct(); };
+    virtual CLdsStruct &GetStruct(void) { return pvarValue->var_valValue->GetStruct(); };
     
     // Perform a unary operation
     virtual CLdsValueRef UnaryOp(CLdsValueRef &valRef, CCompAction &ca);
@@ -77,10 +81,10 @@ class LDS_API CLdsPtrType : public ILdsValueBase {
 
     // Conditions
     virtual bool IsTrue(void) {
-      return pValue != NULL;
+      return pvarValue != NULL;
     };
     
     virtual bool Compare(const ILdsValueBase &valOther) {
-      return pValue == valOther.GetPointer();
+      return pvarValue == valOther.GetPointer();
     };
 };
