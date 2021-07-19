@@ -19,6 +19,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
 #include "StdH.h"
+
+// Write value into the stream
+void CLdsStructType::Write(CLdsWriteFunc pWriteFunc) {
+  
+};
+
+// Read value from the stream
+void CLdsStructType::Read(CLdsReadFunc pWriteFunc) {
+  
+};
       
 // Print the value
 string CLdsStructType::Print(void) {
@@ -56,7 +66,7 @@ CLdsValueRef CLdsStructType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
   switch (iOperation) {
     // get pointer
     case UOP_POINTER: {
-      val = CLdsPtrType(valRef.vr_pvar);
+      val = valRef.ToPointer();
     } break;
 
     default: LdsThrow(LEX_UNARY, "Cannot perform a unary operation %d on a structure at %s", ca->GetIndex(), ca.PrintPos().c_str());
@@ -99,7 +109,7 @@ CLdsValueRef CLdsStructType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
         
       string strVar = val2->GetString();
         
-      // direct 'val1 = val1.sStruct' empties its own struct before getting a value from it
+      // direct 'val1 = val1->GetStruct()' empties its own struct before getting a value from it
       CLdsStruct sCopy = val1->GetStruct();
 
       if (sCopy.FindIndex(strVar) == -1) {
@@ -123,6 +133,10 @@ CLdsValueRef CLdsStructType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
         
     default: LdsBinaryError(val1, val2, tkn);
   }
+  
+  // copy reference indices
+  CLdsValueRef valReturn(val1, valRef1.vr_pvar, pvalStructAccess, valRef1.vr_strVar, strStructVar, bConstVar, valRef1.IsGlobal());
+  valReturn.vr_ariIndices = valRef1.vr_ariIndices;
 
-  return CLdsValueRef(val1, valRef1.vr_pvar, pvalStructAccess, valRef1.vr_strVar, strStructVar, bConstVar, valRef1.IsGlobal());
+  return valReturn;
 };

@@ -32,13 +32,7 @@ class LDS_API CLdsArrayType : public ILdsValueBase {
     CLdsArrayType(void) {};
 
     // Array constructor
-    CLdsArrayType(const int &ct, CLdsValue valDef) {
-      aArray.New(ct);
-
-      for (int i = 0; i < ct; i++) {
-        aArray[i] = valDef;
-      }
-    };
+    CLdsArrayType(const int &ct, const CLdsValue &valDef);
 
     // Array copy constructor
     CLdsArrayType(const CLdsArray &a) : aArray(a) {};
@@ -62,6 +56,10 @@ class LDS_API CLdsArrayType : public ILdsValueBase {
     virtual void Clear(void) {
       aArray.Clear();
     };
+
+    // Value I/O
+    virtual void Write(CLdsWriteFunc pWriteFunc);
+    virtual void Read(CLdsReadFunc pWriteFunc);
   
   public:
     // Print the value

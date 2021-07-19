@@ -20,6 +20,16 @@ SOFTWARE. */
 
 #include "StdH.h"
 
+// Write value into the stream
+void CLdsFloatType::Write(CLdsWriteFunc pWriteFunc) {
+  
+};
+
+// Read value from the stream
+void CLdsFloatType::Read(CLdsReadFunc pWriteFunc) {
+  
+};
+
 // Print the value
 string CLdsFloatType::Print(void) {
   return LdsPrintF("%s", LdsFloatStr(dValue).c_str());
@@ -63,7 +73,7 @@ CLdsValueRef CLdsFloatType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
 
     // get pointer
     case UOP_POINTER: {
-      val = CLdsPtrType(valRef.vr_pvar);
+      val = valRef.ToPointer();
     } break;
   }
 

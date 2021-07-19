@@ -53,6 +53,10 @@ class LDS_API CLdsStringType : public ILdsValueBase {
     virtual void Clear(void) {
       strValue = "";
     };
+
+    // Value I/O
+    virtual void Write(CLdsWriteFunc pWriteFunc);
+    virtual void Read(CLdsReadFunc pWriteFunc);
   
   public:
     // Print the value

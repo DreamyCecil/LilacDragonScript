@@ -22,13 +22,17 @@ SOFTWARE. */
 
 var pPtr = null;
 
+var s = {
+  const str = strHello,
+}
+
 // set pointer to the string
-pPtr = *strHello;
+pPtr = *s.str;
 
 // check if they match
 Out("Matching pointers? - ");
 
-if (pPtr == *strHello) {
+if (pPtr == *s.str) {
   Out("yes\n");
 } else {
   Out("no\n");

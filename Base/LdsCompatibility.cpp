@@ -109,8 +109,8 @@ void CLdsScriptEngine::LdsOutputFunctions(void *pPrint, void *pError) {
 
 // Set stream functions
 void CLdsScriptEngine::LdsStreamFunctions(void *pWrite, void *pRead, void *pTell) {
-  _pLdsWrite = (void (*)(void *, const void *, const LdsSize &))pWrite;
-  _pLdsRead = (void (*)(void *, void *, const LdsSize &))pRead;
+  _pLdsWrite = (CLdsWriteFunc)pWrite;
+  _pLdsRead = (CLdsReadFunc)pRead;
   _pLdsStreamTell = (int (*)(void *))pTell;
 };
 

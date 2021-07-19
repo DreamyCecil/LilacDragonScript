@@ -72,6 +72,10 @@ typedef CDMap<LdsHash, struct SLdsCache> CScriptCache; // script cache map
 // 64-bit integer
 typedef __int64 LONG64;
 
+// I/O function types
+typedef void (*CLdsWriteFunc)(void *pStream, const void *pData, const LdsSize &iSize);
+typedef void (*CLdsReadFunc)(void *pStream, void *pData, const LdsSize &iSize);
+
 // General
 #include "Base/LdsCompatibility.h"
 #include "Base/LdsFormatting.h"

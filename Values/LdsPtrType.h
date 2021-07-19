@@ -52,6 +52,10 @@ class LDS_API CLdsPtrType : public ILdsValueBase {
     virtual void Clear(void) {
       pvarValue = NULL;
     };
+
+    // Value I/O
+    virtual void Write(CLdsWriteFunc pWriteFunc);
+    virtual void Read(CLdsReadFunc pWriteFunc);
   
   public:
     // Type name

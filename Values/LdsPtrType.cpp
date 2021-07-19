@@ -20,6 +20,16 @@ SOFTWARE. */
 
 #include "StdH.h"
 
+// Write value into the stream
+void CLdsPtrType::Write(CLdsWriteFunc pWriteFunc) {
+  
+};
+
+// Read value from the stream
+void CLdsPtrType::Read(CLdsReadFunc pWriteFunc) {
+  
+};
+
 // Constructor
 CLdsPtrType::CLdsPtrType(SLdsVar *pvar) {
   // invalid variable

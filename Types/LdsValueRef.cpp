@@ -73,3 +73,27 @@ CLdsValue *CLdsValueRef::GetValue(const string &strVar) {
   // TODO: Check if something like 'val = ExternalFunc().structVar[1];' worked before when it was NULL
   return &vr_val->GetStruct()[strVar];
 };
+
+// Convert into the variable pointer
+CLdsValue CLdsValueRef::ToPointer(void) {
+  // pointer to the structure variable
+  if (vr_strRef != "") {
+    // get last reference
+    SLdsRefIndex &ri = vr_ariIndices[vr_ariIndices.Count() - 1];
+
+    CLdsValue &val = vr_pvar->var_valValue;
+
+    // array index
+    if (ri.bIndex) {
+      LdsThrow(LEX_POINTER, "Cannot retrive pointer to an array value at %s", LdsPrintPos(LDS_iActionPos).c_str());
+
+    // structure field
+    } else {
+      SLdsVar &varStruct = val->GetStruct().mapVars[vr_strRef];
+      return CLdsPtrType(&varStruct);
+    }
+  }
+
+  // pointer to the variable
+  return CLdsPtrType(vr_pvar);
+};

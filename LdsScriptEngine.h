@@ -59,9 +59,9 @@ class LDS_API CLdsScriptEngine {
     bool (*_pLdsLoadScript)(const char *strFile, string &strScript);
 
     // Write some data into a data stream
-    void (*_pLdsWrite)(void *pStream, const void *pData, const LdsSize &iSize);
+    CLdsWriteFunc _pLdsWrite;
     // Read some data from a data stream
-    void (*_pLdsRead)(void *pStream, void *pData, const LdsSize &iSize);
+    CLdsReadFunc _pLdsRead;
 
     // Get current position in a data stream
     int (*_pLdsStreamTell)(void *pStream);
@@ -248,8 +248,8 @@ class LDS_API CLdsScriptEngine {
       _pDestructorFunc(NULL),
 
       _pLdsLoadScript((bool (*)(const char *, string &))LdsLoadScriptFile),
-      _pLdsWrite((void (*)(void *, const void *, const LdsSize &))LdsWriteFile),
-      _pLdsRead((void (*)(void *, void *, const LdsSize &))LdsReadFile),
+      _pLdsWrite(LdsWriteFile),
+      _pLdsRead(LdsReadFile),
       _pLdsStreamTell((int (*)(void *))LdsFileTell),
       
       // Builder

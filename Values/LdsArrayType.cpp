@@ -20,6 +20,25 @@ SOFTWARE. */
 
 #include "StdH.h"
 
+// Array constructor
+CLdsArrayType::CLdsArrayType(const int &ct, const CLdsValue &valDef) {
+  aArray.New(ct);
+
+  for (int i = 0; i < ct; i++) {
+    aArray[i] = valDef;
+  }
+};
+
+// Write value into the stream
+void CLdsArrayType::Write(CLdsWriteFunc pWriteFunc) {
+  
+};
+
+// Read value from the stream
+void CLdsArrayType::Read(CLdsReadFunc pWriteFunc) {
+  
+};
+
 // Print the value
 string CLdsArrayType::Print(void) {
   int ctArray = aArray.Count();
@@ -78,7 +97,7 @@ CLdsValueRef CLdsArrayType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
 
     // get pointer
     case UOP_POINTER: {
-      val = CLdsPtrType(valRef.vr_pvar);
+      val = valRef.ToPointer();
     } break;
 
     default: LdsThrow(LEX_UNARY, "Cannot perform a unary operation %d on an array at %s", ca->GetIndex(), ca.PrintPos().c_str());
@@ -152,7 +171,7 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
         LdsThrow(LEX_BINARY, "Cannot use %s as an array accessor at %s", strType2.c_str(), tkn.PrintPos().c_str());
       }
         
-      // direct 'val1 = val1.aArray' empties its own array before getting a value from it
+      // direct 'val1 = val1->GetArray()' empties its own array before getting a value from it
       CLdsArray aCopy = val1->GetArray();
         
       int iArrayIndex = val2->GetIndex();
@@ -165,9 +184,9 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
       } else if (iArrayIndex < 0 || iArrayIndex >= iSize) {
         LdsThrow(LEX_ARRAYOUT, "Array index '%d' is out of bounds [0, %d] at %s", iArrayIndex, iSize - 1, tkn.PrintPos().c_str());
       }
-        
+      
       val1 = aCopy[iArrayIndex];
-        
+
       // get pointer to the value within the array
       pvalArrayAccess = valRef1.GetValue(iArrayIndex);
 
@@ -178,5 +197,9 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
     default: LdsBinaryError(val1, val2, tkn);
   }
 
-  return CLdsValueRef(val1, valRef1.vr_pvar, pvalArrayAccess, valRef1.vr_strVar, valRef1.vr_strRef, valRef1.IsConst(), valRef1.IsGlobal());
+  // copy reference indices
+  CLdsValueRef valReturn(val1, valRef1.vr_pvar, pvalArrayAccess, valRef1.vr_strVar, valRef1.vr_strVar, valRef1.IsConst(), valRef1.IsGlobal());
+  valReturn.vr_ariIndices = valRef1.vr_ariIndices;
+
+  return valReturn;
 };

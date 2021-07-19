@@ -22,6 +22,16 @@ SOFTWARE. */
 
 #include <algorithm>
 
+// Write value into the stream
+void CLdsStringType::Write(CLdsWriteFunc pWriteFunc) {
+  
+};
+
+// Read value from the stream
+void CLdsStringType::Read(CLdsReadFunc pWriteFunc) {
+  
+};
+
 // Print the value
 string CLdsStringType::Print(void) {
   return strValue;
@@ -47,7 +57,7 @@ CLdsValueRef CLdsStringType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
 
     // get pointer
     case UOP_POINTER: {
-      val = CLdsPtrType(valRef.vr_pvar);
+      val = valRef.ToPointer();
     } break;
 
     default: LdsThrow(LEX_UNARY, "Cannot perform a unary operation %d on a string at %s", ca->GetIndex(), ca.PrintPos().c_str());

@@ -61,6 +61,10 @@ class LDS_API CLdsStructType : public ILdsValueBase {
     virtual void Clear(void) {
       sStruct.Clear();
     };
+
+    // Value I/O
+    virtual void Write(CLdsWriteFunc pWriteFunc);
+    virtual void Read(CLdsReadFunc pWriteFunc);
   
   public:
     // Print the value
