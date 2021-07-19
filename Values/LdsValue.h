@@ -43,6 +43,9 @@ class LDS_API ILdsValueBase {
     // Constructor
     ILdsValueBase(void) {};
 
+    // Create new instance of this value
+    virtual ILdsValueBase *MakeCopy(void) const = 0;
+
     // Get value type
     virtual ELdsValueType GetType(void) const = 0;
 
@@ -88,7 +91,10 @@ class LDS_API CLdsValue {
   public:
     // Constructor
     CLdsValue(void);
-
+    
+    // Value constructor
+    CLdsValue(const ILdsValueBase &val);
+    
     // Simple constructors
     CLdsValue(const int &i);
     CLdsValue(const double &d);

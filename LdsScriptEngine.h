@@ -152,9 +152,6 @@ class LDS_API CLdsScriptEngine {
 
     // Add one token to the list
     void AddParserToken(const ELdsToken &eType, const int &iPos);
-    void AddParserToken(const ELdsToken &eType, const int &iPos, const int &iValue);
-    void AddParserToken(const ELdsToken &eType, const int &iPos, const double &dValue);
-    void AddParserToken(const ELdsToken &eType, const int &iPos, const string &strValue);
     void AddParserToken(const ELdsToken &eType, const int &iPos, const CLdsValue &valValue);
     
   // Builder

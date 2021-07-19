@@ -42,6 +42,11 @@ class LDS_API CLdsStructType : public ILdsValueBase {
     // Structure copy constructor
     CLdsStructType(const CLdsStruct &s) : sStruct(s) {};
 
+    // Create new instance of this value
+    virtual ILdsValueBase *MakeCopy(void) const {
+      return new CLdsStructType(sStruct);
+    };
+
     // Get value type
     virtual ELdsValueType GetType(void) const {
       return EVT_STRUCT;

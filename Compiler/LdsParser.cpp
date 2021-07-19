@@ -515,6 +515,9 @@ void CLdsScriptEngine::ParseScript(string strScript) {
           } else if (strName == "e") {
             AddParserToken(LTK_VAL, iPrintPos, 2.71828182845904523536);
 
+          } else if (strName == "null") {
+            AddParserToken(LTK_VAL, iPrintPos, CLdsPtrType(NULL));
+
           // conditions
           } else if (strName == "if") {
             AddParserToken(LTK_IF, iPrintPos);
@@ -586,18 +589,6 @@ void CLdsScriptEngine::ParseScript(string strScript) {
 // Add expression token
 void CLdsScriptEngine::AddParserToken(const ELdsToken &eType, const int &iPos) {
   _aetTokens.Add(CLdsToken(eType, iPos, -1));
-};
-
-void CLdsScriptEngine::AddParserToken(const ELdsToken &eType, const int &iPos, const int &iValue) {
-  _aetTokens.Add(CLdsToken(eType, iPos, iValue, -1));
-};
-
-void CLdsScriptEngine::AddParserToken(const ELdsToken &eType, const int &iPos, const double &dValue) {
-  _aetTokens.Add(CLdsToken(eType, iPos, dValue, -1));
-};
-
-void CLdsScriptEngine::AddParserToken(const ELdsToken &eType, const int &iPos, const string &strValue) {
-  _aetTokens.Add(CLdsToken(eType, iPos, strValue, -1));
 };
 
 void CLdsScriptEngine::AddParserToken(const ELdsToken &eType, const int &iPos, const CLdsValue &valValue) {

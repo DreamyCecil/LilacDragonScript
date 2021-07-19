@@ -34,6 +34,11 @@ class LDS_API CLdsIntType : public ILdsValueBase {
     // Int constructor
     CLdsIntType(const int &i) : iValue(i) {};
 
+    // Create new instance of this value
+    virtual ILdsValueBase *MakeCopy(void) const {
+      return new CLdsIntType(iValue);
+    };
+
     // Get value type
     virtual ELdsValueType GetType(void) const {
       return EVT_INDEX;

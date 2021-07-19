@@ -28,7 +28,7 @@ struct LDS_API SLdsVar {
   char var_bConst; // is value constant (0 - no, 1 - yes, not set, 2 - yes, set)
 
   // Constructors
-  SLdsVar(void) : var_valValue(0.0f), var_bConst(0) {};
+  SLdsVar(void) : var_valValue(0), var_bConst(0) {};
   SLdsVar(CLdsValue val, bool bConst = false) : var_valValue(val), var_bConst(bConst) {};
   
   // Mark constants as set

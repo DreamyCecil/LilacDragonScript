@@ -34,6 +34,11 @@ class LDS_API CLdsStringType : public ILdsValueBase {
     // String constructor
     CLdsStringType(const string &str) : strValue(str) {};
 
+    // Create new instance of this value
+    virtual ILdsValueBase *MakeCopy(void) const {
+      return new CLdsStringType(strValue);
+    };
+
     // Get value type
     virtual ELdsValueType GetType(void) const {
       return EVT_STRING;

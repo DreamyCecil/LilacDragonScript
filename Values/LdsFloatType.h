@@ -34,6 +34,11 @@ class LDS_API CLdsFloatType : public ILdsValueBase {
     // Float constructor
     CLdsFloatType(const double &d) : dValue(d) {};
 
+    // Create new instance of this value
+    virtual ILdsValueBase *MakeCopy(void) const {
+      return new CLdsFloatType(dValue);
+    };
+
     // Get value type
     virtual ELdsValueType GetType(void) const {
       return EVT_FLOAT;

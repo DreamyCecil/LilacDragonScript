@@ -28,8 +28,16 @@ class LDS_API CLdsPtrType : public ILdsValueBase {
     ILdsValueBase *pValue; // value pointer
 
   public:
+    // Default constructor
+    CLdsPtrType(void) : pValue(NULL) {};
+
     // Constructor
     CLdsPtrType(ILdsValueBase *pval) : pValue(pval) {};
+
+    // Create new instance of this value
+    virtual ILdsValueBase *MakeCopy(void) const {
+      return new CLdsPtrType(pValue);
+    };
 
     // Get value type
     virtual ELdsValueType GetType(void) const {

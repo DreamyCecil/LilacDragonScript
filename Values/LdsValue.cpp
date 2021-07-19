@@ -45,6 +45,10 @@ void LdsBinaryError(const CLdsValue &val1, const CLdsValue &val2, const CLdsToke
 CLdsValue::CLdsValue(void) :
   val_pBase(new CLdsIntType(0)) {};
 
+// Value constructor
+CLdsValue::CLdsValue(const ILdsValueBase &val) :
+  val_pBase(val.MakeCopy()) {};
+
 // Simple constructors
 CLdsValue::CLdsValue(const int &i) :
   val_pBase(new CLdsIntType(i)) {};
@@ -102,16 +106,9 @@ CLdsValue &CLdsValue::operator=(const CLdsValue &valOther) {
     return *this;
   }
 
-  ILdsValueBase *pvalBase = valOther.val_pBase;
-  
   // replace the value
-  switch (pvalBase->GetType()) {
-    case EVT_INDEX:  operator=(((CLdsIntType    *)pvalBase)->iValue); break;
-    case EVT_FLOAT:  operator=(((CLdsFloatType  *)pvalBase)->dValue); break;
-    case EVT_STRING: operator=(((CLdsStringType *)pvalBase)->strValue); break;
-    case EVT_ARRAY:  operator=(((CLdsArrayType  *)pvalBase)->aArray); break;
-    case EVT_STRUCT: operator=(((CLdsStructType *)pvalBase)->sStruct); break;
-  }
+  DeleteValue();
+  val_pBase = valOther->MakeCopy();
 
   return *this;
 };

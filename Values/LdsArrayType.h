@@ -43,6 +43,11 @@ class LDS_API CLdsArrayType : public ILdsValueBase {
     // Array copy constructor
     CLdsArrayType(const CLdsArray &a) : aArray(a) {};
 
+    // Create new instance of this value
+    virtual ILdsValueBase *MakeCopy(void) const {
+      return new CLdsArrayType(aArray);
+    };
+
     // Get value type
     virtual ELdsValueType GetType(void) const {
       return EVT_ARRAY;
