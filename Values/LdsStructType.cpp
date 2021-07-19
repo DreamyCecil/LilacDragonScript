@@ -59,20 +59,10 @@ string CLdsStructType::Print(void) {
 
 // Perform a unary operation
 CLdsValueRef CLdsStructType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
-  // actual value and the operation
-  CLdsValue val = valRef.vr_val;
-  int iOperation = ca->GetIndex();
+  // cannot do unary operations on structures
+  LdsThrow(LEX_UNARY, "Cannot perform unary operations on a structure at %s", ca.PrintPos().c_str());
 
-  switch (iOperation) {
-    // get pointer
-    case UOP_POINTER: {
-      val = valRef.ToPointer();
-    } break;
-
-    default: LdsThrow(LEX_UNARY, "Cannot perform a unary operation %d on a structure at %s", ca->GetIndex(), ca.PrintPos().c_str());
-  }
-
-  return CLdsValueRef(val);
+  return valRef;
 };
 
 // Perform a binary operation

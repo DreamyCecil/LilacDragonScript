@@ -159,9 +159,6 @@
     <ClInclude Include="Types\LdsVar.h">
       <Filter>Header Files\Types</Filter>
     </ClInclude>
-    <ClInclude Include="Values\LdsPtrType.h">
-      <Filter>Header Files\Values</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Base\LdsCompatibility.cpp">
@@ -231,9 +228,6 @@
       <Filter>Source Files\Values</Filter>
     </ClCompile>
     <ClCompile Include="Values\LdsStringType.cpp">
-      <Filter>Source Files\Values</Filter>
-    </ClCompile>
-    <ClCompile Include="Values\LdsPtrType.cpp">
       <Filter>Source Files\Values</Filter>
     </ClCompile>
   </ItemGroup>

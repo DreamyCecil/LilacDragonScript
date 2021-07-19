@@ -444,7 +444,7 @@ void CLdsScriptEngine::LdsReadValueRef(void *pStream, CLdsThread &sth, CLdsValue
   int ctRef = 0;
   _pLdsRead(pStream, &ctRef, sizeof(int));
 
-  // write each reference index
+  // read each reference index
   for (int iRef = 0; iRef < ctRef; iRef++) {
     // read if it's an array index
     char bIndexRef = false;
@@ -464,7 +464,7 @@ void CLdsScriptEngine::LdsReadValueRef(void *pStream, CLdsThread &sth, CLdsValue
     } else {
       // read structure variable
       string strVar = "";
-      LdsWriteString(pStream, strVar);
+      LdsReadString(pStream, strVar);
       
       // add index
       vr.vr_ariIndices.Add(SLdsRefIndex(strVar));
@@ -600,7 +600,7 @@ void CLdsScriptEngine::LdsReadEngine(void *pStream) {
   int ctVars = 0;
   _pLdsRead(pStream, &ctVars, sizeof(int));
 
-  // write each variable
+  // read each variable
   for (int iVar = 0; iVar < ctVars; iVar++) {
     READ_VAR_INTO_MAP(_mapLdsVariables);
   }

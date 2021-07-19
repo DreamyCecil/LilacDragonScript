@@ -25,4 +25,3 @@ SOFTWARE. */
 #include "LdsStringType.h"
 #include "LdsArrayType.h"
 #include "LdsStructType.h"
-#include "LdsPtrType.h"

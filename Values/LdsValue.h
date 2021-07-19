@@ -29,7 +29,6 @@ enum ELdsValueType {
   EVT_STRING,
   EVT_ARRAY,
   EVT_STRUCT,
-  EVT_POINTER,
 
   EVT_LAST,
 };
@@ -62,9 +61,6 @@ class LDS_API ILdsValueBase {
   
     // Print the value
     virtual string Print(void) = 0;
-
-    // Get pointer to the value's variable
-    virtual SLdsVar *GetPointer(void) const { return NULL; };
   
     // Get integer value
     virtual int GetIndex(void) { return 0; };

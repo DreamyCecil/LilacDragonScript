@@ -55,11 +55,6 @@ CLdsValueRef CLdsStringType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
     // it's already a string
     case UOP_STRINGIFY: break;
 
-    // get pointer
-    case UOP_POINTER: {
-      val = valRef.ToPointer();
-    } break;
-
     default: LdsThrow(LEX_UNARY, "Cannot perform a unary operation %d on a string at %s", ca->GetIndex(), ca.PrintPos().c_str());
   }
 

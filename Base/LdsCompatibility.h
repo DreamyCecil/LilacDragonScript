@@ -97,7 +97,6 @@ enum ELdsError {
   LEX_ACCESS     = 0x69, // no accessor reference
   LEX_NOFUNC     = 0x6a, // no function pointer
   LEX_CALL       = 0x6b, // external function error
-  LEX_POINTER    = 0x6c, // invalid variable pointer
 };
 
 // LDS error

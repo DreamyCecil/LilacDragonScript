@@ -515,9 +515,6 @@ void CLdsScriptEngine::ParseScript(string strScript) {
           } else if (strName == "e") {
             AddParserToken(LTK_VAL, iPrintPos, 2.71828182845904523536);
 
-          } else if (strName == "null") {
-            AddParserToken(LTK_VAL, iPrintPos, CLdsPtrType());
-
           // conditions
           } else if (strName == "if") {
             AddParserToken(LTK_IF, iPrintPos);

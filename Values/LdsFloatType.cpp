@@ -70,11 +70,6 @@ CLdsValueRef CLdsFloatType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
 
       val = string(strChar);
     } break;
-
-    // get pointer
-    case UOP_POINTER: {
-      val = valRef.ToPointer();
-    } break;
   }
 
   return CLdsValueRef(val);

@@ -95,11 +95,6 @@ CLdsValueRef CLdsArrayType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
       val = strArray;
     } break;
 
-    // get pointer
-    case UOP_POINTER: {
-      val = valRef.ToPointer();
-    } break;
-
     default: LdsThrow(LEX_UNARY, "Cannot perform a unary operation %d on an array at %s", ca->GetIndex(), ca.PrintPos().c_str());
   }
 

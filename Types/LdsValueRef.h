@@ -119,9 +119,6 @@ class LDS_API CLdsValueRef {
     inline bool IsGlobal(void) {
       return (vr_eFlags & VRF_GLOBAL) != 0;
     };
-
-    // Convert into the variable pointer
-    CLdsValue ToPointer(void);
 };
 
 // Undefine constructor templates
