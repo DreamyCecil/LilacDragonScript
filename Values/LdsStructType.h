@@ -28,6 +28,9 @@ class LDS_API CLdsStructType : public ILdsValueBase {
     CLdsStruct sStruct; // structure with value fields
     
   public:
+    // Default constructor
+    CLdsStructType(void) : sStruct() {};
+
     // Structure constructor
     CLdsStructType(const int &iSetID, const CLdsVarMap &map, const bool &bSetStatic) :
       sStruct(iSetID)
@@ -40,8 +43,13 @@ class LDS_API CLdsStructType : public ILdsValueBase {
     CLdsStructType(const CLdsStruct &s) : sStruct(s) {};
 
     // Get value type
-    virtual ELdsValueType GetType(void) {
+    virtual ELdsValueType GetType(void) const {
       return EVT_STRUCT;
+    };
+
+    // Type name
+    virtual string TypeName(void) const {
+      return "struct";
     };
 
     // Clear the value
@@ -50,9 +58,6 @@ class LDS_API CLdsStructType : public ILdsValueBase {
     };
   
   public:
-    // Type name
-    TYPE_NAME_FUNC(strNumber, strString, strArray, strStruct) { return strStruct; };
-
     // Print the value
     virtual string Print(void);
 

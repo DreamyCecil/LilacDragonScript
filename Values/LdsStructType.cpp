@@ -64,8 +64,8 @@ CLdsValueRef CLdsStructType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
   int iOperation = tkn->GetIndex();
 
   // types
-  const string strType1 = val1->TypeName("a number", "a string", "an array", "a structure");
-  const string strType2 = val2->TypeName("a number", "a string", "an array", "a structure");
+  const string strType1 = val1->TypeName();
+  const string strType2 = val2->TypeName();
 
   CLdsValue *pvalStructAccess = NULL;
 

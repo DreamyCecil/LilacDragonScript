@@ -28,12 +28,20 @@ class LDS_API CLdsIntType : public ILdsValueBase {
     int iValue; // index value
 
   public:
-    // Constructor
+    // Default constructor
+    CLdsIntType(void) : iValue(0) {};
+
+    // Int constructor
     CLdsIntType(const int &i) : iValue(i) {};
 
     // Get value type
-    virtual ELdsValueType GetType(void) {
+    virtual ELdsValueType GetType(void) const {
       return EVT_INDEX;
+    };
+
+    // Type name
+    virtual string TypeName(void) const {
+      return "integer";
     };
 
     // Clear the value
@@ -42,9 +50,6 @@ class LDS_API CLdsIntType : public ILdsValueBase {
     };
   
   public:
-    // Type name
-    TYPE_NAME_FUNC(strNumber, strString, strArray, strStruct) { return strNumber; };
-
     // Print the value
     virtual string Print(void);
   

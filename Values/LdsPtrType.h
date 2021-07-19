@@ -22,48 +22,45 @@ SOFTWARE. */
 
 #include "LdsValue.h"
 
-// Script array value
-class LDS_API CLdsArrayType : public ILdsValueBase {
+// Script pointer value
+class LDS_API CLdsPtrType : public ILdsValueBase {
   public:
-    CLdsArray aArray; // array of values
+    ILdsValueBase *pValue; // value pointer
 
   public:
-    // Default constructor
-    CLdsArrayType(void) {};
-
-    // Array constructor
-    CLdsArrayType(const int &ct, CLdsValue valDef) {
-      aArray.New(ct);
-
-      for (int i = 0; i < ct; i++) {
-        aArray[i] = valDef;
-      }
-    };
-
-    // Array copy constructor
-    CLdsArrayType(const CLdsArray &a) : aArray(a) {};
+    // Constructor
+    CLdsPtrType(ILdsValueBase *pval) : pValue(pval) {};
 
     // Get value type
     virtual ELdsValueType GetType(void) const {
-      return EVT_ARRAY;
-    };
-
-    // Type name
-    virtual string TypeName(void) const {
-      return "array";
+      return EVT_POINTER;
     };
 
     // Clear the value
     virtual void Clear(void) {
-      aArray.Clear();
+      pValue = NULL;
     };
   
   public:
+    // Type name
+    virtual string TypeName(void) const { return "pointer"; };
+
     // Print the value
     virtual string Print(void);
 
+    // Get pointer to the value (different only for the pointer type)
+    virtual ILdsValueBase *GetPointer(void) const { return pValue; };
+  
+    // Get integer value
+    virtual int GetIndex(void) { return pValue->GetIndex(); };
+    // Get float value
+    virtual double GetNumber(void) { return pValue->GetNumber(); };
+    // Get string value
+    virtual string GetString(void) { return pValue->GetString(); };
     // Get array value
-    virtual CLdsArray &GetArray(void) { return aArray; };
+    virtual CLdsArray &GetArray(void) { return pValue->GetArray(); };
+    // Get structure value
+    virtual CLdsStruct &GetStruct(void) { return pValue->GetStruct(); };
     
     // Perform a unary operation
     virtual CLdsValueRef UnaryOp(CLdsValueRef &valRef, CCompAction &ca);
@@ -72,10 +69,10 @@ class LDS_API CLdsArrayType : public ILdsValueBase {
 
     // Conditions
     virtual bool IsTrue(void) {
-      return (aArray.Count() > 0);
+      return pValue != NULL;
     };
     
     virtual bool Compare(const ILdsValueBase &valOther) {
-      return (aArray.Count() == ((CLdsArrayType &)valOther).aArray.Count());
+      return pValue == valOther.GetPointer();
     };
 };

@@ -147,6 +147,7 @@
     <ClInclude Include="Values\LdsArrayType.h" />
     <ClInclude Include="Values\LdsFloatType.h" />
     <ClInclude Include="Values\LdsIntType.h" />
+    <ClInclude Include="Values\LdsPtrType.h" />
     <ClInclude Include="Values\LdsStringType.h" />
     <ClInclude Include="Values\LdsStructType.h" />
     <ClInclude Include="Values\LdsValue.h" />
@@ -182,6 +183,7 @@
     <ClCompile Include="Values\LdsArrayType.cpp" />
     <ClCompile Include="Values\LdsFloatType.cpp" />
     <ClCompile Include="Values\LdsIntType.cpp" />
+    <ClCompile Include="Values\LdsPtrType.cpp" />
     <ClCompile Include="Values\LdsStringType.cpp" />
     <ClCompile Include="Values\LdsStructType.cpp" />
     <ClCompile Include="Values\LdsValue.cpp" />

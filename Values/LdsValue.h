@@ -29,19 +29,10 @@ enum ELdsValueType {
   EVT_STRING,
   EVT_ARRAY,
   EVT_STRUCT,
+  EVT_POINTER,
 
   EVT_LAST,
 };
-
-// Value type name
-LDS_API string TypeName(const ELdsValueType &eType,
-                        const string &strNumber, const string &strString,
-                        const string &strArray, const string &strStruct);
-
-// Type name function definition
-#define TYPE_NAME_FUNC(_Number, _String, _Array, _Struct) \
-  virtual string TypeName(const string &_Number, const string &_String, \
-                          const string &_Array, const string &_Struct)
 
 // Binary operation error
 LDS_API void LdsBinaryError(const CLdsValue &val1, const CLdsValue &val2, const CLdsToken &tkn);
@@ -53,17 +44,20 @@ class LDS_API ILdsValueBase {
     ILdsValueBase(void) {};
 
     // Get value type
-    virtual ELdsValueType GetType(void) = 0;
+    virtual ELdsValueType GetType(void) const = 0;
 
     // Clear the value
     virtual void Clear(void) = 0;
   
   public:
     // Type name
-    TYPE_NAME_FUNC(strNumber, strString, strArray, strStruct) = 0;
+    virtual string TypeName(void) const = 0;
   
     // Print the value
     virtual string Print(void) = 0;
+
+    // Get pointer to the value (different only for the pointer type)
+    virtual ILdsValueBase *GetPointer(void) const { return (ILdsValueBase *)this; };
   
     // Get integer value
     virtual int GetIndex(void) { return 0; };
@@ -138,8 +132,7 @@ class LDS_API CLdsValue {
     CLdsValue &operator=(const CLdsStruct &s);
   
     // Type assertion (for function arguments)
-    CLdsValue &Assert(const ELdsValueType &eDesired);
-    CLdsValue &AssertNumber(void);
+    CLdsValue &Assert(const ILdsValueBase &valDesired);
 
     // Conditions
     bool operator==(const CLdsValue &valOther) const;

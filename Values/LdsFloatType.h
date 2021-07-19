@@ -28,12 +28,20 @@ class LDS_API CLdsFloatType : public ILdsValueBase {
     double dValue; // float value
 
   public:
-    // Constructor
+    // Default constructor
+    CLdsFloatType(void) : dValue(0.0) {};
+
+    // Float constructor
     CLdsFloatType(const double &d) : dValue(d) {};
 
     // Get value type
-    virtual ELdsValueType GetType(void) {
+    virtual ELdsValueType GetType(void) const {
       return EVT_FLOAT;
+    };
+    
+    // Type name
+    virtual string TypeName(void) const {
+      return "double";
     };
 
     // Clear the value
@@ -42,9 +50,6 @@ class LDS_API CLdsFloatType : public ILdsValueBase {
     };
   
   public:
-    // Type name
-    TYPE_NAME_FUNC(strNumber, strString, strArray, strStruct) { return strNumber; };
-
     // Print the value
     virtual string Print(void);
   

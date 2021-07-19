@@ -37,11 +37,8 @@ string TypeName(const ELdsValueType &eType,
 
 // Binary operation error
 void LdsBinaryError(const CLdsValue &val1, const CLdsValue &val2, const CLdsToken &tkn) {
-  string strType1 = val1->TypeName("a number", "a string", "an array", "a structure");
-  string strType2 = val2->TypeName("a number", "a string", "an array", "a structure");
-
   LdsThrow(LEX_BINARY, "Cannot perform a binary operation %d on %s and %s at %s",
-           tkn->GetIndex(), strType1.c_str(), strType2.c_str(), tkn.PrintPos().c_str());
+           tkn->GetIndex(), val1->TypeName().c_str(), val2->TypeName().c_str(), tkn.PrintPos().c_str());
 };
 
 // Constructor
@@ -85,28 +82,16 @@ void CLdsValue::DeleteValue(void) {
 };
 
 // Type assertion (for function arguments)
-CLdsValue &CLdsValue::Assert(const ELdsValueType &eDesired) {
-  if (val_pBase->GetType() == eDesired) {
+CLdsValue &CLdsValue::Assert(const ILdsValueBase &valDesired) {
+  if (val_pBase->GetType() == valDesired.GetType()) {
     return *this;
   }
   
   // type mismatch
-  string strExpected = ::TypeName(eDesired, "a number", "a string", "an array", "a structure");
-  string strGot = val_pBase->TypeName("a number", "a string", "an array", "a structure");
+  string strExpected = valDesired.TypeName();
+  string strGot = val_pBase->TypeName();
   
   LdsThrow(LER_TYPE, "Expected %s but got %s", strExpected.c_str(), strGot.c_str());
-
-  return *this;
-};
-
-CLdsValue &CLdsValue::AssertNumber(void) {
-  if (val_pBase->GetType() <= EVT_FLOAT) {
-    return *this;
-  }
-
-  // type mismatch
-  string strGot = val_pBase->TypeName("a number", "a string", "an array", "a structure");
-  LdsThrow(LER_TYPE, "Expected a number but got %s", strGot.c_str());
 
   return *this;
 };
