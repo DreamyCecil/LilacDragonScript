@@ -55,8 +55,8 @@ class LDS_API CLdsFloatType : public ILdsValueBase {
     };
 
     // Value I/O
-    virtual void Write(CLdsWriteFunc pWriteFunc);
-    virtual void Read(CLdsReadFunc pWriteFunc);
+    virtual void Write(class CLdsScriptEngine *pEngine, void *pStream);
+    virtual void Read(class CLdsScriptEngine *pEngine, void *pStream, CLdsValue &val);
   
   public:
     // Print the value

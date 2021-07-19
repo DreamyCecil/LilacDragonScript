@@ -20,23 +20,32 @@ SOFTWARE. */
 
 #include "StdH.h"
 
-// Array constructor
-CLdsArrayType::CLdsArrayType(const int &ct, const CLdsValue &valDef) {
-  aArray.New(ct);
+// Write value into the stream
+void CLdsArrayType::Write(class CLdsScriptEngine *pEngine, void *pStream) {
+  const int ctArray = aArray.Count();
 
-  for (int i = 0; i < ct; i++) {
-    aArray[i] = valDef;
+  // write array count
+  pEngine->_pLdsWrite(pStream, &ctArray, sizeof(int));
+
+  // write each individual array value
+  for (int i = 0; i < ctArray; i++) {
+    pEngine->LdsWriteValue(pStream, aArray[i]);
   }
 };
 
-// Write value into the stream
-void CLdsArrayType::Write(CLdsWriteFunc pWriteFunc) {
-  
-};
-
 // Read value from the stream
-void CLdsArrayType::Read(CLdsReadFunc pWriteFunc) {
-  
+void CLdsArrayType::Read(class CLdsScriptEngine *pEngine, void *pStream, CLdsValue &val) {
+  // read array count
+  int ctArray = 0;
+  pEngine->_pLdsRead(pStream, &ctArray, sizeof(int));
+
+  // create an empty array
+  val = CLdsArrayType(ctArray, 0);
+
+  // read values into the array
+  for (int i = 0; i < ctArray; i++) {
+    pEngine->LdsReadValue(pStream, val->GetArray()[i]);
+  }
 };
 
 // Print the value

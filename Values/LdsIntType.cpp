@@ -21,13 +21,16 @@ SOFTWARE. */
 #include "StdH.h"
 
 // Write value into the stream
-void CLdsIntType::Write(CLdsWriteFunc pWriteFunc) {
-  
+void CLdsIntType::Write(class CLdsScriptEngine *pEngine, void *pStream) {
+  pEngine->_pLdsWrite(pStream, &iValue, sizeof(int));
 };
 
 // Read value from the stream
-void CLdsIntType::Read(CLdsReadFunc pWriteFunc) {
-  
+void CLdsIntType::Read(class CLdsScriptEngine *pEngine, void *pStream, CLdsValue &val) {
+  int i = 0;
+  pEngine->_pLdsRead(pStream, &i, sizeof(int));
+
+  val = i;
 };
 
 // Print the value

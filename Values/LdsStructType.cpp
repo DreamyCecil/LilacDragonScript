@@ -21,13 +21,45 @@ SOFTWARE. */
 #include "StdH.h"
 
 // Write value into the stream
-void CLdsStructType::Write(CLdsWriteFunc pWriteFunc) {
-  
+void CLdsStructType::Write(class CLdsScriptEngine *pEngine, void *pStream) {
+  const int ctStruct = sStruct.Count();
+
+  // write structure ID and if it's static
+  char bStatic = sStruct.bStatic;
+  pEngine->_pLdsWrite(pStream, &sStruct.iID, sizeof(int));
+  pEngine->_pLdsWrite(pStream, &bStatic, sizeof(char));
+
+  // write amount of keys
+  pEngine->_pLdsWrite(pStream, &ctStruct, sizeof(int));
+
+  // write each individual key-value pair
+  for (int i = 0; i < ctStruct; i++) {
+    pEngine->LdsWriteMapVar(pStream, sStruct.mapVars, i);
+  }
 };
 
 // Read value from the stream
-void CLdsStructType::Read(CLdsReadFunc pWriteFunc) {
-  
+void CLdsStructType::Read(class CLdsScriptEngine *pEngine, void *pStream, CLdsValue &val) {
+  // read structure ID and if it's static
+  int iID = -1;
+  char bStatic = false;
+  pEngine->_pLdsRead(pStream, &iID, sizeof(int));
+  pEngine->_pLdsRead(pStream, &bStatic, sizeof(char));
+
+  // read amount of keys
+  int ctStruct = 0;
+  pEngine->_pLdsRead(pStream, &ctStruct, sizeof(int));
+
+  // create a variable map
+  CLdsVarMap mapVars;
+
+  // read each individual key-value pair
+  for (int i = 0; i < ctStruct; i++) {
+    pEngine->LdsReadMapVar(pStream, mapVars);
+  }
+
+  // create a structure
+  val = CLdsValue(iID, mapVars, (bStatic != 0));
 };
       
 // Print the value

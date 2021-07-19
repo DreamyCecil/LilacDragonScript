@@ -23,13 +23,16 @@ SOFTWARE. */
 #include <algorithm>
 
 // Write value into the stream
-void CLdsStringType::Write(CLdsWriteFunc pWriteFunc) {
-  
+void CLdsStringType::Write(class CLdsScriptEngine *pEngine, void *pStream) {
+  pEngine->LdsWriteString(pStream, strValue);
 };
 
 // Read value from the stream
-void CLdsStringType::Read(CLdsReadFunc pWriteFunc) {
-  
+void CLdsStringType::Read(class CLdsScriptEngine *pEngine, void *pStream, CLdsValue &val) {
+  string str = "";
+  pEngine->LdsReadString(pStream, str);
+
+  strValue = str;
 };
 
 // Print the value

@@ -20,21 +20,6 @@ SOFTWARE. */
 
 #include "StdH.h"
 
-// Value type name
-string TypeName(const ELdsValueType &eType,
-                const string &strNumber, const string &strString,
-                const string &strArray, const string &strStruct)
-{
-  switch (eType) {
-    case EVT_INDEX:
-    case EVT_FLOAT: return strNumber;
-    case EVT_STRING: return strString;
-    case EVT_ARRAY: return strArray;
-    case EVT_STRUCT: return strStruct;
-  }
-  return "<undefined>";
-};
-
 // Binary operation error
 void LdsBinaryError(const CLdsValue &val1, const CLdsValue &val2, const CLdsToken &tkn) {
   LdsThrow(LEX_BINARY, "Cannot perform a binary operation %d on %s and %s at %s",

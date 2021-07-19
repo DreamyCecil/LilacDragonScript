@@ -68,6 +68,7 @@ typedef CDList<class CBuildNode> CNodeList; // node list
 typedef CDList<class CBuildNode *> CDynamicNodeList; // dynamic node list
 typedef CDList<class CCompAction> CActionList; // action list
 typedef CDMap<LdsHash, struct SLdsCache> CScriptCache; // script cache map
+typedef CDList<class ILdsValueBase *> CLdsValueTypes; // value type list
 
 // 64-bit integer
 typedef __int64 LONG64;

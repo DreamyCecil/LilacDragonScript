@@ -39,6 +39,11 @@ struct LDS_API SLdsCache {
 class LDS_API CLdsScriptEngine {
   // Compatibility
   public:
+    CLdsValueTypes _ldsValueTypes; // value types used by this engine
+
+    // Add new value type
+    void AddValueType(const ILdsValueBase &val);
+
     // Custom output functions
     void (*_pLdsPrintFunction)(const char *);
     void (*_pLdsErrorFunction)(const char *);
@@ -84,6 +89,10 @@ class LDS_API CLdsScriptEngine {
     void LdsReadInlineFunc(void *pStream, SLdsInlineFunc &inFunc);
 
     // Script values I/O
+
+    // Write and read one variable
+    void LdsWriteMapVar(void *pStream, CLdsVarMap &map, const int &iVar);
+    void LdsReadMapVar(void *pStream, CLdsVarMap &map);
 
     // Write and read values
     void LdsWriteValue(void *pStream, CLdsValue &val);
@@ -265,9 +274,16 @@ class LDS_API CLdsScriptEngine {
       _iThreadTickRate(64),
       _llCurrentTick(0)
     {
-      // Set default functions and variables
+      // set default functions and variables
       SetDefaultFunctions();
       SetDefaultVariables();
+
+      // add default value types
+      AddValueType(CLdsIntType());
+      AddValueType(CLdsFloatType());
+      AddValueType(CLdsStringType());
+      AddValueType(CLdsArrayType());
+      AddValueType(CLdsStructType());
     };
     
     // Destructor
@@ -276,12 +292,19 @@ class LDS_API CLdsScriptEngine {
       if (_pDestructorFunc != NULL) {
         _pDestructorFunc(this);
       }
+
+      // delete value types
+      int ctTypes = _ldsValueTypes.Count();
+
+      while (--ctTypes >= 0) {
+        delete _ldsValueTypes[ctTypes];
+      }
       
       // delete remaining threads
-      int iThreads = _athhThreadHandlers.Count();
+      int ctThreads = _athhThreadHandlers.Count();
 
-      while (--iThreads >= 0) {
-        delete _athhThreadHandlers[iThreads].psthThread;
+      while (--ctThreads >= 0) {
+        delete _athhThreadHandlers[ctThreads].psthThread;
       }
 
       _athhThreadHandlers.Clear();

@@ -195,164 +195,58 @@ void CLdsScriptEngine::LdsReadInlineFunc(void *pStream, SLdsInlineFunc &inFunc) 
 // Script values I/O
 
 // Write one variable from the variable map
-#define WRITE_VAR_FROM_MAP(_Map, _Var) \
-  /* write key */ \
-  LdsWriteString(pStream, _Map.GetKey(_Var)); \
-\
-  /* write variable const type */ \
-  SLdsVar &var = _Map.GetValue(_Var); \
-  _pLdsWrite(pStream, &var.var_bConst, sizeof(char)); \
-\
-  /* write variable value */ \
-  LdsWriteValue(pStream, var.var_valValue)
+void CLdsScriptEngine::LdsWriteMapVar(void *pStream, CLdsVarMap &map, const int &iVar) {
+  // write key
+  LdsWriteString(pStream, map.GetKey(iVar));
+
+  // write variable const type
+  SLdsVar &var = map.GetValue(iVar);
+  _pLdsWrite(pStream, &var.var_bConst, sizeof(char));
+
+  // write variable value
+  LdsWriteValue(pStream, var.var_valValue);
+};
   
 // Read one variable into the variable map
-#define READ_VAR_INTO_MAP(_Map) \
-  /* read key */ \
-  string strKey = ""; \
-  LdsReadString(pStream, strKey); \
-\
-  /* read variable const type */ \
-  SLdsVar var; \
-  _pLdsRead(pStream, &var.var_bConst, sizeof(char)); \
-\
-  /* read variable value */ \
-  LdsReadValue(pStream, var.var_valValue); \
-\
-  /* add one variable */ \
-  _Map.Add(strKey, var)
+void CLdsScriptEngine::LdsReadMapVar(void *pStream, CLdsVarMap &map) {
+  // read key
+  string strKey = "";
+  LdsReadString(pStream, strKey);
+
+  // read variable const type
+  SLdsVar var;
+  _pLdsRead(pStream, &var.var_bConst, sizeof(char));
+
+  // read variable value
+  LdsReadValue(pStream, var.var_valValue);
+
+  // add one variable
+  map.Add(strKey, var);
+};
 
 // Write value
 void CLdsScriptEngine::LdsWriteValue(void *pStream, CLdsValue &val) {
-  char iType = val->GetType();
-  _pLdsWrite(pStream, &iType, sizeof(char));
+  int iType = val->GetType();
+  _pLdsWrite(pStream, &iType, sizeof(int));
 
-  switch (iType) {
-    // integer
-    case EVT_INDEX: {
-      int i = val->GetIndex();
-      _pLdsWrite(pStream, &i, sizeof(int));
-    } break;
-
-    // float number
-    case EVT_FLOAT: {
-      double d = val->GetNumber();
-      _pLdsWrite(pStream, &d, sizeof(double));
-    } break;
-
-    // string
-    case EVT_STRING: {
-      LdsWriteString(pStream, val->GetString());
-    } break;
-
-    // array
-    case EVT_ARRAY: {
-      CLdsArray &aArray = val->GetArray();
-      const int ctArray = aArray.Count();
-
-      // write array count
-      _pLdsWrite(pStream, &ctArray, sizeof(int));
-
-      // write each individual array value
-      for (int i = 0; i < ctArray; i++) {
-        LdsWriteValue(pStream, aArray[i]);
-      }
-    } break;
-
-    // structure
-    case EVT_STRUCT: {
-      CLdsStruct &sStruct = val->GetStruct();
-      const int ctStruct = sStruct.Count();
-
-      // write structure ID and if it's static
-      char bStatic = sStruct.bStatic;
-      _pLdsWrite(pStream, &sStruct.iID, sizeof(int));
-      _pLdsWrite(pStream, &bStatic, sizeof(char));
-
-      // write amount of keys
-      _pLdsWrite(pStream, &ctStruct, sizeof(int));
-
-      // write each individual key-value pair
-      for (int i = 0; i < ctStruct; i++) {
-        WRITE_VAR_FROM_MAP(sStruct.mapVars, i);
-      }
-    } break;
-
-    default: LdsThrow(LER_WRITE, "Cannot write value type %d at %d!", iType, _pLdsStreamTell(pStream));
-  }
+  // write value through its own method
+  val->Write(this, pStream);
 };
 
 // Read value
 void CLdsScriptEngine::LdsReadValue(void *pStream, CLdsValue &val) {
-  char iType = -1;
-  _pLdsRead(pStream, &iType, sizeof(char));
+  int iType = -1;
+  _pLdsRead(pStream, &iType, sizeof(int));
 
-  switch (iType) {
-    // integer
-    case EVT_INDEX: {
-      int iInteger = -1;
-      _pLdsRead(pStream, &iInteger, sizeof(int));
+  // invalid value type
+  int ctValues = _ldsValueTypes.Count();
 
-      val = iInteger;
-    } break;
-
-    // float number
-    case EVT_FLOAT: {
-      double dNumber = 0.0;
-      _pLdsRead(pStream, &dNumber, sizeof(double));
-
-      val = dNumber;
-    } break;
-
-    // string
-    case EVT_STRING: {
-      string str = "";
-      LdsReadString(pStream, str);
-
-      val = str;
-    } break;
-
-    // array
-    case EVT_ARRAY: {
-      // read array count
-      int ctArray = 0;
-      _pLdsRead(pStream, &ctArray, sizeof(int));
-
-      // create an empty array
-      val = CLdsValue(ctArray, (int)0);
-
-      // read values into the array
-      for (int i = 0; i < ctArray; i++) {
-        LdsReadValue(pStream, val->GetArray()[i]);
-      }
-    } break;
-
-    // structure
-    case EVT_STRUCT: {
-      // read structure ID and if it's static
-      int iID = -1;
-      char bStatic = false;
-      _pLdsRead(pStream, &iID, sizeof(int));
-      _pLdsRead(pStream, &bStatic, sizeof(char));
-
-      // read amount of keys
-      int ctStruct = 0;
-      _pLdsRead(pStream, &ctStruct, sizeof(int));
-
-      // create a variable map
-      CLdsVarMap mapVars;
-
-      // read each individual key-value pair
-      for (int i = 0; i < ctStruct; i++) {
-        READ_VAR_INTO_MAP(mapVars);
-      }
-
-      // create a structure
-      val = CLdsValue(iID, mapVars, (bStatic != 0));
-    } break;
-
-    default: LdsThrow(LER_READ, "Cannot read value type %d at %d!", iType, _pLdsStreamTell(pStream));
+  if (iType < 0 || iType >= ctValues) {
+    LdsThrow(LER_READ, "Cannot read value type %d (%d/%d) at %d!", iType, iType + 1, ctValues, _pLdsStreamTell(pStream));
   }
+
+  // read value through its own method
+  _ldsValueTypes[iType]->Read(this, pStream, val);
 };
 
 // Write value reference
@@ -542,7 +436,7 @@ void CLdsScriptEngine::LdsWriteEngine(void *pStream) {
 
   // write each variable
   for (int iVar = 0; iVar < ctVars; iVar++) {
-    WRITE_VAR_FROM_MAP(_mapLdsVariables, iVar);
+    LdsWriteMapVar(pStream, _mapLdsVariables, iVar);
   }
 
   // write current tick
@@ -602,7 +496,7 @@ void CLdsScriptEngine::LdsReadEngine(void *pStream) {
 
   // read each variable
   for (int iVar = 0; iVar < ctVars; iVar++) {
-    READ_VAR_INTO_MAP(_mapLdsVariables);
+    LdsReadMapVar(pStream, _mapLdsVariables);
   }
 
   // read current tick
@@ -659,7 +553,7 @@ void CLdsScriptEngine::LdsWriteThread(void *pStream, CLdsThread &sth, bool bHand
 
   // write each local variable
   for (i = 0; i < ct; i++) {
-    WRITE_VAR_FROM_MAP(sth.sth_mapLocals, i);
+    LdsWriteMapVar(pStream, sth.sth_mapLocals, i);
   }
 
   // write inline functions count
@@ -776,7 +670,7 @@ void CLdsScriptEngine::LdsReadThread(void *pStream, CLdsThread &sth, bool bHandl
 
   // read each local variable
   for (i = 0; i < ct; i++) {
-    READ_VAR_INTO_MAP(sth.sth_mapLocals);
+    LdsReadMapVar(pStream, sth.sth_mapLocals);
   }
 
   // read inline functions count

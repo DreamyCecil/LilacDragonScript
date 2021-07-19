@@ -92,6 +92,11 @@ int LdsFileTell(void *pStream) {
   return ftell(file);
 };
 
+// Add new value type
+void CLdsScriptEngine::AddValueType(const ILdsValueBase &val) {
+  _ldsValueTypes.Add(val.MakeCopy());
+};
+
 // Set output printing functions
 void CLdsScriptEngine::LdsOutputFunctions(void *pPrint, void *pError) {
   // reset to standard printing function
