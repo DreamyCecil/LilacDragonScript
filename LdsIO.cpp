@@ -541,6 +541,9 @@ void CLdsScriptEngine::LdsWriteThread(void *pStream, CLdsThread &sth, bool bHand
   // write position
   _pLdsWrite(pStream, &sth.sth_iPos, sizeof(int));
 
+  // write executed action count
+  _pLdsWrite(pStream, &sth.sth_ctActions, sizeof(int));
+
   // write the result
   LdsWriteValue(pStream, sth.sth_valResult);
 
@@ -657,6 +660,9 @@ void CLdsScriptEngine::LdsReadThread(void *pStream, CLdsThread &sth, bool bHandl
 
   // read position
   _pLdsRead(pStream, &sth.sth_iPos, sizeof(int));
+
+  // read executed action count
+  _pLdsRead(pStream, &sth.sth_ctActions, sizeof(int));
 
   // read the result
   LdsReadValue(pStream, sth.sth_valResult);

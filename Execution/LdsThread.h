@@ -47,6 +47,7 @@ class LDS_API CLdsThread {
     
     CActionList sth_acaActions; // compiled actions
     int sth_iPos; // current position in the thread
+    int sth_ctActions; // how many actions the thread has executed so far
     
     CDStack<SLdsInlineCall> sth_aicCalls; // inline function calls
   

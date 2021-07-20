@@ -129,7 +129,7 @@ void SetupLDS(void) {
 // Test one script
 static bool RunScript(string strFile, const bool &bInfo)
 {
-  strFile = LdsPrintF("TestScripts\\%s", strFile.c_str());
+  strFile = string("TestScripts\\") + strFile;
 
   if (bInfo) {
     printf("[LDS]: Running \"%s\"...\n", strFile.c_str());
@@ -166,9 +166,26 @@ static bool RunScript(string strFile, const bool &bInfo)
   }
   
   // execute script in quick run mode
+  CLdsThread *psth = _ldsEngine.ThreadCreate(acaActions, CLdsVarMap());
+  psth->SetFlag(CLdsThread::THF_QUICK, true);
+
+  // script status and return value
+  EThreadStatus eStatus = psth->Resume();
   CLdsValue valResult;
+
+  switch (eStatus) {
+    case ETS_FINISHED: valResult = psth->sth_valResult; break;
+    case ETS_ERROR: _ldsEngine.LdsErrorOut("%s (code: 0x%X)\n", psth->sth_valResult->GetString().c_str(), psth->sth_eError); break;
+    default: _ldsEngine.LdsErrorOut("Thread execution got paused inside of the 'Execute' function instead of 'ThreadResume'\n");
+  }
+
+  // action count
+  int ctActions = psth->sth_ctActions;
   
-  if (_ldsEngine.ScriptExecute(acaActions, &valResult) != ETS_FINISHED) {
+  // delete the thread
+  delete psth;
+  
+  if (eStatus != ETS_FINISHED) {
     // execution has failed
     printf("\n");
     return false;
@@ -179,7 +196,8 @@ static bool RunScript(string strFile, const bool &bInfo)
     if (!_bAllScriptsTest) {
       printf("\n--------------------------------\n");
     }
-
+    
+    printf("[LDS]: Executed %d actions\n", ctActions);
     printf("[RESULT]: %s\n\n", valResult->Print().c_str());
   }
 

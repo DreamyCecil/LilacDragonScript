@@ -35,7 +35,7 @@ void CLdsFloatType::Read(class CLdsScriptEngine *pEngine, void *pStream, CLdsVal
 
 // Print the value
 string CLdsFloatType::Print(void) {
-  return LdsPrintF("%s", LdsFloatStr(dValue).c_str());
+  return LdsFloatStr(dValue);
 };
 
 // Perform a unary operation

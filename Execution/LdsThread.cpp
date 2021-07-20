@@ -44,7 +44,7 @@ extern const char *_astrActionNames[LCA_SIZEOF] = {
 // Constructor
 CLdsThread::CLdsThread(const CActionList &aca, CLdsScriptEngine *plds) :
   sth_pldsEngine(plds), sth_eFlags(ELdsThreadFlags(0)),
-  sth_acaActions(aca), sth_iPos(0),
+  sth_acaActions(aca), sth_iPos(0), sth_ctActions(0),
   sth_eStatus(ETS_FINISHED), sth_eError(LER_OK),
   sth_pReference(NULL), sth_pPreRun(NULL), sth_pResult(NULL)
 {
@@ -323,6 +323,9 @@ EThreadStatus CLdsThread::Resume(void) {
         // add result to the previous stack
         _pavalStack->Push(valRefResult);
       }
+
+      // count one executed action
+      sth_ctActions++;
     }
 
     sth_eStatus = ETS_FINISHED;
@@ -345,7 +348,7 @@ EThreadStatus CLdsThread::Resume(void) {
     if (eStatus != ETS_PAUSE) {
       sth_eStatus = ETS_ERROR;
       sth_eError = LEX_THREAD;
-      sth_valResult = LdsPrintF("The thread got destroyed at %s", LdsPrintPos(iPausePos).c_str());
+      sth_valResult = CLdsStringType(string("The thread got destroyed at ") + LdsPrintPos(iPausePos));
     }
   }
 

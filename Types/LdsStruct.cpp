@@ -37,6 +37,7 @@ CLdsStruct::CLdsStruct(const int &iSetID) :
 void CLdsStruct::Clear(void) {
   iID = -1;
   mapVars.Clear();
+  pCallback = &DummyStructCallback;
 };
 
 // Print one variable
