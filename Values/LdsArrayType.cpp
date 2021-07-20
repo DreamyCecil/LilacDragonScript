@@ -192,7 +192,7 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
       val1 = aCopy[iArrayIndex];
 
       // get pointer to the value within the array
-      pvalArrayAccess = valRef1.GetValue(iArrayIndex);
+      pvalArrayAccess = valRef1.AccessValue(iArrayIndex);
 
       // add reference index
       valRef1.AddIndex(iArrayIndex);

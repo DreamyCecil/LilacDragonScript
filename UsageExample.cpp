@@ -42,12 +42,12 @@ void ErrorOutput(const char *strError) {
 };
 
 // Random number function
-LdsReturn LDS_Random(LDS_ARGS) {
+LDS_FUNC(LDS_Random) {
   return rand();
 };
 
 // Console printing function
-LdsReturn LDS_ConsolePrint(LDS_ARGS) {
+LDS_FUNC(LDS_ConsolePrint) {
   // don't output anything on tests
   if (_bAllScriptsTest) {
     return 0;
@@ -58,7 +58,7 @@ LdsReturn LDS_ConsolePrint(LDS_ARGS) {
 };
 
 // Suspend execution for some time
-LdsReturn LDS_Sleep(LDS_ARGS) {
+LDS_FUNC(LDS_Sleep) {
   int iMilliseconds = int(LDS_NEXT_NUM * 1000);
 
   // wait for very little while doing all tests
@@ -75,6 +75,30 @@ LdsReturn LDS_Sleep(LDS_ARGS) {
   return 0;
 };
 
+// Return an array or a structure with some data
+LDS_FUNC(LDS_Data) {
+  int iStruct = LDS_NEXT_INT;
+
+  CLdsArrayType aData(2, 0xFF);
+  aData.aArray[0] = 0x7F;
+
+  if (iStruct != 0) {
+    // return structure
+    CLdsVarMap mapFields;
+    mapFields["info"] = SLdsVar(string("Two bytes"), true);
+    mapFields["data"] = SLdsVar(aData, true);
+
+    return CLdsStructType(-1, mapFields, true);
+  }
+
+  // return array
+  CLdsArrayType valArray(2, 0);
+  valArray.aArray[0] = string("Two bytes");
+  valArray.aArray[1] = aData;
+
+  return valArray;
+};
+
 // Initial LDS setup
 void SetupLDS(void) {
   // hook the error output function
@@ -88,6 +112,7 @@ void SetupLDS(void) {
   mapFunc["Random"] = SLdsFunc(0, &LDS_Random);
   mapFunc["Out"] = SLdsFunc(1, &LDS_ConsolePrint);
   mapFunc["Sleep"] = SLdsFunc(1, &LDS_Sleep);
+  mapFunc["GetData"] = SLdsFunc(1, &LDS_Data);
 
   _ldsEngine.SetCustomFunctions(mapFunc);
 

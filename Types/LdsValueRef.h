@@ -89,9 +89,9 @@ class LDS_API CLdsValueRef {
     CONSTRUCTOR_FULL(string);
 
     // Get value by an array index
-    CLdsValue *GetValue(const int &iIndex);
+    CLdsValue *AccessValue(const int &iIndex);
     // Get value by a structure variable name
-    CLdsValue *GetValue(const string &strVar);
+    CLdsValue *AccessValue(const string &strVar);
 
     // Add array index
     inline void AddIndex(const int &iIndex) {

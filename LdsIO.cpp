@@ -353,7 +353,7 @@ void CLdsScriptEngine::LdsReadValueRef(void *pStream, CLdsThread &sth, CLdsValue
       vr.vr_ariIndices.Add(SLdsRefIndex(iRefIndex));
 
       // get next reference by an index
-      vr.vr_pvalAccess = vr.GetValue(iRefIndex);
+      vr.vr_pvalAccess = vr.AccessValue(iRefIndex);
 
     } else {
       // read structure variable
@@ -364,7 +364,7 @@ void CLdsScriptEngine::LdsReadValueRef(void *pStream, CLdsThread &sth, CLdsValue
       vr.vr_ariIndices.Add(SLdsRefIndex(strVar));
 
       // get next reference by a variable name
-      vr.vr_pvalAccess = vr.GetValue(strVar);
+      vr.vr_pvalAccess = vr.AccessValue(strVar);
     }
   }
 };

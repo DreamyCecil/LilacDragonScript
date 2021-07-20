@@ -142,7 +142,7 @@ CLdsValueRef CLdsStructType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
         
       // get pointer to the value within the structure
       if (valRef1.vr_pvar != NULL) {
-        pvalStructAccess = valRef1.GetValue(strVar);
+        pvalStructAccess = valRef1.AccessValue(strVar);
 
         // get variable name and check for const
         strStructVar = strVar;
