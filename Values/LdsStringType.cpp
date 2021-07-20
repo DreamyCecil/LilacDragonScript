@@ -156,8 +156,6 @@ CLdsValueRef CLdsStringType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
     // accessor
     case LOP_ACCESS: {
       if (tkn.lt_iArg >= 1) {
-        // TODO: Make it search for a certain substring and return amount of them in a string
-        //       Example: "string".str - returns 1; "search for the sea"["sea"] - returns 2
         LdsThrow(LEX_BINARY, "Cannot use structure accessor on a string at %s", tkn.PrintPos().c_str());
       }
 

@@ -22,8 +22,11 @@ SOFTWARE. */
 
 #include "../LdsBase.h"
 
+// Structure change callback function
+typedef void (*CLdsStructCallback)(class CLdsStruct *sStruct, const int &iVariable);
+
 // Structure value
-struct LDS_API CLdsStruct {
+class LDS_API CLdsStruct {
   public:
     // TODO: Each structure would have a unique ID (for example - Serious Sam entity ID) and a function that would be called
     //       everytime a variable in the structure is changed and sends this variable (its position in the map) and a struct ID
@@ -33,10 +36,13 @@ struct LDS_API CLdsStruct {
     int iID; // unique ID
     CLdsVarMap mapVars; // structure fields
     bool bStatic; // static struct (cannot add new fields)
+
+    CLdsStructCallback pCallback; // callback function
   
+  public:
     // Constructors
-    CLdsStruct(void) : iID(-1) {};
-    CLdsStruct(const int &iSetID) : iID(iSetID) {};
+    CLdsStruct(void);
+    CLdsStruct(const int &iSetID);
   
     // Clear the structure
     void Clear(void);

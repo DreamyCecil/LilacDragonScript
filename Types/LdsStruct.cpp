@@ -21,6 +21,18 @@ SOFTWARE. */
 #include "StdH.h"
 #include "LdsStruct.h"
 
+// Dummy structure callback function
+static void DummyStructCallback(CLdsStruct *sStruct, const int &iVariable) {
+  (void)0;
+};
+
+// Constructors
+CLdsStruct::CLdsStruct(void) :
+  iID(-1), pCallback(&DummyStructCallback) {};
+
+CLdsStruct::CLdsStruct(const int &iSetID) :
+  iID(iSetID), pCallback(&DummyStructCallback) {};
+
 // Clear the structure
 void CLdsStruct::Clear(void) {
   iID = -1;

@@ -125,7 +125,6 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
   CLdsValue *pvalArrayAccess = NULL;
     
   switch (iOperation) {
-    // TODO: Add multiplication operator to copy array contents multiple times
     // operators
     case LOP_ADD: {
       if (val2->GetType() > EVT_FLOAT) {
@@ -136,7 +135,7 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
       int ctResize = (val1->GetArray().Count() + val2->GetIndex());
       val1->GetArray().Resize(ctResize);
     } break;
-        
+
     case LOP_SUB: {
       if (val2->GetType() > EVT_FLOAT) {
         LdsThrow(LEX_BINARY, "Cannot subtract %s from an array at %s", strType2.c_str(), tkn.PrintPos().c_str());
@@ -146,7 +145,26 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
       int ctResize = (val1->GetArray().Count() - val2->GetIndex());
       val1->GetArray().Resize(ctResize);
     } break;
-      
+
+    case LOP_MUL: {
+      if (val2->GetType() > EVT_FLOAT) {
+        LdsThrow(LEX_BINARY, "Cannot multiply array by %s at %s", strType2.c_str(), tkn.PrintPos().c_str());
+      }
+        
+      // copy array contents several times
+      int ctOld = val1->GetArray().Count();
+      int ctNew = int(ctOld * val2->GetNumber());
+
+      CLdsArray &aArray = val1->GetArray();
+      CLdsArrayType valNewArray(ctNew, 0);
+
+      for (int i = 0; i < ctNew; i++) {
+        valNewArray.aArray[i] = aArray[i % ctOld];
+      }
+
+      val1 = valNewArray;
+    } break;
+
     // conditional operators
     case LOP_GT: case LOP_GOE:
     case LOP_LT: case LOP_LOE:
@@ -154,7 +172,7 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
       if (val2->GetType() != EVT_ARRAY) {
         LdsThrow(LEX_BINARY, "Cannot compare an array with %s at %s", strType2.c_str(), tkn.PrintPos().c_str());
       }
-        
+
       switch (iOperation) {
         case LOP_GT:  val1 = int(val1->GetArray().Count() >  val2->GetArray().Count()); break;
         case LOP_GOE: val1 = int(val1->GetArray().Count() >= val2->GetArray().Count()); break;
@@ -164,23 +182,23 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
         case LOP_NEQ: val1 = int(val1 != val2); break;
       }
       break;
-      
+
     // accessor
     case LOP_ACCESS: {
       if (tkn.lt_iArg >= 1) {
         LdsThrow(LEX_BINARY, "Cannot use structure accessor on the array at %s", tkn.PrintPos().c_str());
       }
-        
+
       if (val2->GetType() > EVT_FLOAT) {
         LdsThrow(LEX_BINARY, "Cannot use %s as an array accessor at %s", strType2.c_str(), tkn.PrintPos().c_str());
       }
-        
+
       // direct 'val1 = val1->GetArray()' empties its own array before getting a value from it
       CLdsArray aCopy = val1->GetArray();
-        
+
       int iArrayIndex = val2->GetIndex();
       int iSize = aCopy.Count();
-    
+
       // out of bounds
       if (iSize <= 0) {
         LdsThrow(LEX_ARRAYEMPTY, "Cannot index an empty array at %s", tkn.PrintPos().c_str());
@@ -188,7 +206,7 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
       } else if (iArrayIndex < 0 || iArrayIndex >= iSize) {
         LdsThrow(LEX_ARRAYOUT, "Array index '%d' is out of bounds [0, %d] at %s", iArrayIndex, iSize - 1, tkn.PrintPos().c_str());
       }
-      
+
       val1 = aCopy[iArrayIndex];
 
       // get pointer to the value within the array
@@ -197,7 +215,7 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
       // add reference index
       valRef1.AddIndex(iArrayIndex);
     } break;
-      
+
     default: LdsBinaryError(val1, val2, tkn);
   }
 
