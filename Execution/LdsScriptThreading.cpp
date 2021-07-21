@@ -20,8 +20,6 @@ SOFTWARE. */
 
 #include "StdH.h"
 
-extern CLdsThread *_psthCurrent;
-
 // Create a new thread
 CLdsThread *CLdsScriptEngine::ThreadCreate(const CActionList &acaActions, CLdsVarMap &mapArgs) {
   CLdsThread *sthNew = new CLdsThread(acaActions, this);
@@ -29,44 +27,6 @@ CLdsThread *CLdsScriptEngine::ThreadCreate(const CActionList &acaActions, CLdsVa
   sthNew->sth_eStatus = ETS_RUNNING;
 
   return sthNew;
-};
-
-// Execute the compiled script
-EThreadStatus CLdsScriptEngine::ScriptExecute(const CActionList &acaActions, CLdsValue *pvalResult,
-                                              CLdsVarMap &mapArgs, CLdsInFuncMap *pmapInline)
-{
-  CLdsThread *psth = ThreadCreate(acaActions, mapArgs);
-  psth->SetFlag(CLdsThread::THF_QUICK, true);
-  
-  // copy provided inline function if there are any
-  if (pmapInline != NULL && pmapInline->Count() > 0) {
-    psth->sth_mapInlineFunc.AddFrom(*pmapInline, true);
-  }
-
-  // get script status
-  EThreadStatus eStatus = psth->Resume();
-
-  switch (eStatus) {
-    case ETS_FINISHED: {
-      // return value
-      if (pvalResult != NULL) {
-        *pvalResult = psth->sth_valResult;
-      }
-    } break;
-    
-    case ETS_ERROR: {
-      string strError = psth->sth_valResult->GetString();
-      LdsErrorOut("%s (code: 0x%X)\n", strError.c_str(), psth->sth_eError);
-    } break;
-    
-    default:
-      LdsErrorOut("Thread execution got paused inside of the 'Execute' function instead of 'ThreadResume'\n");
-  }
-  
-  // delete the thread
-  delete psth;
-  
-  return eStatus;
 };
 
 // Thread handling

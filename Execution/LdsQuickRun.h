@@ -20,27 +20,29 @@ SOFTWARE. */
 
 #pragma once
 
-#include "LdsBase.h"
+#include "LdsThread.h"
 
-// Script values (any type)
-#include "Types/LdsStruct.h"
+// Class for starting threads in a quick run mode
+class LDS_API CLdsQuickRun {
+  public:
+    CLdsThread *qr_psthThread; // thread for running the script
+    EThreadStatus qr_eStatus; // thread execution status
 
-#include "Values/LdsValue.h"
-#include "Types/LdsValueRef.h"
+  public:
+    // Constructor
+    CLdsQuickRun(CLdsScriptEngine &ldsEngine, const CActionList &acaActions,
+                 CLdsVarMap &mapArgs = CLdsVarMap(), CLdsInFuncMap &mapInline = CLdsInFuncMap());
 
-#include "Values/LdsValueTypes.h"
+    // Destructor
+    ~CLdsQuickRun(void);
 
-// Script elements
-#include "Types/LdsToken.h"
-#include "Types/LdsBuildNode.h"
-#include "Types/LdsAction.h"
+    // Get thread status
+    inline EThreadStatus &GetStatus(void) {
+      return qr_eStatus;
+    };
 
-// Script functions and variables
-#include "Types/LdsFunc.h"
-#include "Types/LdsVar.h"
-#include "Functions/LdsFunctions.h"
-
-// Script execution
-#include "Execution/LdsThread.h"
-#include "Execution/LdsHandler.h"
-#include "Execution/LdsQuickRun.h"
+    // Get thread result
+    inline CLdsValue &GetResult(void) {
+      return qr_psthThread->sth_valResult;
+    };
+};

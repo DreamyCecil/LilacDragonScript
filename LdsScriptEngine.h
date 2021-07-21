@@ -243,10 +243,6 @@ class LDS_API CLdsScriptEngine {
   
     // Create a new thread
     CLdsThread *ThreadCreate(const CActionList &acaActions, CLdsVarMap &mapArgs);
-
-    // Execute the compiled inline script
-    EThreadStatus ScriptExecute(const CActionList &acaActions, CLdsValue *pvalResult,
-                                CLdsVarMap &mapArgs = CLdsVarMap(), CLdsInFuncMap *pmapInline = NULL);
     
   public:
     // Constructor

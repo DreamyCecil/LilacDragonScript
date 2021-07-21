@@ -41,7 +41,7 @@ class LDS_API CLdsThread {
 
     // Thread flags
     enum ELdsThreadFlags {
-      THF_QUICK = (1 << 0), // the whole thread is being executed in one run (via ScriptExecute)
+      THF_QUICK = (1 << 0), // the whole thread is being executed in one run (via CLdsQuickRun)
       THF_DEBUG = (1 << 1), // debug output for every action
     };
 
