@@ -90,10 +90,6 @@ class LDS_API CBuildNode : public CLdsToken {
       }
     };
     
-    // Int constructor
-    CBuildNode(const EBuildNode &eType, const int &iPos, const int &iValue, const int &iArg, CNodeList *abnNodes = NULL) :
-      CBuildNode(eType, iPos, CLdsIntType(iValue), iArg, abnNodes) {};
-    
     // Copy constructor
     CBuildNode(const CBuildNode &bnOther) : CLdsToken() {
       operator=(bnOther);
@@ -150,7 +146,7 @@ class LDS_API CBuildNode : public CLdsToken {
       }
     };
 
-    // Copy nodes from some list
+    // Copy nodes from some dynamic list
     int CopyNodes(const CDynamicNodeList &abnNodes) {
       int ctNodes = abnNodes.Count();
 
@@ -160,6 +156,8 @@ class LDS_API CBuildNode : public CLdsToken {
 
       return ctNodes;
     };
+    
+    // Copy nodes from some list
     int CopyNodes(CNodeList &abnNodes) {
       int ctNodes = abnNodes.Count();
 

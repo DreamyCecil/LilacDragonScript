@@ -38,7 +38,7 @@ SOFTWARE. */
   #pragma comment(lib, "LilacDragonScript.lib")
 #endif
 
-// Standart library
+// Standard library
 #include <math.h>
 #include <sstream>
 
