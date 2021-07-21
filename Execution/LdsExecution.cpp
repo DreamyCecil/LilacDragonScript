@@ -168,19 +168,8 @@ void Exec_Set(void) {
     LdsThrow(LEX_CONST, "Cannot reassign constant variable '%s' at %s", strName.c_str(), _ca->PrintPos().c_str());
   }
   
-  CLdsValueRef valRef = _pavalStack->Pop();
-  
-  // check for an array accessor
-  if (valRef.vr_pvalAccess != NULL && pvar == valRef.vr_pvar) {
-    // set value within the array
-    *valRef.vr_pvalAccess = valRef.vr_val;
-    
-  } else {
-    // set value to the variable
-    pvar->var_valValue = valRef.vr_val;
-  }
-  
-  // constant variables
+  // set value to the variable
+  pvar->var_valValue = _pavalStack->Pop().vr_val;
   pvar->SetConst();
 };
 
@@ -209,19 +198,8 @@ void Exec_SetLocal(void) {
     LdsThrow(LEX_CONST, "Cannot reassign constant variable '%s' at %s", strName.c_str(), _ca->PrintPos().c_str());
   }
   
-  CLdsValueRef valRef = _pavalStack->Pop();
-  
-  // check for an array accessor
-  if (valRef.vr_pvalAccess != NULL && pvar == valRef.vr_pvar) {
-    // set value within the array
-    *valRef.vr_pvalAccess = _pavalStack->Pop().vr_val;
-    
-  } else {
-    // set value to the variable
-    pvar->var_valValue = valRef.vr_val;
-  }
-  
-  // constant variables
+  // set value to the variable
+  pvar->var_valValue = _pavalStack->Pop().vr_val;
   pvar->SetConst();
 };
 
@@ -231,7 +209,7 @@ void Exec_SetAccessor(void) {
   
   // check for an array accessor
   if (valRef.vr_pvalAccess == NULL) {
-    LdsThrow(LEX_ACCESS, "Trying to set value to an accessor with no accessor reference at %s", _ca->PrintPos().c_str());
+    LdsThrow(LEX_ACCESS, "Cannot set value through an accessor at %s", _ca->PrintPos().c_str());
   }
 
   // constant reference
