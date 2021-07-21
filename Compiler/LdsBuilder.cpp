@@ -72,14 +72,14 @@ void CLdsScriptEngine::StatementBuilder(void) {
       
       // no return value
       if (etNext.lt_eType == LTK_SEMICOL) {
-        _bnNode = CBuildNode(EBN_RETURN, et.lt_iPos, -1, false);
+        _bnNode = CBuildNode(EBN_RETURN_ACT, et.lt_iPos, -1, false);
         break;
       }
       
       ExpressionBuilder(LBF_NONE);
       CBuildNode bnExp = _bnNode;
 
-      _bnNode = CBuildNode(EBN_RETURN, et.lt_iPos, -1, true);
+      _bnNode = CBuildNode(EBN_RETURN_ACT, et.lt_iPos, -1, true);
       _bnNode.AddReference(&bnExp);
     } break;
     
@@ -249,7 +249,7 @@ void CLdsScriptEngine::StatementBuilder(void) {
       BuildLoopBody();
       CBuildNode bnLoop = _bnNode;
 
-      _bnNode = CBuildNode(EBN_WHILE, et.lt_iPos, -1, -1);
+      _bnNode = CBuildNode(EBN_WHILE_LOOP, et.lt_iPos, -1, -1);
       _bnNode.AddReference(&bnCond);
       _bnNode.AddReference(&bnLoop);
     } break;
@@ -272,7 +272,7 @@ void CLdsScriptEngine::StatementBuilder(void) {
       ExpressionBuilder(LBF_NONE);
       CBuildNode bnCond = _bnNode;
     
-      _bnNode = CBuildNode(EBN_DO_WHILE, et.lt_iPos, -1, -1);
+      _bnNode = CBuildNode(EBN_DO_LOOP, et.lt_iPos, -1, -1);
       _bnNode.AddReference(&bnLoop);
       _bnNode.AddReference(&bnCond);
     } break;
@@ -321,7 +321,7 @@ void CLdsScriptEngine::StatementBuilder(void) {
       BuildLoopBody();
       CBuildNode bnLoop = _bnNode;
     
-      _bnNode = CBuildNode(EBN_FOR, et.lt_iPos, -1, -1);
+      _bnNode = CBuildNode(EBN_FOR_LOOP, et.lt_iPos, -1, -1);
       _bnNode.AddReference(&bnInit);
       _bnNode.AddReference(&bnCond);
       _bnNode.AddReference(&bnPost);
@@ -331,7 +331,7 @@ void CLdsScriptEngine::StatementBuilder(void) {
     // break from this statement
     case LTK_BREAK: {
       if (_bBuildBreak) {
-        _bnNode = CBuildNode(EBN_BREAK, et.lt_iPos, -1, -1);
+        _bnNode = CBuildNode(EBN_BREAK_ACT, et.lt_iPos, -1, -1);
       
       } else {
         LdsThrow(LEB_BREAK, "Can't 'break' at %s", et.PrintPos().c_str());
@@ -341,7 +341,7 @@ void CLdsScriptEngine::StatementBuilder(void) {
     // continue to the next iteration
     case LTK_CONTINUE: {
       if (_bBuildCont) {
-        _bnNode = CBuildNode(EBN_CONTINUE, et.lt_iPos, -1, -1);
+        _bnNode = CBuildNode(EBN_CONTINUE_ACT, et.lt_iPos, -1, -1);
       
       } else {
         LdsThrow(LEB_CONTINUE, "Can't 'continue' at %s", et.PrintPos().c_str());
@@ -366,9 +366,9 @@ void CLdsScriptEngine::StatementBuilder(void) {
           _bnNode.lt_eType = EBN_ADJFIX;
           break;
         
-        case EBN_CALL:
+        case EBN_CALL_ACT:
           // discard return value if the function is called as a statement
-          _bnNode = CBuildNode(EBN_DISCARD, bnExp.lt_iPos, -1, -1);
+          _bnNode = CBuildNode(EBN_DISCARD_ACT, bnExp.lt_iPos, -1, -1);
           _bnNode.AddReference(&bnExp);
           break;
         
@@ -382,7 +382,7 @@ void CLdsScriptEngine::StatementBuilder(void) {
             ExpressionBuilder(LBF_NONE);
             CBuildNode bnSet = _bnNode;
           
-            _bnNode = CBuildNode(EBN_SET, etNext.lt_iPos, etNext.lt_valValue, -1);
+            _bnNode = CBuildNode(EBN_ASSIGN_OP, etNext.lt_iPos, etNext.lt_valValue, -1);
             _bnNode.AddReference(&bnExp);
             _bnNode.AddReference(&bnSet);
           
@@ -420,7 +420,7 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
         string strName = etNext->GetString();
         
         // define the variable
-        CBuildNode bnDefine = CBuildNode(EBN_VAR, etNext.lt_iPos, strName, bConst);
+        CBuildNode bnDefine = CBuildNode(EBN_VAR_DEF, etNext.lt_iPos, strName, bConst);
         abnNodes.Add(bnDefine);
       
         etNext = _aetTokens[_iBuildPos];
@@ -434,8 +434,8 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
           bnExp = _bnNode;
 
           // assign a value
-          CBuildNode bnSetVar = CBuildNode(EBN_SET, etNext.lt_iPos, LOP_SET, -1);
-          CBuildNode bnVar = CBuildNode(EBN_ID, etNext.lt_iPos, strName, 0);
+          CBuildNode bnSetVar = CBuildNode(EBN_ASSIGN_OP, etNext.lt_iPos, LOP_SET, -1);
+          CBuildNode bnVar = CBuildNode(EBN_IDENTIFIER, etNext.lt_iPos, strName, 0);
 
           bnSetVar.AddReference(&bnVar);
           bnSetVar.AddReference(&bnExp);
@@ -549,7 +549,7 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
       StatementBuilder();
       CBuildNode bnBody = _bnNode;
       
-      _bnNode = CBuildNode(EBN_FUNC, et.lt_iPos, strFunc, -1);
+      _bnNode = CBuildNode(EBN_FUNC_DEF, et.lt_iPos, strFunc, -1);
       _bnNode.AddReference(&bnBody);
     } break;
     
@@ -644,7 +644,7 @@ void CLdsScriptEngine::ExpressionBuilder(const LdsFlags &ubFlags) {
           }
         }
 
-        _bnNode = CBuildNode(EBN_VAL, et.lt_iPos, val, -1);
+        _bnNode = CBuildNode(EBN_RAW_VAL, et.lt_iPos, val, -1);
       } break;
 
       // arrays
@@ -686,7 +686,7 @@ void CLdsScriptEngine::ExpressionBuilder(const LdsFlags &ubFlags) {
         }
       
         // create an array
-        _bnNode = CBuildNode(EBN_ARRAY, et.lt_iPos, -1, abnArray.Count(), &abnArray);
+        _bnNode = CBuildNode(EBN_ARRAY_VAL, et.lt_iPos, -1, abnArray.Count(), &abnArray);
       } break;
       
       // structure
@@ -733,7 +733,7 @@ void CLdsScriptEngine::ExpressionBuilder(const LdsFlags &ubFlags) {
             LdsThrow(LEB_ID, "Expected a variable name at %s", etNext.PrintPos().c_str());
           }
           
-          CBuildNode bnStructVar = CBuildNode(EBN_SVAR, etNext.lt_iPos, etNext.lt_valValue, bConst);
+          CBuildNode bnStructVar = CBuildNode(EBN_SVAR_DEF, etNext.lt_iPos, etNext.lt_valValue, bConst);
           
           // assignment operator
           etNext = _aetTokens[_iBuildPos++];
@@ -765,7 +765,7 @@ void CLdsScriptEngine::ExpressionBuilder(const LdsFlags &ubFlags) {
         }
       
         // create a structure
-        _bnNode = CBuildNode(EBN_STRUCT, et.lt_iPos, iType, abnVars.Count(), &abnVars);
+        _bnNode = CBuildNode(EBN_STRUCT_VAL, et.lt_iPos, iType, abnVars.Count(), &abnVars);
       } break;
         
       // inside the parentheses
@@ -789,7 +789,7 @@ void CLdsScriptEngine::ExpressionBuilder(const LdsFlags &ubFlags) {
             ExpressionBuilder(LBF_NOOPS);
             CBuildNode bnVal = _bnNode;
 
-            _bnNode = CBuildNode(EBN_UN, et.lt_iPos, UOP_NEGATE, -1);
+            _bnNode = CBuildNode(EBN_UNARY_OP, et.lt_iPos, UOP_NEGATE, -1);
             _bnNode.AddReference(&bnVal);
           } break;
 
@@ -802,7 +802,7 @@ void CLdsScriptEngine::ExpressionBuilder(const LdsFlags &ubFlags) {
         ExpressionBuilder(LBF_NOOPS);
         CBuildNode bnNum = _bnNode;
 
-        _bnNode = CBuildNode(EBN_UN, et.lt_iPos, et.lt_valValue, -1);
+        _bnNode = CBuildNode(EBN_UNARY_OP, et.lt_iPos, et.lt_valValue, -1);
         _bnNode.AddReference(&bnNum);
       } break;
 
@@ -881,11 +881,11 @@ bool CLdsScriptEngine::ScopeBuilder(void) {
           LdsThrow(LEB_CLOSEP, "Unclosed function at %s", et.PrintPos().c_str());
         }
         
-        _bnNode = CBuildNode(EBN_CALL, et.lt_iPos, et.lt_valValue, abnArgs.Count(), &abnArgs);
+        _bnNode = CBuildNode(EBN_CALL_ACT, et.lt_iPos, et.lt_valValue, abnArgs.Count(), &abnArgs);
 
       // variable
       } else {
-        _bnNode = CBuildNode(EBN_ID, et.lt_iPos, et.lt_valValue, -1);
+        _bnNode = CBuildNode(EBN_IDENTIFIER, et.lt_iPos, et.lt_valValue, -1);
       }
     } break;
     
@@ -941,13 +941,13 @@ bool CLdsScriptEngine::PostfixBuilder(bool bChained) {
           LdsThrow(LEB_ID, "Expected a variable name at %s", etNext.PrintPos().c_str());
         }
         
-        bnID = CBuildNode(EBN_VAL, etNext.lt_iPos, etNext.lt_valValue, -1);
+        bnID = CBuildNode(EBN_RAW_VAL, etNext.lt_iPos, etNext.lt_valValue, -1);
       }
       
       CBuildNode bnAccess = CBuildNode(EBN_ACCESS, et.lt_iPos, bnVal.lt_valValue, false);
       
       if (bChained) {
-        CBuildNode bnNone = CBuildNode(EBN_DISCARD, _bnNode.lt_iPos, -1, -1);
+        CBuildNode bnNone = CBuildNode(EBN_DISCARD_ACT, _bnNode.lt_iPos, -1, -1);
         bnAccess.AddReference(&bnNone);
       } else {
         bnAccess.AddReference(&bnVal);
@@ -1025,7 +1025,7 @@ void CLdsScriptEngine::OperationBuilder(CLdsToken etFirst) {
       CBuildNode &bnNode2 = abnNodes[iOperator + 1];
 
       // if they are actually both pure values
-      if (bnNode1.lt_eType == EBN_VAL && bnNode2.lt_eType == EBN_VAL) {
+      if (bnNode1.lt_eType == EBN_RAW_VAL && bnNode2.lt_eType == EBN_RAW_VAL) {
         // perform operation in place
         CLdsToken tknOp(LTK_OPERATOR, et.lt_iPos, et.lt_valValue, -1);
 
@@ -1035,7 +1035,7 @@ void CLdsScriptEngine::OperationBuilder(CLdsToken etFirst) {
         valRef1 = valRef1.vr_val->BinaryOp(valRef1, valRef2, tknOp);
 
         // add pure value
-        abnNodes[iOperator] = CBuildNode(EBN_VAL, et.lt_iPos, valRef1.vr_val, -1);
+        abnNodes[iOperator] = CBuildNode(EBN_RAW_VAL, et.lt_iPos, valRef1.vr_val, -1);
 
       // if has identifiers or other operations
       } else {
@@ -1044,7 +1044,7 @@ void CLdsScriptEngine::OperationBuilder(CLdsToken etFirst) {
         abn.Add(bnNode1);
         abn.Add(bnNode2);
 
-        abnNodes[iOperator] = CBuildNode(EBN_BIN, et.lt_iPos, et.lt_valValue, -1, &abn);
+        abnNodes[iOperator] = CBuildNode(EBN_BINARY_OP, et.lt_iPos, et.lt_valValue, -1, &abn);
         abn.Clear();
       }
 

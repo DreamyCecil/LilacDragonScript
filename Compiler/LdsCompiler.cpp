@@ -78,7 +78,7 @@ ELdsError CLdsScriptEngine::LdsCompileExpression(const string &strExpression, CA
 void CLdsScriptEngine::CompileGetter(CBuildNode &bn, CActionList &aca) {
   switch (bn.lt_eType) {
     // iVal
-    case EBN_ID: {
+    case EBN_IDENTIFIER: {
       string strName = bn->GetString();
       
       // custom variables and constants
@@ -113,7 +113,7 @@ void CLdsScriptEngine::CompileGetter(CBuildNode &bn, CActionList &aca) {
 void CLdsScriptEngine::CompileSetter(CBuildNode &bn, CActionList &aca) {
   switch (bn.lt_eType) {
     // iVal
-    case EBN_ID: {
+    case EBN_IDENTIFIER: {
       string strName = bn->GetString();
       bool bLocal = (_mapLdsVariables.FindKeyIndex(strName) == -1);
       
@@ -186,7 +186,7 @@ void CLdsScriptEngine::CompileJumpShift(CActionList &aca, int iStart, int iShift
 // Accessors
 void CLdsScriptEngine::CompileAccessors(CBuildNode &bn, CActionList &aca, bool bSet) {
   // compile the initial value
-  if (bn.bn_abnNodes[0]->lt_eType != EBN_DISCARD) {
+  if (bn.bn_abnNodes[0]->lt_eType != EBN_DISCARD_ACT) {
     Compile(*bn.bn_abnNodes[0], aca);
   }
   
@@ -227,11 +227,11 @@ void CLdsScriptEngine::CompileAccessors(CBuildNode &bn, CActionList &aca, bool b
 void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
   switch (bn.lt_eType) {
     // values
-    case EBN_VAL: aca.Add(CCompAction(LCA_VAL, bn.lt_iPos, bn.lt_valValue, -1)); break;
-    case EBN_ID: CompileGetter(bn, aca); break;
+    case EBN_RAW_VAL: aca.Add(CCompAction(LCA_VAL, bn.lt_iPos, bn.lt_valValue, -1)); break;
+    case EBN_IDENTIFIER: CompileGetter(bn, aca); break;
 
     // arrays
-    case EBN_ARRAY: {
+    case EBN_ARRAY_VAL: {
       int ctValues = bn.lt_iArg;
 
       for (int iVal = 0; iVal < ctValues; iVal++) {
@@ -243,7 +243,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
     } break;
     
     // structures
-    case EBN_STRUCT: {
+    case EBN_STRUCT_VAL: {
       int ctVars = bn.lt_iArg;
 
       for (int iVar = 0; iVar < ctVars; iVar++) {
@@ -255,13 +255,13 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
     } break;
 
     // unary operation value
-    case EBN_UN:
+    case EBN_UNARY_OP:
       Compile(*bn.bn_abnNodes[0], aca);
       aca.Add(CCompAction(LCA_UN, bn.lt_iPos, bn.lt_valValue, -1));
       break;
 
     // binary operation values
-    case EBN_BIN:
+    case EBN_BINARY_OP:
       switch (bn->GetIndex()) {
         case LOP_AND: {
           Compile(*bn.bn_abnNodes[0], aca);
@@ -293,7 +293,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
       break;
 
     // function arguments
-    case EBN_CALL: {
+    case EBN_CALL_ACT: {
       // verify argument count
       int ctArgs = bn.lt_iArg;
       string strFunc = bn->GetString();
@@ -329,7 +329,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
     } break;
     
     // inline function
-    case EBN_FUNC: {
+    case EBN_FUNC_DEF: {
       // function name
       string strFunc = bn->GetString();
       
@@ -349,7 +349,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
     } break;
     
     // variable definition
-    case EBN_VAR: {
+    case EBN_VAR_DEF: {
       // variable name
       string strVar = bn->GetString();
       
@@ -363,7 +363,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
     } break;
     
     // structure variable definition
-    case EBN_SVAR: {
+    case EBN_SVAR_DEF: {
       // variable value
       Compile(*bn.bn_abnNodes[0], aca);
       
@@ -390,7 +390,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
     } break;
     
     // return a value if possible
-    case EBN_RETURN:
+    case EBN_RETURN_ACT:
       if (bn.lt_iArg > 0) {
         Compile(*bn.bn_abnNodes[0], aca);
       }
@@ -398,7 +398,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
       break;
     
     // discard last value
-    case EBN_DISCARD:
+    case EBN_DISCARD_ACT:
       Compile(*bn.bn_abnNodes[0], aca);
       aca.Add(CCompAction(LCA_DISCARD, bn.lt_iPos, -1, -1));
       break;
@@ -495,7 +495,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
       CompileBreakCont(aca, iStartPos, iBreakPos, iBreakPos, -1);
     } break;
     
-    case EBN_SET: {
+    case EBN_ASSIGN_OP: {
       // get the value
       if (bn->GetIndex() == LOP_SET) {
         Compile(*bn.bn_abnNodes[1], aca);
@@ -555,7 +555,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
       CompileAccessors(bn, aca, false);
     } break;
     
-    case EBN_WHILE: {
+    case EBN_WHILE_LOOP: {
       // jump through the loop unless the condition is true
       int iContPos = aca.Count();
     
@@ -577,7 +577,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
       CompileBreakCont(aca, iStartPos, iBreakPos, iBreakPos, iContPos);
     } break;
     
-    case EBN_DO_WHILE: {
+    case EBN_DO_LOOP: {
       // go through the loop
       int iStartPos = aca.Count();
     
@@ -594,7 +594,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
       CompileBreakCont(aca, iStartPos, iBreakPos, iBreakPos, iContPos);
     } break;
     
-    case EBN_FOR: {
+    case EBN_FOR_LOOP: {
       Compile(*bn.bn_abnNodes[0], aca);
     
       // jump through the loop unless the condition is true
@@ -624,12 +624,12 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
     } break;
     
     // break from the statement
-    case EBN_BREAK:
+    case EBN_BREAK_ACT:
       aca.Add(CCompAction(LCA_JUMP, bn.lt_iPos, -1, -10));
       break;
     
     // continue to the next iteration
-    case EBN_CONTINUE:
+    case EBN_CONTINUE_ACT:
       aca.Add(CCompAction(LCA_JUMP, bn.lt_iPos, -1, -11));
       break;
 
