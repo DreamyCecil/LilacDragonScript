@@ -105,12 +105,56 @@ enum ELdsOperator {
   LOP_ACCESS = 0x61, // array or struct accessor
 };
 
+// Binary operation symbols
+static const struct SLdsBinaryOps {
+  CDMap<int, string> mapOperations;
+
+  // Constructor
+  SLdsBinaryOps(void) {
+    mapOperations[LOP_SET]    = "=";
+    mapOperations[LOP_MUL]    = "*";
+    mapOperations[LOP_DIV]    = "/";
+    mapOperations[LOP_FMOD]   = "%";
+    mapOperations[LOP_IDIV]   = "i";
+    mapOperations[LOP_ADD]    = "+";
+    mapOperations[LOP_SUB]    = "-";
+    mapOperations[LOP_SH_L]   = "<<";
+    mapOperations[LOP_SH_R]   = ">>";
+    mapOperations[LOP_B_AND]  = "&";
+    mapOperations[LOP_B_XOR]  = "^";
+    mapOperations[LOP_B_OR]   = "|";
+    mapOperations[LOP_EQ]     = "==";
+    mapOperations[LOP_NEQ]    = "!=";
+    mapOperations[LOP_LT]     = "<";
+    mapOperations[LOP_LOE]    = "<=";
+    mapOperations[LOP_GT]     = ">";
+    mapOperations[LOP_GOE]    = ">=";
+    mapOperations[LOP_AND]    = "&&";
+    mapOperations[LOP_XOR]    = "^^";
+    mapOperations[LOP_OR]     = "||";
+    mapOperations[LOP_MAX]    = "<max>";
+    mapOperations[LOP_ACCESS] = "<accessor>";
+  };
+
+  // Get operation name
+  const char *operator[](const int &iOperation) const {
+    return mapOperations[iOperation].c_str();
+  };
+} _astrBinaryOps;
+
 // Unary operations
 enum EUnaryOp {
   UOP_NEGATE,    // - negation
   UOP_INVERT,    // ! inversion
   UOP_BINVERT,   // ~ bitwise inversion
   UOP_STRINGIFY, // $ stringify value
+
+  UOP_LAST,
+};
+
+// Unary operation symbols
+static const char *_astrUnaryOps[UOP_LAST] = {
+  "-", "!", "~", "$",
 };
 
 // Script token template

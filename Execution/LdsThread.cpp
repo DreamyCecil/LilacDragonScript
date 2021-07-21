@@ -32,15 +32,6 @@ extern CLdsThread *_psthCurrent = NULL;
 // Current action position
 extern int LDS_iActionPos = 0;
 
-// Action names
-extern const char *_astrActionNames[LCA_SIZEOF] = {
-  "UNKNOWN",
-  "VAL", "UN", "BIN", "CALL", "INLINE", "FUNC", "VAR",
-  "SET", "GET", "SET_ACCESS",
-  "JUMP", "JUMPIF", "JUMPUNLESS", "AND", "OR", "SWITCH",
-  "RETURN", "DISCARD", "DUP", "DIR",
-};
-
 // Constructor
 CLdsThread::CLdsThread(const CActionList &aca, CLdsScriptEngine *plds) :
   sth_pldsEngine(plds), sth_ubFlags(0),

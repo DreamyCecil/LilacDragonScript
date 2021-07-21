@@ -57,7 +57,13 @@ enum ELdsAction {
 };
 
 // Action names
-extern const char *_astrActionNames[LCA_SIZEOF];
+static const char *_astrActionNames[LCA_SIZEOF] = {
+  "UNKNOWN",
+  "VAL", "UN", "BIN", "CALL", "INLINE", "FUNC", "VAR",
+  "SET", "GET", "SET_ACCESS",
+  "JUMP", "JUMPIF", "JUMPUNLESS", "AND", "OR", "SWITCH",
+  "RETURN", "DISCARD", "DUP", "DIR",
+};
 
 // Compiler action
 class LDS_API CCompAction : public CLdsToken {

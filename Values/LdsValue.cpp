@@ -22,8 +22,8 @@ SOFTWARE. */
 
 // Binary operation error
 void LdsBinaryError(const CLdsValue &val1, const CLdsValue &val2, const CLdsToken &tkn) {
-  LdsThrow(LEX_BINARY, "Cannot perform a binary operation %d on %s and %s at %s",
-           tkn->GetIndex(), val1->TypeName().c_str(), val2->TypeName().c_str(), tkn.PrintPos().c_str());
+  LdsThrow(LEX_BINARY, "Cannot perform a binary operation '%s' on %s and %s at %s",
+           _astrBinaryOps[tkn->GetIndex()], val1->TypeName().c_str(), val2->TypeName().c_str(), tkn.PrintPos().c_str());
 };
 
 // Constructor

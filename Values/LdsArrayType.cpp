@@ -104,7 +104,7 @@ CLdsValueRef CLdsArrayType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
       val = strArray;
     } break;
 
-    default: LdsThrow(LEX_UNARY, "Cannot perform a unary operation %d on an array at %s", ca->GetIndex(), ca.PrintPos().c_str());
+    default: LdsThrow(LEX_UNARY, "Cannot perform a unary operation '%s' on an array at %s", _astrUnaryOps[iOperation], ca.PrintPos().c_str());
   }
 
   return CLdsValueRef(val);
