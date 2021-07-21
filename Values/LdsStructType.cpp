@@ -113,7 +113,7 @@ CLdsValueRef CLdsStructType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
 
   // structure variable properties
   string strStructVar = valRef1.vr_strVar;
-  bool bConstVar = false;
+  LdsFlags ubConstVar = 0;
     
   switch (iOperation) {
     // accessor
@@ -146,7 +146,7 @@ CLdsValueRef CLdsStructType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
 
         // get variable name and check for const
         strStructVar = strVar;
-        bConstVar = (sCopy.mapVars[strVar].var_bConst > 0);
+        ubConstVar = (sCopy.mapVars[strVar].var_bConst > 0 ? CLdsValueRef::VRF_CONST : 0);
       }
 
       // add reference index
@@ -157,7 +157,7 @@ CLdsValueRef CLdsStructType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
   }
   
   // copy reference indices
-  CLdsValueRef valReturn(val1, valRef1.vr_pvar, pvalStructAccess, valRef1.vr_strVar, strStructVar, bConstVar, valRef1.IsGlobal());
+  CLdsValueRef valReturn(val1, valRef1.vr_pvar, pvalStructAccess, valRef1.vr_strVar, strStructVar, ubConstVar | valRef1.IsGlobal());
   valReturn.vr_ariIndices = valRef1.vr_ariIndices;
 
   return valReturn;

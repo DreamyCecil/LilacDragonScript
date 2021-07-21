@@ -150,7 +150,7 @@ void Exec_Get(void) {
   
   CLdsValue *pvalRef = &pvar->var_valValue;
   
-  _pavalStack->Push(CLdsValueRef(*pvalRef, pvar, NULL, strName, strName, false, true));
+  _pavalStack->Push(CLdsValueRef(*pvalRef, pvar, NULL, strName, strName, CLdsValueRef::VRF_GLOBAL));
 };
 
 // Set variable value
@@ -194,7 +194,7 @@ void Exec_GetLocal(void) {
   SLdsVar *pvar = &mapLocals.GetValue(iLocal);
   CLdsValue *pvalLocal = &pvar->var_valValue;
   
-  _pavalStack->Push(CLdsValueRef(*pvalLocal, pvar, NULL, strName, strName, false, false));
+  _pavalStack->Push(CLdsValueRef(*pvalLocal, pvar, NULL, strName, strName, 0));
 };
 
 // Set local variable value

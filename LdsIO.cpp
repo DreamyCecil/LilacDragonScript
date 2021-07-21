@@ -259,8 +259,7 @@ void CLdsScriptEngine::LdsWriteValueRef(void *pStream, CLdsThread &sth, CLdsValu
   LdsWriteString(pStream, vr.vr_strRef);
 
   // write value flags
-  char eFlags = vr.vr_eFlags;
-  _pLdsWrite(pStream, &eFlags, sizeof(char));
+  _pLdsWrite(pStream, &vr.vr_ubFlags, sizeof(LdsFlags));
 
   // write variable reference index
   int iVarReference = -1; // nothing
@@ -313,10 +312,7 @@ void CLdsScriptEngine::LdsReadValueRef(void *pStream, CLdsThread &sth, CLdsValue
   LdsReadString(pStream, vr.vr_strRef);
 
   // read value flags
-  char eFlags = 0;
-  _pLdsRead(pStream, &eFlags, sizeof(char));
-
-  vr.SetFlag(eFlags, true);
+  _pLdsRead(pStream, &vr.vr_ubFlags, sizeof(LdsFlags));
 
   // read variable reference index
   int iVarReference = -1; // nothing

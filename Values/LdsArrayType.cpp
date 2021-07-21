@@ -220,7 +220,7 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
   }
 
   // copy reference indices
-  CLdsValueRef valReturn(val1, valRef1.vr_pvar, pvalArrayAccess, valRef1.vr_strVar, valRef1.vr_strVar, valRef1.IsConst(), valRef1.IsGlobal());
+  CLdsValueRef valReturn(val1, valRef1.vr_pvar, pvalArrayAccess, valRef1.vr_strVar, valRef1.vr_strVar, valRef1.GetFlags());
   valReturn.vr_ariIndices = valRef1.vr_ariIndices;
 
   return valReturn;

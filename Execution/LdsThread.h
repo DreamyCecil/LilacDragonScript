@@ -43,7 +43,9 @@ class LDS_API CLdsThread {
     enum ELdsThreadFlags {
       THF_QUICK = (1 << 0), // the whole thread is being executed in one run (via ScriptExecute)
       THF_DEBUG = (1 << 1), // debug output for every action
-    } sth_eFlags;
+    };
+
+    LdsFlags sth_ubFlags;
     
     CActionList sth_acaActions; // compiled actions
     int sth_iPos; // current position in the thread
@@ -89,20 +91,20 @@ class LDS_API CLdsThread {
     int ReturnFromInline(void);
 
     // Set the flag
-    inline void SetFlag(int iFlag, bool bSet) {
+    inline void SetFlag(const LdsFlags ubFlag, const bool &bSet) {
       if (bSet) {
-        sth_eFlags = ELdsThreadFlags(sth_eFlags | iFlag);
+        sth_ubFlags |= ubFlag;
       } else {
-        sth_eFlags = ELdsThreadFlags(sth_eFlags & ~iFlag);
+        sth_ubFlags &= ~ubFlag;
       }
     };
 
     // Check for flags
-    inline bool IsQuick(void) {
-      return (sth_eFlags & THF_QUICK) != 0;
+    inline LdsFlags IsQuick(void) {
+      return (sth_ubFlags & THF_QUICK);
     };
-    inline bool IsDebug(void) {
-      return (sth_eFlags & THF_DEBUG) != 0;
+    inline LdsFlags IsDebug(void) {
+      return (sth_ubFlags & THF_DEBUG);
     };
 
     // Writing and reading

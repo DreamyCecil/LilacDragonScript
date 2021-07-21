@@ -41,19 +41,15 @@ struct LDS_API SLdsRefIndex {
 };
 
 // Constructor templates
-#define ARGS_TEMP(_Var, _Access, _Name, _Ref, _Const, _Global) \
-  vr_pvar(_Var), vr_pvalAccess(_Access), vr_strVar(_Name), vr_strRef(_Ref) \
-{ \
-  vr_eFlags = ELdsValueRefFlags((_Const  ? VRF_CONST  : 0) \
-                              | (_Global ? VRF_GLOBAL : 0)); \
-}
+#define ARGS_TEMP(_Var, _Access, _Name, _Ref, _Flags) \
+  vr_pvar(_Var), vr_pvalAccess(_Access), vr_strVar(_Name), vr_strRef(_Ref), vr_ubFlags(_Flags) {}
 
-#define CONSTRUCTOR_TEMP(_Type) CLdsValueRef(const _Type &_Set) : \
-                                             vr_val(_Set), ARGS_TEMP(NULL, NULL, "", "", false, false)
+#define CONSTRUCTOR_TEMP(_Type) CLdsValueRef(const _Type &_Set) \
+  : vr_val(_Set), ARGS_TEMP(NULL, NULL, "", "", 0)
 
-#define CONSTRUCTOR_FULL(_Type) CLdsValueRef(const _Type &_Set, SLdsVar *_Var, CLdsValue *_Access, \
-  const string &_Name, const string &_Ref, bool _Const, bool _Global) \
-  : vr_val(_Set), ARGS_TEMP(_Var, _Access, _Name, _Ref, _Const, _Global)
+#define CONSTRUCTOR_FULL(_Type) CLdsValueRef(const _Type &_Set, SLdsVar *pvar, CLdsValue *pvalAccess, \
+  const string &strName, const string &strRef, const LdsFlags &ubFlags) \
+  : vr_val(_Set), ARGS_TEMP(pvar, pvalAccess, strName, strRef, ubFlags)
 
 // Value reference
 class LDS_API CLdsValueRef {
@@ -71,10 +67,12 @@ class LDS_API CLdsValueRef {
     enum ELdsValueRefFlags {
       VRF_CONST  = (1 << 0), // reference is a constant variable (for structure variables)
       VRF_GLOBAL = (1 << 1), // referencing a global variable (from CLdsScriptEngine::_mapLdsVariables; for I/O)
-    } vr_eFlags;
+    };
+
+    LdsFlags vr_ubFlags;
 
     // Default constructor
-    CLdsValueRef(void) : vr_val(0), ARGS_TEMP(NULL, NULL, "", "", false, false);
+    CLdsValueRef(void) : vr_val(0), ARGS_TEMP(NULL, NULL, "", "", 0);
 
     // Value constructors
     CONSTRUCTOR_TEMP(CLdsValue);
@@ -104,20 +102,25 @@ class LDS_API CLdsValueRef {
     };
 
     // Set the flag
-    inline void SetFlag(int iFlag, bool bSet) {
+    inline void SetFlag(const LdsFlags &iFlag, const bool &bSet) {
       if (bSet) {
-        vr_eFlags = ELdsValueRefFlags(vr_eFlags | iFlag);
+        vr_ubFlags |= iFlag;
       } else {
-        vr_eFlags = ELdsValueRefFlags(vr_eFlags & ~iFlag);
+        vr_ubFlags &= ~iFlag;
       }
     };
 
-    // Check for flags
-    inline bool IsConst(void) {
-      return (vr_eFlags & VRF_CONST) != 0;
+    // Get flags
+    inline LdsFlags &GetFlags(void) {
+      return vr_ubFlags;
     };
-    inline bool IsGlobal(void) {
-      return (vr_eFlags & VRF_GLOBAL) != 0;
+
+    // Check for flags
+    inline LdsFlags IsConst(void) {
+      return (vr_ubFlags & VRF_CONST);
+    };
+    inline LdsFlags IsGlobal(void) {
+      return (vr_ubFlags & VRF_GLOBAL);
     };
 };
 
