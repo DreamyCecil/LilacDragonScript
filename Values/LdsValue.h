@@ -100,12 +100,6 @@ class LDS_API CLdsValue {
     CLdsValue(const double &d);
     CLdsValue(const string &str);
 
-    // Array constructor
-    CLdsValue(const int &ct, CLdsValue valDef);
-  
-    // Structure constructor
-    CLdsValue(const int &iSetID, const CLdsVarMap &map, const bool &bSetStatic);
-
     // Copy constructor
     CLdsValue(const CLdsValue &valOther);
 
@@ -134,8 +128,6 @@ class LDS_API CLdsValue {
     CLdsValue &operator=(const int &i);
     CLdsValue &operator=(const double &d);
     CLdsValue &operator=(const string &str);
-    CLdsValue &operator=(const CLdsArray &a);
-    CLdsValue &operator=(const CLdsStruct &s);
   
     // Type assertion (for function arguments)
     CLdsValue &Assert(const ILdsValueBase &valDesired);

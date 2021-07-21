@@ -44,14 +44,6 @@ CLdsValue::CLdsValue(const double &d) :
 CLdsValue::CLdsValue(const string &str) :
   val_pBase(new CLdsStringType(str)) {};
 
-// Array constructor
-CLdsValue::CLdsValue(const int &ct, CLdsValue valDef) :
-  val_pBase(new CLdsArrayType(ct, valDef)) {};
-  
-// Structure constructor
-CLdsValue::CLdsValue(const int &iSetID, const CLdsVarMap &map, const bool &bSetStatic) :
-  val_pBase(new CLdsStructType(iSetID, map, bSetStatic)) {};
-
 // Copy constructor
 CLdsValue::CLdsValue(const CLdsValue &valOther) : val_pBase(NULL) {
   operator=(valOther);
@@ -121,20 +113,6 @@ CLdsValue &CLdsValue::operator=(const double &d) {
 CLdsValue &CLdsValue::operator=(const string &str) {
   DeleteValue();
   val_pBase = new CLdsStringType(str);
-
-  return *this;
-};
-
-CLdsValue &CLdsValue::operator=(const CLdsArray &a) {
-  DeleteValue();
-  val_pBase = new CLdsArrayType(a);
-
-  return *this;
-};
-
-CLdsValue &CLdsValue::operator=(const CLdsStruct &s) {
-  DeleteValue();
-  val_pBase = new CLdsStructType(s);
 
   return *this;
 };

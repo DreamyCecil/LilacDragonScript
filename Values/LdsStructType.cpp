@@ -59,7 +59,7 @@ void CLdsStructType::Read(class CLdsScriptEngine *pEngine, void *pStream, CLdsVa
   }
 
   // create a structure
-  val = CLdsValue(iID, mapVars, (bStatic != 0));
+  val = CLdsStructType(iID, mapVars, (bStatic != 0));
 };
       
 // Print the value

@@ -73,22 +73,15 @@ void Exec_Val(void) {
     
     // array
     if (iContainer == 0) {
-      CLdsValue valArray = CLdsValue(ctValues, 0);
-      
-      CLdsArray avalArray;
-      avalArray.New(ctValues);
+      CLdsArray aArray;
+      aArray.New(ctValues);
       
       // get array entries
       for (int iPopVal = ctValues - 1; iPopVal >= 0; iPopVal--) {
-        avalArray[iPopVal] = _pavalStack->Pop().vr_val;
+        aArray[iPopVal] = _pavalStack->Pop().vr_val;
       }
       
-      // add them in the array
-      for (int iArrayVal = 0; iArrayVal < ctValues; iArrayVal++) {
-        valArray->GetArray()[iArrayVal] = avalArray[iArrayVal];
-      }
-      
-      _pavalStack->Push(CLdsValueRef(valArray));
+      _pavalStack->Push(CLdsValueRef(CLdsArrayType(aArray)));
       
     // structure
     } else {
@@ -108,8 +101,7 @@ void Exec_Val(void) {
       }
       
       // fill the structure
-      CLdsValue valStruct = CLdsValue(-1, mapVars, (iContainer > 1));
-      _pavalStack->Push(CLdsValueRef(valStruct));
+      _pavalStack->Push(CLdsValueRef(CLdsStructType(-1, mapVars, (iContainer > 1))));
     }
 
   // value
