@@ -26,7 +26,7 @@ extern CLdsThread *_psthCurrent;
 extern CLdsScriptEngine *_pldsCurrent = NULL;
 
 // Execution stack
-extern CDStack<CLdsValueRef> *_pavalStack = NULL;
+extern DSStack<CLdsValueRef> *_pavalStack = NULL;
 
 // Current action
 static CCompAction *_ca = NULL;

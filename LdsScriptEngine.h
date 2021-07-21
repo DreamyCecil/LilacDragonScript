@@ -237,7 +237,7 @@ class LDS_API CLdsScriptEngine {
     
   // Threads
   public:
-    CDList<SLdsHandler> _athhThreadHandlers;
+    DSList<SLdsHandler> _athhThreadHandlers;
     int _iThreadTickRate; // how many ticks to wait per second (higher = more precise)
     LONG64 _llCurrentTick; // current timer tick (used in I/O)
   

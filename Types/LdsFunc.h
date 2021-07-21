@@ -23,7 +23,7 @@ SOFTWARE. */
 #include "../Functions/LdsFunctions.h"
 
 // List of function arguments
-typedef CDList<string> CLdsInlineArgs;
+typedef DSList<string> CLdsInlineArgs;
 
 // Global script function
 struct LDS_API SLdsFunc {

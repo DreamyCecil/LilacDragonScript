@@ -22,7 +22,7 @@ SOFTWARE. */
 #include "LdsExecution.h"
 
 extern CLdsScriptEngine *_pldsCurrent;
-extern CDStack<CLdsValueRef> *_pavalStack;
+extern DSStack<CLdsValueRef> *_pavalStack;
 
 extern CCompAction &SetCurrentAction(CCompAction *pcaCurrent);
 
@@ -36,9 +36,9 @@ CLdsValue CLdsScriptEngine::LdsExecute(CActionList &acaActions) {
   }
   
   // remember previous stack
-  CDStack<CLdsValueRef> *pavalStackPrev = _pavalStack;
+  DSStack<CLdsValueRef> *pavalStackPrev = _pavalStack;
   
-  CDStack<CLdsValueRef> avalStack;
+  DSStack<CLdsValueRef> avalStack;
   _pavalStack = &avalStack;
   
   // use this engine for the thread

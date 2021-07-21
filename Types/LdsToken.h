@@ -107,7 +107,7 @@ enum ELdsOperator {
 
 // Binary operation symbols
 static const struct SLdsBinaryOps {
-  CDMap<int, string> mapOperations;
+  DSMap<int, string> mapOperations;
 
   // Constructor
   SLdsBinaryOps(void) {

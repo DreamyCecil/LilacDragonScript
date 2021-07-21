@@ -443,7 +443,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
       int ctCases = bn.bn_abnNodes[1]->lt_iArg;
 
       // jumps for each case
-      CDArray<int> aiArgJumps;
+      DSArray<int> aiArgJumps;
       aiArgJumps.New(ctCases);
     
       // header value

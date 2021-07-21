@@ -25,8 +25,8 @@ SOFTWARE. */
 // Inline function call
 struct SLdsInlineCall {
   string strFunc; // inline function name
-  CDList<string> astrLocals; // inline function locals 
-  CDStack<CLdsValueRef> avalStack; // stack of inline values
+  DSList<string> astrLocals; // inline function locals 
+  DSStack<CLdsValueRef> avalStack; // stack of inline values
   
   CActionList acaReturn; // actions to return
   int iPos; // position to return to

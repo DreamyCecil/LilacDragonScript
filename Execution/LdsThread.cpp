@@ -23,7 +23,7 @@ SOFTWARE. */
 #include "LdsExecution.h"
 
 extern CLdsScriptEngine *_pldsCurrent;
-extern CDStack<CLdsValueRef> *_pavalStack;
+extern DSStack<CLdsValueRef> *_pavalStack;
 extern CCompAction &SetCurrentAction(CCompAction *pcaCurrent);
 
 // Currently active thread
@@ -109,7 +109,7 @@ EThreadStatus CLdsThread::Resume(void) {
   // remember previous thread
   CLdsScriptEngine *pldsPrev = _pldsCurrent;
   CLdsThread *psthPrev = _psthCurrent;
-  CDStack<CLdsValueRef> *pavalPrev = _pavalStack;
+  DSStack<CLdsValueRef> *pavalPrev = _pavalStack;
   
   _pldsCurrent = sth_pldsEngine;
   _psthCurrent = this;
@@ -371,7 +371,7 @@ void CLdsThread::Pause(void) {
 
 // Get thread result
 CLdsValueRef CLdsThread::GetResult(void) {
-  CDStack<CLdsValueRef> *paval = &sth_avalStack;
+  DSStack<CLdsValueRef> *paval = &sth_avalStack;
   
   // get inline stack
   if (sth_aicCalls.Count() > 0) {
@@ -458,7 +458,7 @@ int CLdsThread::ReturnFromInline(void) {
 };
 
 // Fill a value list with values from the stack
-CLdsValueList MakeValueList(CDStack<CLdsValueRef> &avalStack, int ctValues) {
+CLdsValueList MakeValueList(DSStack<CLdsValueRef> &avalStack, int ctValues) {
   // make a list of values
   CLdsValueList aval;
   aval.New(ctValues);

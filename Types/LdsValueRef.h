@@ -59,7 +59,7 @@ class LDS_API CLdsValueRef {
     SLdsVar *vr_pvar; // variable reference (from CLdsScriptEngine::_mapLdsVariables or CLdsThread::sth_mapLocals)
     CLdsValue *vr_pvalAccess; // array/structure value reference
 
-    CDList<SLdsRefIndex> vr_ariIndices; // reference indices in order (to determine vr_pvalAccess for I/O)
+    DSList<SLdsRefIndex> vr_ariIndices; // reference indices in order (to determine vr_pvalAccess for I/O)
 
     string vr_strVar; // variable this value belongs to
     string vr_strRef; // reference name

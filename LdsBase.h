@@ -57,18 +57,18 @@ typedef unsigned long LdsSize; // size in bytes
 typedef unsigned long LdsHash; // string hash value
 
 // Lists
-typedef CDArray<class CLdsValue> CLdsArray; // value array
-typedef CDList<class CLdsValue> CLdsValueList; // value list
-typedef CDMap<string, class CLdsValue> CLdsValueMap; // value map
-typedef CDMap<string, struct SLdsFunc> CLdsFuncMap; // functions map
-typedef CDMap<string, struct SLdsInlineFunc> CLdsInFuncMap; // inline functions map
-typedef CDMap<string, struct SLdsVar> CLdsVarMap; // variables map
-typedef CDList<class CLdsToken> CTokenList; // script token list
-typedef CDList<class CBuildNode> CNodeList; // node list
-typedef CDList<class CBuildNode *> CDynamicNodeList; // dynamic node list
-typedef CDList<class CCompAction> CActionList; // action list
-typedef CDMap<LdsHash, struct SLdsCache> CScriptCache; // script cache map
-typedef CDList<class ILdsValueBase *> CLdsValueTypes; // value type list
+typedef DSArray<class CLdsValue> CLdsArray; // value array
+typedef DSList<class CLdsValue> CLdsValueList; // value list
+typedef DSMap<string, class CLdsValue> CLdsValueMap; // value map
+typedef DSMap<string, struct SLdsFunc> CLdsFuncMap; // functions map
+typedef DSMap<string, struct SLdsInlineFunc> CLdsInFuncMap; // inline functions map
+typedef DSMap<string, struct SLdsVar> CLdsVarMap; // variables map
+typedef DSList<class CLdsToken> CTokenList; // script token list
+typedef DSList<class CBuildNode> CNodeList; // node list
+typedef DSList<class CBuildNode *> CDynamicNodeList; // dynamic node list
+typedef DSList<class CCompAction> CActionList; // action list
+typedef DSMap<LdsHash, struct SLdsCache> CScriptCache; // script cache map
+typedef DSList<class ILdsValueBase *> CLdsValueTypes; // value type list
 
 // 64-bit integer
 typedef __int64 LONG64;

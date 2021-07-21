@@ -51,10 +51,10 @@ class LDS_API CLdsThread {
     int sth_iPos; // current position in the thread
     int sth_ctActions; // how many actions the thread has executed so far
     
-    CDStack<SLdsInlineCall> sth_aicCalls; // inline function calls
+    DSStack<SLdsInlineCall> sth_aicCalls; // inline function calls
   
-    CDStack<CLdsValueRef> sth_avalStack; // stack of values
-    CDStack<int> sth_aiJumpStack; // stack of actions to jump to
+    DSStack<CLdsValueRef> sth_avalStack; // stack of values
+    DSStack<int> sth_aiJumpStack; // stack of actions to jump to
     CLdsVarMap sth_mapLocals; // local variables to this specific thread (script)
     CLdsInFuncMap sth_mapInlineFunc; // inline functions
   
@@ -113,4 +113,4 @@ class LDS_API CLdsThread {
 };
 
 // Fill a value list with values from the stack
-CLdsValueList MakeValueList(CDStack<CLdsValueRef> &avalStack, int ctValues);
+CLdsValueList MakeValueList(DSStack<CLdsValueRef> &avalStack, int ctValues);
