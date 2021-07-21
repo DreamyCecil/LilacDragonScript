@@ -75,12 +75,17 @@ CLdsValue &CLdsValue::Assert(const ILdsValueBase &valDesired) {
   if (val_pBase->GetType() == valDesired.GetType()) {
     return *this;
   }
+
+  // allow any numbers
+  if (val_pBase->GetType() <= EVT_FLOAT && valDesired.GetType() <= EVT_FLOAT) {
+    return *this;
+  }
   
   // type mismatch
   string strExpected = valDesired.TypeName();
   string strGot = val_pBase->TypeName();
   
-  LdsThrow(LER_TYPE, "Expected %s but got %s", strExpected.c_str(), strGot.c_str());
+  LdsThrow(LER_TYPE, "Expected %s but got %s at %s", strExpected.c_str(), strGot.c_str(), LdsPrintPos(LDS_iActionPos).c_str());
 
   return *this;
 };
