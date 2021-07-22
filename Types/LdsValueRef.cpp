@@ -40,6 +40,17 @@ SLdsRefIndex::SLdsRefIndex(const int &iIndex) : bIndex(true)
   strIndex = strStream.str();
 };
 
+
+// Constructors
+CLdsValueRef::CLdsValueRef(void) :
+  CLdsValueRef(CLdsIntType()) {};
+
+CLdsValueRef::CLdsValueRef(const CLdsValue &val) :
+  CLdsValueRef(val, NULL, NULL, 0) {};
+
+CLdsValueRef::CLdsValueRef(const CLdsValue &val, SLdsVar *pvar, SLdsVar *pvarAccess, const LdsFlags &ubFlags) :
+  vr_val(val), vr_pvar(pvar), vr_pvarAccess(pvarAccess), vr_ubFlags(ubFlags) {};
+
 // Get variable by index
 SLdsVar *CLdsValueRef::AccessVariable(const int &iIndex) {
   CLdsVars *paVars = &vr_val->GetVars();

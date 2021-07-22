@@ -40,17 +40,6 @@ struct LDS_API SLdsRefIndex {
   };
 };
 
-// Constructor templates
-#define ARGS_TEMP(_Var, _Access, _Flags) \
-  vr_pvar(_Var), vr_pvarAccess(_Access), vr_ubFlags(_Flags) {}
-
-#define CONSTRUCTOR_TEMP(_Type) CLdsValueRef(const _Type &_Set) \
-  : vr_val(_Set), ARGS_TEMP(NULL, NULL, 0)
-
-#define CONSTRUCTOR_FULL(_Type) CLdsValueRef(const _Type &_Set, \
-  SLdsVar *pvar, SLdsVar *pvarAccess, const LdsFlags &ubFlags) \
-  : vr_val(_Set), ARGS_TEMP(pvar, pvarAccess, ubFlags)
-
 // Value reference
 class LDS_API CLdsValueRef {
   public:
@@ -67,20 +56,10 @@ class LDS_API CLdsValueRef {
 
     LdsFlags vr_ubFlags;
 
-    // Default constructor
-    CLdsValueRef(void) : vr_val(0), ARGS_TEMP(NULL, NULL, 0);
-
-    // Value constructors
-    CONSTRUCTOR_TEMP(CLdsValue);
-    CONSTRUCTOR_TEMP(int);
-    CONSTRUCTOR_TEMP(double);
-    CONSTRUCTOR_TEMP(string);
-
-    // Full constructors
-    CONSTRUCTOR_FULL(CLdsValue);
-    CONSTRUCTOR_FULL(int);
-    CONSTRUCTOR_FULL(double);
-    CONSTRUCTOR_FULL(string);
+    // Constructors
+    CLdsValueRef(void);
+    CLdsValueRef(const CLdsValue &val);
+    CLdsValueRef(const CLdsValue &val, SLdsVar *pvar, SLdsVar *pvarAccess, const LdsFlags &ubFlags);
 
     // Get variable by index
     SLdsVar *AccessVariable(const int &iIndex);
@@ -116,11 +95,6 @@ class LDS_API CLdsValueRef {
       return (vr_ubFlags & VRF_GLOBAL);
     };
 };
-
-// Undefine constructor templates
-#undef CONSTRUCTOR_TEMP
-#undef CONSTRUCTOR_FULL
-#undef ARGS_TEMP
 
 // A function return type to distinguish the purpose
 typedef CLdsValueRef LdsReturn;
