@@ -74,7 +74,7 @@ class LDS_API ILdsValueBase {
     virtual CLdsStruct &GetStruct(void) { return *((CLdsStruct *)NULL); };
     
     // Perform a unary operation
-    virtual class CLdsValueRef UnaryOp(CLdsValueRef &valRef, CCompAction &ca) = 0;
+    virtual class CLdsValueRef UnaryOp(CLdsValueRef &valRef, const CLdsToken &tkn) = 0;
     // Perform a binary operation
     virtual class CLdsValueRef BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, const CLdsToken &tkn) = 0;
   

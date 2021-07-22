@@ -76,10 +76,10 @@ string CLdsArrayType::Print(void) {
 };
 
 // Perform a unary operation
-CLdsValueRef CLdsArrayType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
+CLdsValueRef CLdsArrayType::UnaryOp(CLdsValueRef &valRef, const CLdsToken &tkn) {
   // actual value and the operation
   CLdsValue val = valRef.vr_val;
-  int iOperation = ca->GetIndex();
+  int iOperation = tkn->GetIndex();
 
   switch (iOperation) {
     // reverse order of array values
@@ -104,7 +104,7 @@ CLdsValueRef CLdsArrayType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
       val = strArray;
     } break;
 
-    default: LdsThrow(LEX_UNARY, "Cannot perform a unary operation '%s' on an array at %s", _astrUnaryOps[iOperation], ca.PrintPos().c_str());
+    default: LdsThrow(LEX_UNARY, "Cannot perform a unary operation '%s' on an array at %s", _astrUnaryOps[iOperation], tkn.PrintPos().c_str());
   }
 
   return CLdsValueRef(val);

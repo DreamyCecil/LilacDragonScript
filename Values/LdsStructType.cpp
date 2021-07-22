@@ -90,9 +90,9 @@ string CLdsStructType::Print(void) {
 };
 
 // Perform a unary operation
-CLdsValueRef CLdsStructType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
+CLdsValueRef CLdsStructType::UnaryOp(CLdsValueRef &valRef, const CLdsToken &tkn) {
   // cannot do unary operations on structures
-  LdsThrow(LEX_UNARY, "Cannot perform unary operations on a structure at %s", ca.PrintPos().c_str());
+  LdsThrow(LEX_UNARY, "Cannot perform unary operations on a structure at %s", tkn.PrintPos().c_str());
 
   return valRef;
 };

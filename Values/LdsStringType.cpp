@@ -41,10 +41,10 @@ string CLdsStringType::Print(void) {
 };
 
 // Perform a unary operation
-CLdsValueRef CLdsStringType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
+CLdsValueRef CLdsStringType::UnaryOp(CLdsValueRef &valRef, const CLdsToken &tkn) {
   // actual value and the operation
   CLdsValue val = valRef.vr_val;
-  int iOperation = ca->GetIndex();
+  int iOperation = tkn->GetIndex();
 
   switch (iOperation) {
     // string inversion
@@ -58,7 +58,7 @@ CLdsValueRef CLdsStringType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
     // it's already a string
     case UOP_STRINGIFY: break;
 
-    default: LdsThrow(LEX_UNARY, "Cannot perform a unary operation '%s' on a string at %s", _astrUnaryOps[iOperation], ca.PrintPos().c_str());
+    default: LdsThrow(LEX_UNARY, "Cannot perform a unary operation '%s' on a string at %s", _astrUnaryOps[iOperation], tkn.PrintPos().c_str());
   }
 
   return CLdsValueRef(val);

@@ -68,7 +68,7 @@ class LDS_API CLdsFloatType : public ILdsValueBase {
     virtual double GetNumber(void) { return dValue; };
     
     // Perform a unary operation
-    virtual CLdsValueRef UnaryOp(CLdsValueRef &valRef, CCompAction &ca);
+    virtual CLdsValueRef UnaryOp(CLdsValueRef &valRef, const CLdsToken &tkn);
     // Perform a binary operation
     virtual CLdsValueRef BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, const CLdsToken &tkn);
 

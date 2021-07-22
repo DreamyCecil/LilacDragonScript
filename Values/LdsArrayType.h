@@ -75,7 +75,7 @@ class LDS_API CLdsArrayType : public ILdsValueBase {
     virtual CLdsArray &GetArray(void) { return aArray; };
     
     // Perform a unary operation
-    virtual CLdsValueRef UnaryOp(CLdsValueRef &valRef, CCompAction &ca);
+    virtual CLdsValueRef UnaryOp(CLdsValueRef &valRef, const CLdsToken &tkn);
     // Perform a binary operation
     virtual CLdsValueRef BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, const CLdsToken &tkn);
 

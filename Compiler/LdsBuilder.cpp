@@ -542,24 +542,24 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
       // determine directive type by its name
       int iDirType = -1;
       int iDesiredVal = -1;
-          
+
       if (strDir == "context") {
         iDirType = THD_DEBUGCONTEXT;
         iDesiredVal = EVT_INDEX;
-            
+
       } else {
         LdsThrow(LEP_DIR, "Unknown directive '%s' at %s", strDir.c_str(), etNext.PrintPos().c_str());
       }
       
       // get directive value
       etNext = _aetTokens[_iBuildPos++];
-    
+
       if (etNext.lt_eType != LTK_VAL) {
         LdsThrow(LEB_VALUE, "Expected a value at %s", etNext.PrintPos().c_str());
       }
-      
+
       CLdsValue valDir = etNext.lt_valValue;
-      
+
       // wrong type
       if (iDesiredVal != -1 && valDir->GetType() != iDesiredVal) {
         string strDesired = (iDesiredVal == EVT_STRING ? "string" : "number");
@@ -567,7 +567,7 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
         
         LdsThrow(LER_TYPE, "Expected a %s but got a %s at %s", strDesired.c_str(), strValType.c_str(), etNext.PrintPos().c_str());
       }
-      
+
       _bnNode = CBuildNode(EBN_DIR, et.lt_iPos, valDir, iDirType);
     } break;
     
@@ -752,33 +752,57 @@ void CLdsScriptEngine::ExpressionBuilder(const LdsFlags &ubFlags) {
           LdsThrow(LEB_CLOSEP, "Expected ')' at %s", etClosing.PrintPos().c_str());
         }
       } break;
-
+      
       // binary/unary operation
-      case LTK_OPERATOR: {
-        switch (et->GetIndex()) {
-          case LOP_ADD:
-            ExpressionBuilder(LBF_NOOPS);
-            break;
-
-          case LOP_SUB: {
-            ExpressionBuilder(LBF_NOOPS);
-            CBuildNode bnVal = _bnNode;
-
-            _bnNode = CBuildNode(EBN_UNARY_OP, et.lt_iPos, UOP_NEGATE, -1);
-            _bnNode.AddReference(&bnVal);
-          } break;
-
-          default: LdsThrow(LEB_OPERATOR, "Unexpected operator token at %s", et.PrintPos().c_str());
-        }
-      } break;
-
-      // unary operation
+      case LTK_OPERATOR:
       case LTK_UNARYOP: {
+        // build expression for the operation
         ExpressionBuilder(LBF_NOOPS);
-        CBuildNode bnNum = _bnNode;
 
-        _bnNode = CBuildNode(EBN_UNARY_OP, et.lt_iPos, et.lt_valValue, -1);
-        _bnNode.AddReference(&bnNum);
+        // get operation
+        int iOperation = et->GetIndex();
+
+        // if it's an operator
+        if (et.lt_eType == LTK_OPERATOR) {
+          bool bSkip = false;
+
+          // select unary operation
+          switch (iOperation) {
+            // skip positive operator
+            case LOP_ADD: bSkip = true; break;
+
+            case LOP_SUB: iOperation = UOP_NEGATE; break;
+
+            // invalid operation
+            default: LdsThrow(LEB_OPERATOR, "Unexpected operator token at %s", et.PrintPos().c_str());
+          }
+
+          // skip operation
+          if (bSkip) {
+            break;
+          }
+        }
+
+        // built expression
+        CBuildNode bnUnaryExp = _bnNode;
+
+        // if it's a pure value
+        if (bnUnaryExp.lt_eType == EBN_RAW_VAL) {
+          // perform operation in place
+          CLdsToken tknOp(LTK_OPERATOR, et.lt_iPos, iOperation, -1);
+
+          CLdsValueRef valRef(bnUnaryExp.lt_valValue);
+          valRef = valRef.vr_val->UnaryOp(valRef, tknOp);
+
+          // add pure value
+          _bnNode = CBuildNode(EBN_RAW_VAL, et.lt_iPos, valRef.vr_val, -1);
+
+        // if an identifier
+        } else {
+          // build unary operation
+          _bnNode = CBuildNode(EBN_UNARY_OP, et.lt_iPos, iOperation, -1);
+          _bnNode.AddReference(&bnUnaryExp);
+        }
       } break;
 
       // prefix operation

@@ -68,7 +68,7 @@ class LDS_API CLdsIntType : public ILdsValueBase {
     virtual double GetNumber(void) { return (double)iValue; };
     
     // Perform a unary operation
-    virtual CLdsValueRef UnaryOp(CLdsValueRef &valRef, CCompAction &ca);
+    virtual CLdsValueRef UnaryOp(CLdsValueRef &valRef, const CLdsToken &tkn);
     // Perform a binary operation
     virtual CLdsValueRef BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, const CLdsToken &tkn);
 

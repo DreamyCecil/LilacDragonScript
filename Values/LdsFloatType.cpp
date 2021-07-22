@@ -39,10 +39,10 @@ string CLdsFloatType::Print(void) {
 };
 
 // Perform a unary operation
-CLdsValueRef CLdsFloatType::UnaryOp(CLdsValueRef &valRef, CCompAction &ca) {
+CLdsValueRef CLdsFloatType::UnaryOp(CLdsValueRef &valRef, const CLdsToken &tkn) {
   // actual value and the operation
   CLdsValue val = valRef.vr_val;
-  int iOperation = ca->GetIndex();
+  int iOperation = tkn->GetIndex();
 
   switch (iOperation) {
     case UOP_NEGATE:
