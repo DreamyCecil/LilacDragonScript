@@ -512,38 +512,13 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
         LdsThrow(LEB_CLOSEP, "Unclosed function arguments at %s", et.PrintPos().c_str());
       }
       
-      /* TODO: Since inline functions can be nested, they are added for the whole thread and can be called but won't have actions
-               because those are added for a specific function while compiling. Not much of a problem, but may be confusing.
-               
-        Example:
-      
-        // nested functions
-        function func() {
-          return inlineFunc();
-          
-          // print and return "Hello"
-          function inlineFunc() {
-            return Print("Hello");
-          }
-        }
-        
-        var test1 = func(); // prints "Hello"
-        var test2 = inlineFunc(); // doesn't do anything and returns 0
-        
-        return (test1 == test2); // returns 'false'
-      */
-      
       // function already exists
       if (_mapInlineFunc.FindKeyIndex(strFunc) != -1) {
         LdsThrow(LEB_FUNCDEF, "Inline function '%s' redefinition at %s", strFunc.c_str(), et.PrintPos().c_str());
       }
       
       // add a function reference with no actions
-      _mapInlineFunc[strFunc] = SLdsInlineFunc(astrArgs, CActionList());
-    
-      // TODO: Make a new variable '_bInlineFunc' and set it to 'true' here, so inline functions of other
-      //       inline functions nested as well instead of being put in one global '_mapInlineFunc' map.
-      //       Otherwise they can't be redefined and can be called outside of the current thread.
+      _mapInlineFunc[strFunc] = astrArgs;
       
       // build function body
       StatementBuilder();

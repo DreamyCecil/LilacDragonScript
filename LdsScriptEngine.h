@@ -172,7 +172,7 @@ class LDS_API CLdsScriptEngine {
     bool _bBuildBreak; // can break
     bool _bBuildCont; // can continue
     
-    CLdsInFuncMap _mapInlineFunc; // inline functions
+    DSMap<string, CLdsInlineArgs> _mapInlineFunc; // built inline functions
     
     // Main builder
     void LdsBuild(bool bExpression);

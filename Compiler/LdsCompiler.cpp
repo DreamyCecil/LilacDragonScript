@@ -302,7 +302,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
       
       // find the inline function
       if (_mapInlineFunc.FindKeyIndex(strFunc) != -1) {
-        int ctFuncArgs = _mapInlineFunc[strFunc].in_astrArgs.Count();
+        int ctFuncArgs = _mapInlineFunc[strFunc].Count();
         eAction = LCA_INLINE;
         
         if (ctArgs != ctFuncArgs) {
@@ -339,7 +339,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
       
       // define inline function
       CCompAction caInline = CCompAction(LCA_FUNC, bn.lt_iPos, strFunc, -1);
-      caInline.ca_inFunc = SLdsInlineFunc(_mapInlineFunc[strFunc].in_astrArgs, acaFunc);
+      caInline.ca_inFunc = SLdsInlineFunc(_mapInlineFunc[strFunc], acaFunc);
       
       // put function definitions before everything else
       aca.Insert(0, caInline);
