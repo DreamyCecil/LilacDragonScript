@@ -21,6 +21,15 @@ SOFTWARE. */
 #include "StdH.h"
 #include "LdsFormatting.h"
 
+// Resize raw string
+void LdsResizeString(char **pMem, int ctSize) {
+  char *pNew = new char[ctSize];
+  memcpy(pNew, &pMem, ctSize);
+
+  delete[] &pMem;
+  *pMem = pNew;
+};
+
 // Format a string
 string LdsPrintF(const char *strFormat, ...) {
   va_list arg;
@@ -34,10 +43,30 @@ string LdsPrintF(const char *strFormat, ...) {
 
 // Format some string using a list of arguments
 string LdsVPrintF(const char *strFormat, va_list arg) {
-  char strBuffer[1024];
-  VSPRINTF_FUNC(strBuffer, strFormat, arg);
+  // allocate new buffer
+  int ctBufferSize = 256;
+  char *pchBuffer = new char[ctBufferSize];
 
-  return strBuffer;
+  // repeat
+  int iLen;
+  while (true) {
+    // print to the buffer
+    iLen = _vsnprintf(pchBuffer, ctBufferSize, strFormat, arg);
+
+    // stop if printed ok
+    if (iLen != -1) {
+      break;
+    }
+
+    // increase the buffer size
+    ctBufferSize += 256;
+    LdsResizeString(&pchBuffer, ctBufferSize);
+  }
+
+  string strPrint = pchBuffer;
+  delete[] pchBuffer;
+
+  return strPrint;
 };
 
 // Convert float number into a string
