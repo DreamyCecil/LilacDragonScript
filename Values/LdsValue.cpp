@@ -20,6 +20,12 @@ SOFTWARE. */
 
 #include "StdH.h"
 
+// Unary operation error
+void LdsUnaryError(const CLdsValue &val, const CLdsToken &tkn) {
+  LdsThrow(LEX_UNARY, "Cannot perform a unary operation '%s' on %s at %s",
+           _astrUnaryOps[tkn->GetIndex()], val->TypeName().c_str(), tkn.PrintPos().c_str());
+};
+
 // Binary operation error
 void LdsBinaryError(const CLdsValue &val1, const CLdsValue &val2, const CLdsToken &tkn) {
   LdsThrow(LEX_BINARY, "Cannot perform a binary operation '%s' on %s and %s at %s",

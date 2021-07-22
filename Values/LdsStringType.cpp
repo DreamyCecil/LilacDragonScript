@@ -58,7 +58,7 @@ CLdsValueRef CLdsStringType::UnaryOp(CLdsValueRef &valRef, const CLdsToken &tkn)
     // it's already a string
     case UOP_STRINGIFY: break;
 
-    default: LdsThrow(LEX_UNARY, "Cannot perform a unary operation '%s' on a string at %s", _astrUnaryOps[iOperation], tkn.PrintPos().c_str());
+    default: LdsUnaryError(val, tkn);
   }
 
   return CLdsValueRef(val);
@@ -84,8 +84,8 @@ CLdsValueRef CLdsStringType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
 
     // remove characters from the end
     case LOP_SUB: {
-      if (val2->GetType() == EVT_STRING) {
-        LdsThrow(LEX_BINARY, "Cannot subtract a string from a string at %s", tkn.PrintPos().c_str());
+      if (val2->GetType() > EVT_FLOAT) {
+        LdsBinaryError(val1, val2, tkn);
       }
 
       string str = val1->GetString();
@@ -97,8 +97,8 @@ CLdsValueRef CLdsStringType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
 
     // copy the same string multiple times
     case LOP_MUL: {
-      if (val2->GetType() == EVT_STRING) {
-        LdsThrow(LEX_BINARY, "Cannot multiply a string by a string at %s", tkn.PrintPos().c_str());
+      if (val2->GetType() > EVT_FLOAT) {
+        LdsBinaryError(val1, val2, tkn);
       }
 
       string strMul = "";
@@ -125,8 +125,7 @@ CLdsValueRef CLdsStringType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
           bResult = (val1 == val2);
           break;
 
-        default:
-          LdsThrow(LEX_BINARY, "Cannot compare a string with %s at %s", strType2.c_str(), tkn.PrintPos().c_str());
+        default: LdsBinaryError(val1, val2, tkn);
       }
 
       val1 = bResult;
@@ -146,8 +145,7 @@ CLdsValueRef CLdsStringType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
           bResult = (val1 != val2);
           break;
 
-        default:
-          LdsThrow(LEX_BINARY, "Cannot compare a string with %s at %s", strType2.c_str(), tkn.PrintPos().c_str());
+        default: LdsBinaryError(val1, val2, tkn);
       }
 
       val1 = bResult;
@@ -156,11 +154,11 @@ CLdsValueRef CLdsStringType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
     // accessor
     case LOP_ACCESS: {
       if (tkn.lt_iArg >= 1) {
-        LdsThrow(LEX_BINARY, "Cannot use structure accessor on a string at %s", tkn.PrintPos().c_str());
+        LdsThrow(LEX_ACCESS, "Cannot use structure accessor on a string at %s", tkn.PrintPos().c_str());
       }
 
       if (val2->GetType() > EVT_FLOAT) {
-        LdsThrow(LEX_BINARY, "Cannot use %s as an string accessor at %s", strType2.c_str(), tkn.PrintPos().c_str());
+        LdsBinaryError(val1, val2, tkn);
       }
         
       string strCopy = val1->GetString();

@@ -94,9 +94,10 @@ enum ELdsError {
   LEX_STRUCTACC  = 0x66, // wrong structure accessor
   LEX_EXPECTACC  = 0x67, // expected structure variable
   LEX_STRUCTVAR  = 0x68, // invalid structure variable
-  LEX_ACCESS     = 0x69, // no accessor reference
-  LEX_NOFUNC     = 0x6a, // no function pointer
-  LEX_CALL       = 0x6b, // external function error
+  LEX_ACCESS     = 0x69, // wrong accessor type
+  LEX_NOACCESS   = 0x6a, // no accessor reference
+  LEX_NOFUNC     = 0x6b, // no function pointer
+  LEX_CALL       = 0x6c, // external function error
 };
 
 // LDS error

@@ -133,7 +133,7 @@ static const struct SLdsBinaryOps {
     mapOperations[LOP_XOR]    = "^^";
     mapOperations[LOP_OR]     = "||";
     mapOperations[LOP_MAX]    = "<max>";
-    mapOperations[LOP_ACCESS] = "<accessor>";
+    mapOperations[LOP_ACCESS] = "[]";
   };
 
   // Get operation name

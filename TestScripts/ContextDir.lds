@@ -22,7 +22,7 @@ SOFTWARE. */
 
 #context 1
 
-var str = $(10 * 2);
+var str = $((30 + 2) * 2);
 Out(str);
 
 #context 0

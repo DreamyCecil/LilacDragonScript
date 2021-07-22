@@ -33,6 +33,9 @@ enum ELdsValueType {
   EVT_LAST,
 };
 
+// Unary operation error
+LDS_API void LdsUnaryError(const CLdsValue &val, const CLdsToken &tkn);
+
 // Binary operation error
 LDS_API void LdsBinaryError(const CLdsValue &val1, const CLdsValue &val2, const CLdsToken &tkn);
 

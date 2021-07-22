@@ -201,7 +201,7 @@ void Exec_SetAccessor(void) {
   
   // check for an array accessor
   if (valRef.vr_pvalAccess == NULL) {
-    LdsThrow(LEX_ACCESS, "Cannot set value through an accessor at %s", _ca->PrintPos().c_str());
+    LdsThrow(LEX_NOACCESS, "Cannot set value through an accessor at %s", _ca->PrintPos().c_str());
   }
 
   // constant reference

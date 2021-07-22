@@ -104,7 +104,7 @@ CLdsValueRef CLdsArrayType::UnaryOp(CLdsValueRef &valRef, const CLdsToken &tkn) 
       val = strArray;
     } break;
 
-    default: LdsThrow(LEX_UNARY, "Cannot perform a unary operation '%s' on an array at %s", _astrUnaryOps[iOperation], tkn.PrintPos().c_str());
+    default: LdsUnaryError(val, tkn);
   }
 
   return CLdsValueRef(val);
@@ -128,7 +128,7 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
     // operators
     case LOP_ADD: {
       if (val2->GetType() > EVT_FLOAT) {
-        LdsThrow(LEX_BINARY, "Cannot add %s to an array at %s", strType2.c_str(), tkn.PrintPos().c_str());
+        LdsBinaryError(val1, val2, tkn);
       }
         
       // expand the array
@@ -138,7 +138,7 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
 
     case LOP_SUB: {
       if (val2->GetType() > EVT_FLOAT) {
-        LdsThrow(LEX_BINARY, "Cannot subtract %s from an array at %s", strType2.c_str(), tkn.PrintPos().c_str());
+        LdsBinaryError(val1, val2, tkn);
       }
         
       // shrink the array
@@ -148,7 +148,7 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
 
     case LOP_MUL: {
       if (val2->GetType() > EVT_FLOAT) {
-        LdsThrow(LEX_BINARY, "Cannot multiply array by %s at %s", strType2.c_str(), tkn.PrintPos().c_str());
+        LdsBinaryError(val1, val2, tkn);
       }
         
       // copy array contents several times
@@ -170,7 +170,7 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
     case LOP_LT: case LOP_LOE:
     case LOP_EQ: case LOP_NEQ:
       if (val2->GetType() != EVT_ARRAY) {
-        LdsThrow(LEX_BINARY, "Cannot compare an array with %s at %s", strType2.c_str(), tkn.PrintPos().c_str());
+        LdsBinaryError(val1, val2, tkn);
       }
 
       switch (iOperation) {
@@ -186,11 +186,11 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
     // accessor
     case LOP_ACCESS: {
       if (tkn.lt_iArg >= 1) {
-        LdsThrow(LEX_BINARY, "Cannot use structure accessor on the array at %s", tkn.PrintPos().c_str());
+        LdsThrow(LEX_ACCESS, "Cannot use structure accessor on an array at %s", tkn.PrintPos().c_str());
       }
 
       if (val2->GetType() > EVT_FLOAT) {
-        LdsThrow(LEX_BINARY, "Cannot use %s as an array accessor at %s", strType2.c_str(), tkn.PrintPos().c_str());
+        LdsBinaryError(val1, val2, tkn);
       }
 
       // direct 'val1 = val1->GetArray()' empties its own array before getting a value from it
