@@ -435,7 +435,7 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
 
           // assign a value
           CBuildNode bnSetVar = CBuildNode(EBN_ASSIGN_OP, etNext.lt_iPos, LOP_SET, -1);
-          CBuildNode bnVar = CBuildNode(EBN_IDENTIFIER, etNext.lt_iPos, strName, 0);
+          CBuildNode bnVar = CBuildNode(EBN_IDENTIFIER, etNext.lt_iPos, strName, -1);
 
           bnSetVar.AddReference(&bnVar);
           bnSetVar.AddReference(&bnExp);
@@ -916,7 +916,7 @@ bool CLdsScriptEngine::PostfixBuilder(bool bChained) {
       _bnNode.AddReference(&bnVal);
     } break;
     
-    // aArr[value][...]
+    // aArr[value].variable[...]
     case LTK_SQ_OPEN:
     // sStruct.variable
     case LTK_ACCESS: {

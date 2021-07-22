@@ -38,11 +38,11 @@ enum EBuildNode {
   EBN_PREFIX,  // ++i
   EBN_POSTFIX, // i++
   EBN_ADJFIX,  // i += 1
-  EBN_ACCESS,  // variable accessor
+  EBN_ACCESS,  // variable accessor (arg: array or struct accessor)
   
   // actions
-  EBN_CALL_ACT,
-  EBN_RETURN_ACT,
+  EBN_CALL_ACT,   // function call (arg: amount of arguments)
+  EBN_RETURN_ACT, // return from the script (arg: has return value)
   EBN_DISCARD_ACT,
   EBN_BREAK_ACT,
   EBN_CONTINUE_ACT,
@@ -63,7 +63,7 @@ enum EBuildNode {
   EBN_DO_LOOP,
   EBN_FOR_LOOP,
   
-  EBN_DIR, // thread directive
+  EBN_DIR, // thread directive (arg: directive type)
 
   EBN_LAST,
 };
@@ -198,7 +198,7 @@ class LDS_API CBuildNode : public CLdsToken {
     string Print(string strTab) {
       // open this node block
       string str = strTab + _astrBuildNodes[lt_eType];
-      str += " {\n";
+      str += " =={\n";
 
       string strNodeTab = strTab + ". ";
 
@@ -215,12 +215,11 @@ class LDS_API CBuildNode : public CLdsToken {
         case EBN_UNARY_OP:
           strValue = _astrUnaryOps[lt_valValue->GetIndex()];
           break;
+      }
 
-        case EBN_RAW_VAL:
-          if (lt_valValue->GetType() == EVT_STRING) {
-            strValue = "\"" + strValue + "\"";
-          }
-          break;
+      // surround strings with quotes
+      if (lt_valValue->GetType() == EVT_STRING) {
+        strValue = "\"" + strValue + "\"";
       }
 
       str += LdsPrintF("%sValue : %s\n", strNodeTab.c_str(), strValue.c_str());
@@ -235,7 +234,7 @@ class LDS_API CBuildNode : public CLdsToken {
       // open nodes block
       if (bn_abnNodes.Count() > 0) {
         str += '\n';
-        str += strNodeTab + "NODES {\n";
+        str += strNodeTab + "NODES -{\n";
       }
 
       // print each sub node
@@ -249,11 +248,11 @@ class LDS_API CBuildNode : public CLdsToken {
 
       // close nodes block
       if (bn_abnNodes.Count() > 0) {
-        str += strNodeTab + "}\n";
+        str += strNodeTab + "}-\n";
       }
       
       // close this node block
-      str += strTab + "}\n";
+      str += strTab + "}==\n";
 
       return str;
     };
