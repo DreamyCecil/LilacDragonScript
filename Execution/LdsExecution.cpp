@@ -221,10 +221,10 @@ void Exec_SetAccessor(void) {
 // Function call
 void Exec_Call(void) {
   // make a list of arguments
-  CLdsValueList avalArgs = MakeValueList(*_pavalStack, _ca->lt_iArg);
+  CLdsArray aArgs = MakeValueList(*_pavalStack, _ca->lt_iArg);
 
   // call the function
-  CLdsValueRef valValue = _pldsCurrent->CallFunction(_ca, avalArgs);
+  CLdsValueRef valValue = _pldsCurrent->CallFunction(_ca, aArgs);
   
   _pavalStack->Push(valValue);
 };

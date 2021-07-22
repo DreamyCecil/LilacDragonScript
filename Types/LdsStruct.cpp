@@ -43,10 +43,16 @@ void CLdsStruct::Clear(void) {
 // Print one variable
 string CLdsStruct::Print(int iVar) {
   // print value
-  string strValue = mapVars.GetValue(iVar).var_valValue->Print();
+  CLdsValue &val = mapVars.GetValue(iVar).var_valValue;
+  string strValue = val->Print();
+
+  // surround with quotes
+  if (val->GetType() == EVT_STRING) {
+    strValue = '"' + strValue + '"';
+  }
   
-  // var = 'val'
-  string strVar = mapVars.GetKey(iVar) + " = '" + strValue + "'";
+  // var = "val"
+  string strVar = mapVars.GetKey(iVar) + " = " + strValue;
   
   return strVar;
 };

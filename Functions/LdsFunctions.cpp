@@ -100,7 +100,7 @@ void CLdsScriptEngine::AddCustomFunctions(CLdsFuncMap &mapFrom) {
 static CCompAction *_pcaFunctionCall = NULL;
 
 // Call function from the action
-LdsReturn CLdsScriptEngine::CallFunction(CCompAction *pcaAction, CLdsValueList &avalArgs)
+LdsReturn CLdsScriptEngine::CallFunction(CCompAction *pcaAction, CLdsArray &aArgs)
 {
   _pcaFunctionCall = pcaAction;
 
@@ -113,12 +113,12 @@ LdsReturn CLdsScriptEngine::CallFunction(CCompAction *pcaAction, CLdsValueList &
   }
 
   // make an array of arguments
-  int ctArgs = avalArgs.Count();
+  int ctArgs = aArgs.Count();
   CLdsValue *pvalFuncArgs = new CLdsValue[ctArgs];
 
   // copy each argument
   for (int iArg = 0; iArg < ctArgs; iArg++) {
-    pvalFuncArgs[iArg] = avalArgs[iArg];
+    pvalFuncArgs[iArg] = aArgs[iArg];
   }
 
   // call the function

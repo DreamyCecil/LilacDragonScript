@@ -51,24 +51,39 @@ typedef std::string string;
 #include "DreamyStructures/DataStructures.h"
 #endif
 
+// Pre-declare types
+class CLdsValue;
+class ILdsValueBase;
+
+struct SLdsFunc;
+struct SLdsInlineFunc;
+struct SLdsVar;
+
+class CLdsToken;
+class CBuildNode;
+class CCompAction;
+
+struct SLdsCache;
+
 // Special types
 typedef unsigned char LdsFlags; // script flags
 typedef unsigned long LdsSize; // size in bytes
 typedef unsigned long LdsHash; // string hash value
 
 // Lists
-typedef DSArray<class CLdsValue> CLdsArray; // value array
-typedef DSList<class CLdsValue> CLdsValueList; // value list
-typedef DSMap<string, class CLdsValue> CLdsValueMap; // value map
-typedef DSMap<string, struct SLdsFunc> CLdsFuncMap; // functions map
-typedef DSMap<string, struct SLdsInlineFunc> CLdsInFuncMap; // inline functions map
-typedef DSMap<string, struct SLdsVar> CLdsVarMap; // variables map
-typedef DSList<class CLdsToken> CTokenList; // script token list
-typedef DSList<class CBuildNode> CNodeList; // node list
-typedef DSList<class CBuildNode *> CDynamicNodeList; // dynamic node list
-typedef DSList<class CCompAction> CActionList; // action list
-typedef DSMap<LdsHash, struct SLdsCache> CScriptCache; // script cache map
-typedef DSList<class ILdsValueBase *> CLdsValueTypes; // value type list
+typedef DSArray<CLdsValue>            CLdsArray;        // value array
+typedef DSList<CLdsValue>             CLdsList;         // value list
+typedef DSMap<string, CLdsValue>      CLdsMap;          // value map
+typedef DSMap<string, SLdsFunc>       CLdsFuncMap;      // functions map
+typedef DSMap<string, SLdsInlineFunc> CLdsInFuncMap;    // inline functions map
+typedef DSMap<string, SLdsVar>        CLdsVarMap;       // variables map
+typedef DSMap<CLdsValue, CLdsValue *> CLdsSubVars;      // sub variables map
+typedef DSList<CLdsToken>             CTokenList;       // script token list
+typedef DSList<CBuildNode>            CNodeList;        // node list
+typedef DSList<CBuildNode *>          CDynamicNodeList; // dynamic node list
+typedef DSList<CCompAction>           CActionList;      // action list
+typedef DSMap<LdsHash, SLdsCache>     CScriptCache;     // script cache map
+typedef DSList<ILdsValueBase *>       CLdsValueTypes;   // value type list
 
 // 64-bit integer
 typedef __int64 LONG64;

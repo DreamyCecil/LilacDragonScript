@@ -129,7 +129,7 @@ class LDS_API CLdsScriptEngine {
     void AddCustomFunctions(CLdsFuncMap &mapFrom);
 
     // Call function from the action
-    LdsReturn CallFunction(CCompAction *pcaAction, CLdsValueList &avalArgs);
+    LdsReturn CallFunction(CCompAction *pcaAction, CLdsArray &aArgs);
     
   // Variables
   public:
@@ -148,10 +148,10 @@ class LDS_API CLdsScriptEngine {
   
   // Parser
   public:
-    CLdsValueMap _mapLdsConstants; // custom constants
+    CLdsMap _mapLdsConstants; // custom constants
     
     // Set custom constants
-    void SetParserConstants(CLdsValueMap &mapFrom);
+    void SetParserConstants(CLdsMap &mapFrom);
     
   private:
     CTokenList _aetTokens; // tokens from the script

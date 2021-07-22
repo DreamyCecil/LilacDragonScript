@@ -85,7 +85,7 @@ class LDS_API CLdsThread {
     CLdsValueRef GetResult(void);
     
     // Call the inline function
-    void CallInlineFunction(string strFunc, CLdsValueList &avalArgs);
+    void CallInlineFunction(string strFunc, CLdsArray &aArgs);
     
     // Return from the inline function
     int ReturnFromInline(void);
@@ -112,5 +112,5 @@ class LDS_API CLdsThread {
     void Read(void);
 };
 
-// Fill a value list with values from the stack
-CLdsValueList MakeValueList(DSStack<CLdsValueRef> &avalStack, int ctValues);
+// Fill a value array with values from the stack
+CLdsArray MakeValueList(DSStack<CLdsValueRef> &avalStack, int ctValues);

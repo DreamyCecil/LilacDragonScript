@@ -67,7 +67,7 @@ static void ParseBlockComment(const string &str) {
 };
 
 // Set custom constants from the map
-void CLdsScriptEngine::SetParserConstants(CLdsValueMap &mapFrom) {
+void CLdsScriptEngine::SetParserConstants(CLdsMap &mapFrom) {
   // reset the map
   _mapLdsConstants.Clear();
   

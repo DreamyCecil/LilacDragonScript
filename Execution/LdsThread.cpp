@@ -175,9 +175,9 @@ EThreadStatus CLdsThread::Resume(void) {
           // Inline function (local to the thread)
           if (iType == LCA_INLINE) {
             // make a list of arguments
-            CLdsValueList avalArgs = MakeValueList(*_pavalStack, ca.lt_iArg);
+            CLdsArray aArgs = MakeValueList(*_pavalStack, ca.lt_iArg);
             
-            _psthCurrent->CallInlineFunction(ca->GetString(), avalArgs);
+            _psthCurrent->CallInlineFunction(ca->GetString(), aArgs);
             
             // reset position to go through the inline function
             iPos = 0;
@@ -386,7 +386,7 @@ CLdsValueRef CLdsThread::GetResult(void) {
 };
 
 // Call the inline function
-void CLdsThread::CallInlineFunction(string strFunc, CLdsValueList &avalArgs) {
+void CLdsThread::CallInlineFunction(string strFunc, CLdsArray &aArgs) {
   // get the inline function
   int iInline = sth_mapInlineFunc.FindKeyIndex(strFunc);
   SLdsInlineFunc inFunc = sth_mapInlineFunc.GetValue(iInline);
@@ -406,7 +406,7 @@ void CLdsThread::CallInlineFunction(string strFunc, CLdsValueList &avalArgs) {
     string strArg = astrArgs[iArg];
     string strInline = icCall.VarName(strArg);
     
-    mapInlineArgs[strInline] = avalArgs[iArg];
+    mapInlineArgs[strInline] = aArgs[iArg];
     
     // add to the list of inline locals
     if (icCall.astrLocals.FindIndex(strInline) == -1) {
@@ -457,15 +457,15 @@ int CLdsThread::ReturnFromInline(void) {
   return sth_iPos;
 };
 
-// Fill a value list with values from the stack
-CLdsValueList MakeValueList(DSStack<CLdsValueRef> &avalStack, int ctValues) {
+// Fill a value array with values from the stack
+CLdsArray MakeValueList(DSStack<CLdsValueRef> &avalStack, int ctValues) {
   // make a list of values
-  CLdsValueList aval;
-  aval.New(ctValues);
+  CLdsArray aValues;
+  aValues.New(ctValues);
 
   while (ctValues-- > 0) {
-    aval[ctValues] = avalStack.Pop().vr_val;
+    aValues[ctValues] = avalStack.Pop().vr_val;
   }
   
-  return aval;
+  return aValues;
 };
