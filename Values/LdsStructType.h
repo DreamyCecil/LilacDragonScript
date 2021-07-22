@@ -69,9 +69,9 @@ class LDS_API CLdsStructType : public ILdsValueBase {
   public:
     // Print the value
     virtual string Print(void);
-
-    // Get struct value
-    virtual CLdsStruct &GetStruct(void) { return sStruct; };
+    
+    // Get variables
+    virtual CLdsVars &GetVars(void) { return sStruct.aFields; };
     
     // Perform a unary operation
     virtual CLdsValueRef UnaryOp(CLdsValueRef &valRef, const CLdsToken &tkn);

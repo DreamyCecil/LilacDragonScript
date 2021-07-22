@@ -73,19 +73,24 @@ void Exec_Val(void) {
     
     // array
     if (iContainer == 0) {
-      CLdsArray aArray;
-      aArray.New(ctValues);
+      CLdsArrayType valArray;
+
+      DSList<SLdsVar> &aVars = valArray.aArray.aVars;
+      aVars.New(ctValues);
       
       // get array entries
       for (int iPopVal = ctValues - 1; iPopVal >= 0; iPopVal--) {
-        aArray[iPopVal] = _pavalStack->Pop().vr_val;
+        aVars[iPopVal] = SLdsVar("", _pavalStack->Pop().vr_val);
       }
       
-      _pavalStack->Push(CLdsValueRef(CLdsArrayType(aArray)));
+      _pavalStack->Push(CLdsValueRef(valArray));
       
     // structure
     } else {
-      CLdsVars aVars;
+      bool bStatic = (iContainer > 1);
+
+      CLdsVars aFields;
+      aFields.aVars.New(ctValues);
       
       // get structure variables
       for (int iVar = 0; iVar < ctValues; iVar++) {
@@ -97,11 +102,11 @@ void Exec_Val(void) {
         CLdsValue val = _pavalStack->Pop().vr_val;
         
         // add the variable
-        aVars.Add(SLdsVar(strVar, val, bConst));
+        aFields.aVars[iVar] = SLdsVar(strVar, val, bConst);
       }
       
       // fill the structure
-      _pavalStack->Push(CLdsValueRef(CLdsStructType(-1, aVars, (iContainer > 1))));
+      _pavalStack->Push(CLdsValueRef(CLdsStructType(-1, aFields, bStatic)));
     }
 
   // value
@@ -142,8 +147,7 @@ void Exec_Get(void) {
   }
 
   CLdsValue *pvalRef = &pvar->var_valValue;
-
-  _pavalStack->Push(CLdsValueRef(*pvalRef, pvar, NULL, strName, strName, CLdsValueRef::VRF_GLOBAL));
+  _pavalStack->Push(CLdsValueRef(*pvalRef, pvar, NULL, CLdsValueRef::VRF_GLOBAL));
 };
 
 // Set variable value
@@ -170,11 +174,9 @@ void Exec_Set(void) {
 // Get local variable value
 void Exec_GetLocal(void) {
   SLdsVar *pvar = GetLocalVar();
-  string strName = (*_ca)->GetString();
-
   CLdsValue *pvalLocal = &pvar->var_valValue;
-  
-  _pavalStack->Push(CLdsValueRef(*pvalLocal, pvar, NULL, strName, strName, 0));
+
+  _pavalStack->Push(CLdsValueRef(*pvalLocal, pvar, NULL, 0));
 };
 
 // Set local variable value
@@ -197,22 +199,22 @@ void Exec_SetAccessor(void) {
   CLdsValueRef valRef = _pavalStack->Pop();
   
   // check for an array accessor
-  if (valRef.vr_pvalAccess == NULL) {
+  if (valRef.vr_pvarAccess == NULL) {
     LdsThrow(LEX_NOACCESS, "Cannot set value through an accessor at %s", _ca->PrintPos().c_str());
   }
 
   // constant reference
   if (valRef.vr_pvar->var_bConst > 1) {
-    LdsThrow(LEX_CONST, "Cannot reassign value of a constant variable '%s' at %s", valRef.vr_strVar.c_str(), _ca->PrintPos().c_str());
+    LdsThrow(LEX_CONST, "Cannot reassign value of a constant variable '%s' at %s", valRef.vr_pvar->var_strName.c_str(), _ca->PrintPos().c_str());
   }
 
   // check for constants
-  if (valRef.IsConst()) {
-    LdsThrow(LEX_CONST, "Cannot reassign constant variable '%s' at %s", valRef.vr_strRef.c_str(), _ca->PrintPos().c_str());
+  if (valRef.vr_pvarAccess->var_bConst) {
+    LdsThrow(LEX_CONST, "Cannot reassign constant variable '%s' at %s", valRef.vr_pvarAccess->var_strName.c_str(), _ca->PrintPos().c_str());
   }
   
   // set value within the array
-  *valRef.vr_pvalAccess = _pavalStack->Pop().vr_val;
+  valRef.vr_pvarAccess->var_valValue = _pavalStack->Pop().vr_val;
 };
 
 // Function call

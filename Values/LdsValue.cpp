@@ -41,11 +41,8 @@ double ILdsValueBase::GetNumber(void) { return 0.0; };
 // Get string value
 string ILdsValueBase::GetString(void) { return ""; };
 
-// Get array value
-CLdsArray &ILdsValueBase::GetArray(void) { return *(CLdsArray *)NULL; };
-
-// Get struct value
-CLdsStruct &ILdsValueBase::GetStruct(void) { return *(CLdsStruct *)NULL; };
+// Get variables
+CLdsVars &ILdsValueBase::GetVars(void) { return *(CLdsVars *)NULL; };
 
 // Constructor
 CLdsValue::CLdsValue(void) :

@@ -41,15 +41,15 @@ struct LDS_API SLdsRefIndex {
 };
 
 // Constructor templates
-#define ARGS_TEMP(_Var, _Access, _Name, _Ref, _Flags) \
-  vr_pvar(_Var), vr_pvalAccess(_Access), vr_strVar(_Name), vr_strRef(_Ref), vr_ubFlags(_Flags) {}
+#define ARGS_TEMP(_Var, _Access, _Flags) \
+  vr_pvar(_Var), vr_pvarAccess(_Access), vr_ubFlags(_Flags) {}
 
 #define CONSTRUCTOR_TEMP(_Type) CLdsValueRef(const _Type &_Set) \
-  : vr_val(_Set), ARGS_TEMP(NULL, NULL, "", "", 0)
+  : vr_val(_Set), ARGS_TEMP(NULL, NULL, 0)
 
-#define CONSTRUCTOR_FULL(_Type) CLdsValueRef(const _Type &_Set, SLdsVar *pvar, CLdsValue *pvalAccess, \
-  const string &strName, const string &strRef, const LdsFlags &ubFlags) \
-  : vr_val(_Set), ARGS_TEMP(pvar, pvalAccess, strName, strRef, ubFlags)
+#define CONSTRUCTOR_FULL(_Type) CLdsValueRef(const _Type &_Set, \
+  SLdsVar *pvar, SLdsVar *pvarAccess, const LdsFlags &ubFlags) \
+  : vr_val(_Set), ARGS_TEMP(pvar, pvarAccess, ubFlags)
 
 // Value reference
 class LDS_API CLdsValueRef {
@@ -57,22 +57,18 @@ class LDS_API CLdsValueRef {
     CLdsValue vr_val; // value itself
 
     SLdsVar *vr_pvar; // variable reference (from CLdsScriptEngine::_mapLdsVariables or CLdsThread::sth_mapLocals)
-    CLdsValue *vr_pvalAccess; // array/structure value reference
+    SLdsVar *vr_pvarAccess; // array/structure variable reference
 
     DSList<SLdsRefIndex> vr_ariIndices; // reference indices in order (to determine vr_pvalAccess for I/O)
 
-    string vr_strVar; // variable this value belongs to
-    string vr_strRef; // reference name
-
     enum ELdsValueRefFlags {
-      VRF_CONST  = (1 << 0), // reference is a constant variable (for structure variables)
-      VRF_GLOBAL = (1 << 1), // referencing a global variable (from CLdsScriptEngine::_mapLdsVariables; for I/O)
+      VRF_GLOBAL = (1 << 0), // referencing a global variable (from CLdsScriptEngine::_mapLdsVariables; for I/O)
     };
 
     LdsFlags vr_ubFlags;
 
     // Default constructor
-    CLdsValueRef(void) : vr_val(0), ARGS_TEMP(NULL, NULL, "", "", 0);
+    CLdsValueRef(void) : vr_val(0), ARGS_TEMP(NULL, NULL, 0);
 
     // Value constructors
     CONSTRUCTOR_TEMP(CLdsValue);
@@ -86,10 +82,10 @@ class LDS_API CLdsValueRef {
     CONSTRUCTOR_FULL(double);
     CONSTRUCTOR_FULL(string);
 
-    // Get value by an array index
-    CLdsValue *AccessValue(const int &iIndex);
-    // Get value by a structure variable name
-    CLdsValue *AccessValue(const string &strVar);
+    // Get variable by index
+    SLdsVar *AccessVariable(const int &iIndex);
+    // Get variable by name
+    SLdsVar *AccessVariable(const string &strVar);
 
     // Add array index
     inline void AddIndex(const int &iIndex) {
@@ -116,9 +112,6 @@ class LDS_API CLdsValueRef {
     };
 
     // Check for flags
-    inline LdsFlags IsConst(void) {
-      return (vr_ubFlags & VRF_CONST);
-    };
     inline LdsFlags IsGlobal(void) {
       return (vr_ubFlags & VRF_GLOBAL);
     };

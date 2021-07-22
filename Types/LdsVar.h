@@ -22,61 +22,27 @@ SOFTWARE. */
 
 #include "../Values/LdsValue.h"
 
-// Script variable
-struct LDS_API SLdsVar {
-  string var_strName; // variable name
-  CLdsValue var_valValue; // value
-
-  char var_bConst; // is value constant (0 - no, 1 - yes, not set, 2 - yes, set)
-
-  // Default constructor
-  SLdsVar(void) : var_strName(""), var_valValue(0), var_bConst(0) {};
-  
-  // Value constructor
-  SLdsVar(const string &strName, CLdsValue val, const bool &bConst = false) :
-    var_strName(strName), var_valValue(val), var_bConst(bConst) {};
-  
-  // Mark constants as set
-  void SetConst(void) {
-    if (var_bConst != 0) {
-      var_bConst = 2;
-    }
-  };
-  
-  // Assignment
-  SLdsVar &operator=(const SLdsVar &varOther) {
-    if (this == &varOther) {
-      return *this;
-    }
-    
-    var_strName = varOther.var_strName;
-    var_valValue = varOther.var_valValue;
-    var_bConst = varOther.var_bConst;
-    
-    return *this;
-  };
-};
-
 // Variable list
 class LDS_API CLdsVars {
   public:
     DSList<SLdsVar> aVars;
     
   public:
+    // Default constructor
+    CLdsVars(void) {};
+
+    // Copy constructor
+    CLdsVars(const CLdsVars &aOther);
+
     // Assignment
-    CLdsVars &operator=(const CLdsVars &aOther) {
-      if (this == &aOther) {
-        return *this;
-      }
-
-      aVars = aOther.aVars;
-
-      return *this;
-    };
+    CLdsVars &operator=(const CLdsVars &aOther);
 
     // Add a new variable
-    inline int Add(const SLdsVar &varNew) {
-      return aVars.Add(varNew);
+    inline int Add(const SLdsVar &varNew);
+
+    // Delete variable by index
+    inline void Delete(const int &iPos) {
+      aVars.Delete(iPos);
     };
 
     // Clear variables
@@ -89,67 +55,52 @@ class LDS_API CLdsVars {
       return aVars.Count();
     };
 
-    // Add variables from another list
-    void AddFrom(CLdsVars &aOther, const bool &bReplace = true) {
-      int ctAdd = aOther.Count();
-
-      // for each variable
-      for (int iAdd = 0; iAdd < ctAdd; iAdd++) {
-        SLdsVar &var = aOther.aVars[iAdd];
-        string strVar = var.var_strName;
-
-        // if should be replaced
-        if (bReplace) {
-          int iVar = FindIndex(strVar);
-
-          // change the value
-          if (iVar != -1) {
-            aVars[iVar] = var;
-            continue;
-          }
-        }
-
-        // just add a new variable
-        Add(var);
-      }
+    // Get index of some variable
+    inline int Index(SLdsVar *pvar) const {
+      return aVars.Index(pvar);
     };
+
+    // Get variable by index
+    SLdsVar &operator[](const int &iPos) {
+      return aVars[iPos];
+    };
+
+    // Add variables from another list
+    void AddFrom(CLdsVars &aOther, const bool &bReplace = true);
 
     // Delete variable by name
-    void Delete(const string &strVar) {
-      int iVar = FindIndex(strVar);
-
-      if (iVar != -1) {
-        aVars.Delete(iVar);
-      }
-    };
+    void Delete(const string &strVar);
 
     // Get variable by name
-    SLdsVar *Find(const string &strVar) {
-      // go through variables
-      for (int iVar = 0; iVar < aVars.Count(); iVar++) {
-        SLdsVar &var = aVars[iVar];
-
-        // return matching variable
-        if (var.var_strName == strVar) {
-          return &var;
-        }
-      }
-
-      return NULL;
-    };
+    SLdsVar *Find(const string &strVar);
 
     // Get variable index by name
-    int FindIndex(const string &strVar) {
-      // go through variables
-      for (int iVar = 0; iVar < aVars.Count(); iVar++) {
-        SLdsVar &var = aVars[iVar];
+    int FindIndex(const string &strVar);
+};
 
-        // return matching variable
-        if (var.var_strName == strVar) {
-          return iVar;
-        }
-      }
+// Script variable
+struct LDS_API SLdsVar {
+  string var_strName; // variable name
+  CLdsValue var_valValue; // value
 
-      return -1;
-    };
+  char var_bConst; // is value constant (0 - no, 1 - yes, not set, 2 - yes, set)
+
+  // Default constructor
+  SLdsVar(void);
+  
+  // Value constructor
+  SLdsVar(const string &strName, CLdsValue val, const bool &bConst = false);
+  
+  // Mark constants as set
+  void SetConst(void);
+  
+  // Assignment
+  SLdsVar &operator=(const SLdsVar &varOther);
+};
+
+// Inline definitions
+
+// Add a new variable
+inline int CLdsVars::Add(const SLdsVar &varNew) {
+  return aVars.Add(varNew);
 };

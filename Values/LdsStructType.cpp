@@ -109,11 +109,7 @@ CLdsValueRef CLdsStructType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
   const string strType1 = val1->TypeName();
   const string strType2 = val2->TypeName();
 
-  CLdsValue *pvalStructAccess = NULL;
-
-  // structure variable properties
-  string strStructVar = valRef1.vr_strVar;
-  LdsFlags ubConstVar = 0;
+  SLdsVar *pvarField = NULL;
     
   switch (iOperation) {
     // accessor
@@ -130,24 +126,18 @@ CLdsValueRef CLdsStructType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
       }
         
       string strVar = val2->GetString();
-        
-      // direct 'val1 = val1->GetStruct()' empties its own struct before getting a value from it
-      CLdsStruct sCopy = val1->GetStruct();
+      CLdsVars aCopy = val1->GetVars();
 
-      if (sCopy.FindIndex(strVar) == -1) {
+      if (aCopy.FindIndex(strVar) == -1) {
         LdsThrow(LEX_STRUCTVAR, "Variable '%s' does not exist in the structure at %s", strVar.c_str(), tkn.PrintPos().c_str());
       }
 
-      SLdsVar *pvar = sCopy.aFields.Find(strVar);
+      SLdsVar *pvar = aCopy.Find(strVar);
       val1 = pvar->var_valValue;
         
       // get pointer to the value within the structure
       if (valRef1.vr_pvar != NULL) {
-        pvalStructAccess = valRef1.AccessValue(strVar);
-
-        // get variable name and check for const
-        strStructVar = strVar;
-        ubConstVar = (pvar->var_bConst > 0 ? CLdsValueRef::VRF_CONST : 0);
+        pvarField = valRef1.AccessVariable(strVar);
       }
 
       // add reference index
@@ -158,7 +148,7 @@ CLdsValueRef CLdsStructType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
   }
   
   // copy reference indices
-  CLdsValueRef valReturn(val1, valRef1.vr_pvar, pvalStructAccess, valRef1.vr_strVar, strStructVar, ubConstVar | valRef1.IsGlobal());
+  CLdsValueRef valReturn(val1, valRef1.vr_pvar, pvarField, valRef1.IsGlobal());
   valReturn.vr_ariIndices = valRef1.vr_ariIndices;
 
   return valReturn;

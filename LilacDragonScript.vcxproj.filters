@@ -236,6 +236,9 @@
     <ClCompile Include="Execution\LdsQuickRun.cpp">
       <Filter>Source Files\Execution</Filter>
     </ClCompile>
+    <ClCompile Include="Types\LdsVar.cpp">
+      <Filter>Source Files\Types</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="DreamyStructures\DataArray.inl">

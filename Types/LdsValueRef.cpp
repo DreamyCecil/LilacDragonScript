@@ -40,32 +40,34 @@ SLdsRefIndex::SLdsRefIndex(const int &iIndex) : bIndex(true)
   strIndex = strStream.str();
 };
 
-// Get value by an array index
-CLdsValue *CLdsValueRef::AccessValue(const int &iIndex) {
+// Get variable by index
+SLdsVar *CLdsValueRef::AccessVariable(const int &iIndex) {
+  CLdsVars *paVars = &vr_val->GetVars();
+
   if (vr_pvar != NULL) {
-    if (vr_pvalAccess != NULL) {
-      CLdsArray &aArray = (*vr_pvalAccess)->GetArray();
-      return &aArray[iIndex];
+    if (vr_pvarAccess != NULL) {
+      paVars = &vr_pvarAccess->var_valValue->GetVars();
 
     } else {
-      return &vr_pvar->var_valValue->GetArray()[iIndex];
-    }
-  }
-
-  return &vr_val->GetArray()[iIndex];
-};
-    
-// Get value by a structure variable name
-CLdsValue *CLdsValueRef::AccessValue(const string &strVar) {
-  if (vr_pvar != NULL) {
-    if (vr_pvalAccess != NULL) {
-      CLdsStruct &sStruct = (*vr_pvalAccess)->GetStruct();
-      return &sStruct[strVar];
-
-    } else {
-      return &vr_pvar->var_valValue->GetStruct()[strVar];
+      paVars = &vr_pvar->var_valValue->GetVars();
     }
   }
   
-  return &vr_val->GetStruct()[strVar];
+  return &(*paVars)[iIndex];
+};
+    
+// Get variable by name
+SLdsVar *CLdsValueRef::AccessVariable(const string &strVar) {
+  CLdsVars *paVars = &vr_val->GetVars();
+
+  if (vr_pvar != NULL) {
+    if (vr_pvarAccess != NULL) {
+      paVars = &vr_pvarAccess->var_valValue->GetVars();
+
+    } else {
+      paVars = &vr_pvar->var_valValue->GetVars();
+    }
+  }
+  
+  return paVars->Find(strVar);
 };

@@ -25,7 +25,7 @@ SOFTWARE. */
 // Script array value
 class LDS_API CLdsArrayType : public ILdsValueBase {
   public:
-    CLdsArray aArray; // array of values
+    CLdsVars aArray; // array of values
 
   public:
     // Default constructor
@@ -33,15 +33,15 @@ class LDS_API CLdsArrayType : public ILdsValueBase {
 
     // Array constructor
     CLdsArrayType(const int &ct, const CLdsValue &valDef) {
-      aArray.New(ct);
+      aArray.aVars.New(ct);
 
       for (int i = 0; i < ct; i++) {
-        aArray[i] = valDef;
+        aArray.aVars[i] = SLdsVar("", valDef);
       }
     };
 
     // Array copy constructor
-    CLdsArrayType(const CLdsArray &a) : aArray(a) {};
+    CLdsArrayType(const CLdsVars &a) : aArray(a) {};
 
     // Create new instance of this value
     virtual ILdsValueBase *MakeCopy(void) const {
@@ -71,8 +71,11 @@ class LDS_API CLdsArrayType : public ILdsValueBase {
     // Print the value
     virtual string Print(void);
 
-    // Get array value
-    virtual CLdsArray &GetArray(void) { return aArray; };
+    // Add array value
+    virtual int Add(const CLdsValue &val);
+
+    // Get variables
+    virtual CLdsVars &GetVars(void) { return aArray; };
     
     // Perform a unary operation
     virtual CLdsValueRef UnaryOp(CLdsValueRef &valRef, const CLdsToken &tkn);

@@ -29,7 +29,7 @@ void CLdsArrayType::Write(class CLdsScriptEngine *pEngine, void *pStream) {
 
   // write each individual array value
   for (int i = 0; i < ctArray; i++) {
-    pEngine->LdsWriteValue(pStream, aArray[i]);
+    pEngine->LdsWriteValue(pStream, aArray[i].var_valValue);
   }
 };
 
@@ -44,7 +44,10 @@ void CLdsArrayType::Read(class CLdsScriptEngine *pEngine, void *pStream, CLdsVal
 
   // read values into the array
   for (int i = 0; i < ctArray; i++) {
-    pEngine->LdsReadValue(pStream, val->GetArray()[i]);
+    CLdsValue valArray;
+    pEngine->LdsReadValue(pStream, valArray);
+
+    val->GetVars().Add(SLdsVar("", valArray));
   }
 };
 
@@ -66,13 +69,18 @@ string CLdsArrayType::Print(void) {
     }
           
     // print array entry
-    strArray += aArray[iArray]->Print();
+    strArray += aArray[iArray].var_valValue->Print();
   }
         
   // array closing
   strArray += " ]";
 
   return strArray;
+};
+
+// Add array value
+int CLdsArrayType::Add(const CLdsValue &val) {
+  return aArray.Add(SLdsVar("", val, false));
 };
 
 // Perform a unary operation
@@ -84,21 +92,21 @@ CLdsValueRef CLdsArrayType::UnaryOp(CLdsValueRef &valRef, const CLdsToken &tkn) 
   switch (iOperation) {
     // reverse order of array values
     case UOP_INVERT: {
-      CLdsArray aArrayCopy = val->GetArray();
+      CLdsVars aArrayCopy = val->GetVars();
       const int ctArray = aArrayCopy.Count() - 1;
 
       for (int i = 0; i <= ctArray; i++) {
-        val->GetArray()[i] = aArrayCopy[ctArray - i];
+        val->GetVars()[i] = aArrayCopy[ctArray - i];
       }
     } break;
     
     // concatenate every array entry into a string
     case UOP_STRINGIFY: {
-      CLdsArray &aArray = val->GetArray();
+      CLdsVars &aArrayValues = val->GetVars();
       string strArray = "";
 
-      for (int i = 0; i < aArray.Count(); i++) {
-        strArray += aArray[i]->Print();
+      for (int i = 0; i < aArrayValues.Count(); i++) {
+        strArray += aArrayValues[i].var_valValue->Print();
       }
 
       val = strArray;
@@ -122,7 +130,7 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
   const string strType1 = val1->TypeName();
   const string strType2 = val2->TypeName();
 
-  CLdsValue *pvalArrayAccess = NULL;
+  SLdsVar *pvarArrayAccess = NULL;
     
   switch (iOperation) {
     // operators
@@ -132,8 +140,11 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
       }
         
       // expand the array
-      int ctResize = (val1->GetArray().Count() + val2->GetIndex());
-      val1->GetArray().Resize(ctResize);
+      int ctAdd = val2->GetIndex();
+
+      while (--ctAdd >= 0) {
+        val1->GetVars().Add(SLdsVar("", CLdsIntType()));
+      }
     } break;
 
     case LOP_SUB: {
@@ -142,8 +153,11 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
       }
         
       // shrink the array
-      int ctResize = (val1->GetArray().Count() - val2->GetIndex());
-      val1->GetArray().Resize(ctResize);
+      int ctSub = val2->GetIndex();
+
+      while (--ctSub >= 0) {
+        val1->GetVars().Delete(val1->GetVars().Count() - 1);
+      }
     } break;
 
     case LOP_MUL: {
@@ -152,14 +166,14 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
       }
         
       // copy array contents several times
-      int ctOld = val1->GetArray().Count();
+      int ctOld = val1->GetVars().Count();
       int ctNew = int(ctOld * val2->GetNumber());
 
-      CLdsArray &aArray = val1->GetArray();
+      CLdsVars &aOldArray = val1->GetVars();
       CLdsArrayType valNewArray(ctNew, 0);
 
       for (int i = 0; i < ctNew; i++) {
-        valNewArray.aArray[i] = aArray[i % ctOld];
+        valNewArray.aArray[i] = aOldArray[i % ctOld];
       }
 
       val1 = valNewArray;
@@ -174,10 +188,10 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
       }
 
       switch (iOperation) {
-        case LOP_GT:  val1 = int(val1->GetArray().Count() >  val2->GetArray().Count()); break;
-        case LOP_GOE: val1 = int(val1->GetArray().Count() >= val2->GetArray().Count()); break;
-        case LOP_LT:  val1 = int(val1->GetArray().Count() <  val2->GetArray().Count()); break;
-        case LOP_LOE: val1 = int(val1->GetArray().Count() <= val2->GetArray().Count()); break;
+        case LOP_GT:  val1 = int(val1->GetVars().Count() >  val2->GetVars().Count()); break;
+        case LOP_GOE: val1 = int(val1->GetVars().Count() >= val2->GetVars().Count()); break;
+        case LOP_LT:  val1 = int(val1->GetVars().Count() <  val2->GetVars().Count()); break;
+        case LOP_LOE: val1 = int(val1->GetVars().Count() <= val2->GetVars().Count()); break;
         case LOP_EQ:  val1 = int(val1 == val2); break;
         case LOP_NEQ: val1 = int(val1 != val2); break;
       }
@@ -193,8 +207,7 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
         LdsBinaryError(val1, val2, tkn);
       }
 
-      // direct 'val1 = val1->GetArray()' empties its own array before getting a value from it
-      CLdsArray aCopy = val1->GetArray();
+      CLdsVars aCopy = val1->GetVars();
 
       int iArrayIndex = val2->GetIndex();
       int iSize = aCopy.Count();
@@ -207,10 +220,10 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
         LdsThrow(LEX_ARRAYOUT, "Array index '%d' is out of bounds [0, %d] at %s", iArrayIndex, iSize - 1, tkn.PrintPos().c_str());
       }
 
-      val1 = aCopy[iArrayIndex];
+      val1 = aCopy[iArrayIndex].var_valValue;
 
       // get pointer to the value within the array
-      pvalArrayAccess = valRef1.AccessValue(iArrayIndex);
+      pvarArrayAccess = valRef1.AccessVariable(iArrayIndex);
 
       // add reference index
       valRef1.AddIndex(iArrayIndex);
@@ -220,7 +233,7 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
   }
 
   // copy reference indices
-  CLdsValueRef valReturn(val1, valRef1.vr_pvar, pvalArrayAccess, valRef1.vr_strVar, valRef1.vr_strVar, valRef1.GetFlags());
+  CLdsValueRef valReturn(val1, valRef1.vr_pvar, pvarArrayAccess, valRef1.GetFlags());
   valReturn.vr_ariIndices = valRef1.vr_ariIndices;
 
   return valReturn;

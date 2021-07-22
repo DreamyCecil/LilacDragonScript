@@ -71,10 +71,8 @@ class LDS_API ILdsValueBase {
     virtual double GetNumber(void);
     // Get string value
     virtual string GetString(void);
-    // Get array value
-    virtual CLdsArray &GetArray(void);
-    // Get struct value
-    virtual CLdsStruct &GetStruct(void);
+    // Get variables
+    virtual CLdsVars &GetVars(void);
     
     // Perform a unary operation
     virtual class CLdsValueRef UnaryOp(CLdsValueRef &valRef, const CLdsToken &tkn) = 0;

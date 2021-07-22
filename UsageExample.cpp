@@ -79,8 +79,9 @@ LDS_FUNC(LDS_Sleep) {
 LDS_FUNC(LDS_Data) {
   int iStruct = LDS_NEXT_INT;
 
-  CLdsArrayType aData(2, 0xFF);
-  aData.aArray[0] = 0x7F;
+  CLdsArrayType aData;
+  aData.Add(0xFF);
+  aData.Add(0x7F);
 
   if (iStruct != 0) {
     // return structure
@@ -92,9 +93,9 @@ LDS_FUNC(LDS_Data) {
   }
 
   // return array
-  CLdsArrayType valArray(2, 0);
-  valArray.aArray[0] = string("Two bytes");
-  valArray.aArray[1] = aData;
+  CLdsArrayType valArray;
+  valArray.Add(string("Two bytes"));
+  valArray.Add(aData);
 
   return valArray;
 };

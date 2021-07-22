@@ -54,11 +54,12 @@ typedef std::string string;
 // Pre-declare types
 class ILdsValueBase;
 class CLdsValue;
-class CLdsStruct;
+
+class CLdsVars;
+struct SLdsVar;
 
 struct SLdsFunc;
 struct SLdsInlineFunc;
-struct SLdsVar;
 
 class CLdsToken;
 class CBuildNode;

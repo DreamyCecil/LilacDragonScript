@@ -42,7 +42,7 @@ void CLdsStruct::Clear(void) {
 
 // Print one variable
 string CLdsStruct::Print(int iVar) {
-  SLdsVar &var = aFields.aVars[iVar];
+  SLdsVar &var = aFields[iVar];
 
   // print value
   CLdsValue &val = var.var_valValue;

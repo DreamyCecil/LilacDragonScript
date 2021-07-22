@@ -196,7 +196,7 @@ void CLdsScriptEngine::LdsReadInlineFunc(void *pStream, SLdsInlineFunc &inFunc) 
 
 // Write one variable from the variable map
 void CLdsScriptEngine::LdsWriteOneVar(void *pStream, CLdsVars &aVars, const int &iVar) {
-  SLdsVar &var = aVars.aVars[iVar];
+  SLdsVar &var = aVars[iVar];
 
   // write name
   LdsWriteString(pStream, var.var_strName);
@@ -255,10 +255,6 @@ void CLdsScriptEngine::LdsWriteValueRef(void *pStream, CLdsThread &sth, CLdsValu
   // write actual value
   LdsWriteValue(pStream, vr.vr_val);
 
-  // write reference names
-  LdsWriteString(pStream, vr.vr_strVar);
-  LdsWriteString(pStream, vr.vr_strRef);
-
   // write value flags
   _pLdsWrite(pStream, &vr.vr_ubFlags, sizeof(LdsFlags));
 
@@ -269,11 +265,11 @@ void CLdsScriptEngine::LdsWriteValueRef(void *pStream, CLdsThread &sth, CLdsValu
   if (vr.vr_pvar != NULL) {
     if (vr.IsGlobal()) {
       // global index
-      iVarReference = _aLdsVariables.aVars.Index(vr.vr_pvar);
+      iVarReference = _aLdsVariables.Index(vr.vr_pvar);
 
     } else {
       // local index
-      iVarReference = sth.sth_aLocals.aVars.Index(vr.vr_pvar);
+      iVarReference = sth.sth_aLocals.Index(vr.vr_pvar);
     }
   }
 
@@ -308,10 +304,6 @@ void CLdsScriptEngine::LdsReadValueRef(void *pStream, CLdsThread &sth, CLdsValue
   // read actual value
   LdsReadValue(pStream, vr.vr_val);
 
-  // read reference names
-  LdsReadString(pStream, vr.vr_strVar);
-  LdsReadString(pStream, vr.vr_strRef);
-
   // read value flags
   _pLdsRead(pStream, &vr.vr_ubFlags, sizeof(LdsFlags));
 
@@ -323,11 +315,11 @@ void CLdsScriptEngine::LdsReadValueRef(void *pStream, CLdsThread &sth, CLdsValue
   if (iVarReference != -1) {
     if (vr.IsGlobal()) {
       // global index
-      vr.vr_pvar = &_aLdsVariables.aVars[iVarReference];
+      vr.vr_pvar = &_aLdsVariables[iVarReference];
 
     } else {
       // local index
-      vr.vr_pvar = &sth.sth_aLocals.aVars[iVarReference];
+      vr.vr_pvar = &sth.sth_aLocals[iVarReference];
     }
   }
 
@@ -350,7 +342,7 @@ void CLdsScriptEngine::LdsReadValueRef(void *pStream, CLdsThread &sth, CLdsValue
       vr.vr_ariIndices.Add(SLdsRefIndex(iRefIndex));
 
       // get next reference by an index
-      vr.vr_pvalAccess = vr.AccessValue(iRefIndex);
+      vr.vr_pvarAccess = vr.AccessVariable(iRefIndex);
 
     } else {
       // read structure variable
@@ -361,7 +353,7 @@ void CLdsScriptEngine::LdsReadValueRef(void *pStream, CLdsThread &sth, CLdsValue
       vr.vr_ariIndices.Add(SLdsRefIndex(strVar));
 
       // get next reference by a variable name
-      vr.vr_pvalAccess = vr.AccessValue(strVar);
+      vr.vr_pvarAccess = vr.AccessVariable(strVar);
     }
   }
 };
