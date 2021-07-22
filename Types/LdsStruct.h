@@ -20,7 +20,7 @@ SOFTWARE. */
 
 #pragma once
 
-#include "../LdsBase.h"
+#include "LdsVar.h"
 
 // Structure change callback function
 typedef void (*CLdsStructCallback)(class CLdsStruct *sStruct, const int &iVariable);
@@ -34,7 +34,7 @@ class LDS_API CLdsStruct {
     //       For example a line like 'entity.m_strName = "this";' would immediately change value in the 'm_strName' variable of this object in memory, not just the structure.
 
     int iID; // unique ID
-    CLdsVarMap mapVars; // structure fields
+    CLdsVars aFields; // structure fields
     bool bStatic; // static struct (cannot add new fields)
 
     CLdsStructCallback pCallback; // callback function
@@ -48,7 +48,9 @@ class LDS_API CLdsStruct {
     void Clear(void);
   
     // Structure size
-    int Count(void) { return mapVars.Count(); };
+    inline int Count(void) const {
+      return aFields.Count();
+    };
   
     // Print one variable
     string Print(int iVar);

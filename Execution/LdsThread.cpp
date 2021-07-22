@@ -50,7 +50,7 @@ CLdsThread::~CLdsThread(void) {
 void CLdsThread::Clear(void) {
   sth_avalStack.Clear();
   sth_aiJumpStack.Clear();
-  sth_mapLocals.Clear();
+  sth_aLocals.Clear();
 
   sth_acaActions.Clear();
   sth_eStatus = ETS_FINISHED;
@@ -216,7 +216,7 @@ EThreadStatus CLdsThread::Resume(void) {
             strName = icCurrent.VarName(strName);
             
             // check if it already exists
-            int iGlobal = sth_mapLocals.FindKeyIndex(strName);
+            int iGlobal = sth_aLocals.FindIndex(strName);
             int iInline = icCurrent.astrLocals.FindIndex(strName);
             
             if (iGlobal == -1 && iInline == -1) {
@@ -224,7 +224,7 @@ EThreadStatus CLdsThread::Resume(void) {
             }
           }
           
-          sth_mapLocals[strName] = SLdsVar(0, bConst);
+          sth_aLocals.Add(SLdsVar(strName, 0, bConst));
         } break;
         
         // Apply a thread directive
@@ -398,7 +398,7 @@ void CLdsThread::CallInlineFunction(string strFunc, CLdsArray &aArgs) {
   SLdsInlineCall icCall(strFunc, sth_iPos);
   
   // create argument variables
-  CLdsVarMap mapInlineArgs;
+  CLdsVars aInlineArgs;
   
   // copy argument values
   for (int iArg = 0; iArg < astrArgs.Count(); iArg++) {
@@ -406,7 +406,7 @@ void CLdsThread::CallInlineFunction(string strFunc, CLdsArray &aArgs) {
     string strArg = astrArgs[iArg];
     string strInline = icCall.VarName(strArg);
     
-    mapInlineArgs[strInline] = aArgs[iArg];
+    aInlineArgs.Add(SLdsVar(strInline, aArgs[iArg], false));
     
     // add to the list of inline locals
     if (icCall.astrLocals.FindIndex(strInline) == -1) {
@@ -422,7 +422,7 @@ void CLdsThread::CallInlineFunction(string strFunc, CLdsArray &aArgs) {
   sth_iPos = 0;
   
   // add argument variables
-  sth_mapLocals.AddFrom(mapInlineArgs, true);
+  sth_aLocals.AddFrom(aInlineArgs, true);
   
   int iCall = sth_aicCalls.Push(icCall);
   
@@ -444,7 +444,7 @@ int CLdsThread::ReturnFromInline(void) {
   // remove inline locals
   for (int iLocal = 0; iLocal < icCall.astrLocals.Count(); iLocal++) {
     string strLocal = icCall.astrLocals[iLocal];
-    sth_mapLocals.Delete(strLocal);
+    sth_aLocals.Delete(strLocal);
   }
   
   // restore the stack

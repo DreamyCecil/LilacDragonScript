@@ -195,33 +195,34 @@ void CLdsScriptEngine::LdsReadInlineFunc(void *pStream, SLdsInlineFunc &inFunc) 
 // Script values I/O
 
 // Write one variable from the variable map
-void CLdsScriptEngine::LdsWriteMapVar(void *pStream, CLdsVarMap &map, const int &iVar) {
-  // write key
-  LdsWriteString(pStream, map.GetKey(iVar));
+void CLdsScriptEngine::LdsWriteOneVar(void *pStream, CLdsVars &aVars, const int &iVar) {
+  SLdsVar &var = aVars.aVars[iVar];
 
-  // write variable const type
-  SLdsVar &var = map.GetValue(iVar);
-  _pLdsWrite(pStream, &var.var_bConst, sizeof(char));
+  // write name
+  LdsWriteString(pStream, var.var_strName);
 
   // write variable value
   LdsWriteValue(pStream, var.var_valValue);
+  
+  // write variable const type
+  _pLdsWrite(pStream, &var.var_bConst, sizeof(char));
 };
   
 // Read one variable into the variable map
-void CLdsScriptEngine::LdsReadMapVar(void *pStream, CLdsVarMap &map) {
-  // read key
-  string strKey = "";
-  LdsReadString(pStream, strKey);
-
-  // read variable const type
+void CLdsScriptEngine::LdsReadOneVar(void *pStream, CLdsVars &aVars) {
   SLdsVar var;
-  _pLdsRead(pStream, &var.var_bConst, sizeof(char));
+
+  // read name
+  LdsReadString(pStream, var.var_strName);
 
   // read variable value
   LdsReadValue(pStream, var.var_valValue);
 
+  // read variable const type
+  _pLdsRead(pStream, &var.var_bConst, sizeof(char));
+
   // add one variable
-  map.Add(strKey, var);
+  aVars.Add(var);
 };
 
 // Write value
@@ -268,11 +269,11 @@ void CLdsScriptEngine::LdsWriteValueRef(void *pStream, CLdsThread &sth, CLdsValu
   if (vr.vr_pvar != NULL) {
     if (vr.IsGlobal()) {
       // global index
-      iVarReference = _mapLdsVariables.Index(vr.vr_pvar);
+      iVarReference = _aLdsVariables.aVars.Index(vr.vr_pvar);
 
     } else {
       // local index
-      iVarReference = sth.sth_mapLocals.Index(vr.vr_pvar);
+      iVarReference = sth.sth_aLocals.aVars.Index(vr.vr_pvar);
     }
   }
 
@@ -322,11 +323,11 @@ void CLdsScriptEngine::LdsReadValueRef(void *pStream, CLdsThread &sth, CLdsValue
   if (iVarReference != -1) {
     if (vr.IsGlobal()) {
       // global index
-      vr.vr_pvar = &_mapLdsVariables.GetValue(iVarReference);
+      vr.vr_pvar = &_aLdsVariables.aVars[iVarReference];
 
     } else {
       // local index
-      vr.vr_pvar = &sth.sth_mapLocals.GetValue(iVarReference);
+      vr.vr_pvar = &sth.sth_aLocals.aVars[iVarReference];
     }
   }
 
@@ -427,12 +428,12 @@ void CLdsScriptEngine::LdsWriteEngine(void *pStream) {
   }
 
   // write variable count
-  int ctVars = _mapLdsVariables.Count();
+  int ctVars = _aLdsVariables.Count();
   _pLdsWrite(pStream, &ctVars, sizeof(int));
 
   // write each variable
   for (int iVar = 0; iVar < ctVars; iVar++) {
-    LdsWriteMapVar(pStream, _mapLdsVariables, iVar);
+    LdsWriteOneVar(pStream, _aLdsVariables, iVar);
   }
 
   // write current tick
@@ -492,7 +493,7 @@ void CLdsScriptEngine::LdsReadEngine(void *pStream) {
 
   // read each variable
   for (int iVar = 0; iVar < ctVars; iVar++) {
-    LdsReadMapVar(pStream, _mapLdsVariables);
+    LdsReadOneVar(pStream, _aLdsVariables);
   }
 
   // read current tick
@@ -547,12 +548,12 @@ void CLdsScriptEngine::LdsWriteThread(void *pStream, CLdsThread &sth, bool bHand
   int i, ct;
 
   // write locals count
-  ct = sth.sth_mapLocals.Count();
+  ct = sth.sth_aLocals.Count();
   _pLdsWrite(pStream, &ct, sizeof(int));
 
   // write each local variable
   for (i = 0; i < ct; i++) {
-    LdsWriteMapVar(pStream, sth.sth_mapLocals, i);
+    LdsWriteOneVar(pStream, sth.sth_aLocals, i);
   }
 
   // write inline functions count
@@ -672,7 +673,7 @@ void CLdsScriptEngine::LdsReadThread(void *pStream, CLdsThread &sth, bool bHandl
 
   // read each local variable
   for (i = 0; i < ct; i++) {
-    LdsReadMapVar(pStream, sth.sth_mapLocals);
+    LdsReadOneVar(pStream, sth.sth_aLocals);
   }
 
   // read inline functions count

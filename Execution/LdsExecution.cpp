@@ -37,31 +37,31 @@ extern CCompAction &SetCurrentAction(CCompAction *pcaCurrent) {
 };
 
 // Get index of a local variable
-int GetLocalVar(void) {
+SLdsVar *GetLocalVar(void) {
   string strName = (*_ca)->GetString();
   
-  CLdsVarMap &mapLocals = _psthCurrent->sth_mapLocals;
-  int iLocal = -1;
+  CLdsVars &aLocals = _psthCurrent->sth_aLocals;
+  SLdsVar *pvarLocal = NULL;
   
   // prioritize inline locals
   if (_psthCurrent->sth_aicCalls.Count() > 0) {
     SLdsInlineCall &ic = _psthCurrent->sth_aicCalls.Top();
     
     string strInline = ic.VarName(strName);
-    iLocal = mapLocals.FindKeyIndex(strInline);
+    pvarLocal = aLocals.Find(strInline);
   }
   
   // check global locals
-  if (iLocal == -1) {
-    iLocal = mapLocals.FindKeyIndex(strName);
+  if (pvarLocal == NULL) {
+    pvarLocal = aLocals.Find(strName);
   }
   
   // doesn't exist
-  if (iLocal == -1) {
+  if (pvarLocal == NULL) {
     LdsThrow(LEX_VARIABLE, "Variable '%s' is invalid at %s", strName.c_str(), _ca->PrintPos().c_str());
   }
   
-  return iLocal;
+  return pvarLocal;
 };
 
 // Values
@@ -85,7 +85,7 @@ void Exec_Val(void) {
       
     // structure
     } else {
-      CLdsVarMap mapVars;
+      CLdsVars aVars;
       
       // get structure variables
       for (int iVar = 0; iVar < ctValues; iVar++) {
@@ -97,11 +97,11 @@ void Exec_Val(void) {
         CLdsValue val = _pavalStack->Pop().vr_val;
         
         // add the variable
-        mapVars[strVar] = SLdsVar(val, bConst);
+        aVars.Add(SLdsVar(strVar, val, bConst));
       }
       
       // fill the structure
-      _pavalStack->Push(CLdsValueRef(CLdsStructType(-1, mapVars, (iContainer > 1))));
+      _pavalStack->Push(CLdsValueRef(CLdsStructType(-1, aVars, (iContainer > 1))));
     }
 
   // value
@@ -132,34 +132,36 @@ void Exec_Binary(void) {
 
 // Get variable value
 void Exec_Get(void) {
-  SLdsVar *pvar = NULL;
+  // try to get the variable
   string strName = (*_ca)->GetString();
-        
-  // try to get the value
-  if (!_pldsCurrent->LdsVariableValue(strName, pvar)) {
+  SLdsVar *pvar = _pldsCurrent->_aLdsVariables.Find(strName);
+
+  // no variable
+  if (pvar == NULL) {
     LdsThrow(LEX_VARIABLE, "Variable '%s' is invalid at %s", strName.c_str(), _ca->PrintPos().c_str());
   }
-  
+
   CLdsValue *pvalRef = &pvar->var_valValue;
-  
+
   _pavalStack->Push(CLdsValueRef(*pvalRef, pvar, NULL, strName, strName, CLdsValueRef::VRF_GLOBAL));
 };
 
 // Set variable value
 void Exec_Set(void) {
-  SLdsVar *pvar = NULL;
+  // try to get the variable
   string strName = (*_ca)->GetString();
-  
-  // try to get the value
-  if (!_pldsCurrent->LdsVariableValue(strName, pvar)) {
+  SLdsVar *pvar = _pldsCurrent->_aLdsVariables.Find(strName);
+
+  // no variable
+  if (pvar == NULL) {
     LdsThrow(LEX_VARIABLE, "Variable '%s' is invalid at %s", strName.c_str(), _ca->PrintPos().c_str());
   }
-  
+
   // check if it's a constant
   if (pvar->var_bConst > 1) {
     LdsThrow(LEX_CONST, "Cannot reassign constant variable '%s' at %s", strName.c_str(), _ca->PrintPos().c_str());
   }
-  
+
   // set value to the variable
   pvar->var_valValue = _pavalStack->Pop().vr_val;
   pvar->SetConst();
@@ -167,12 +169,9 @@ void Exec_Set(void) {
 
 // Get local variable value
 void Exec_GetLocal(void) {
-  int iLocal = GetLocalVar();
-  CLdsVarMap &mapLocals = _psthCurrent->sth_mapLocals;
-  
+  SLdsVar *pvar = GetLocalVar();
   string strName = (*_ca)->GetString();
 
-  SLdsVar *pvar = &mapLocals.GetValue(iLocal);
   CLdsValue *pvalLocal = &pvar->var_valValue;
   
   _pavalStack->Push(CLdsValueRef(*pvalLocal, pvar, NULL, strName, strName, 0));
@@ -180,9 +179,7 @@ void Exec_GetLocal(void) {
 
 // Set local variable value
 void Exec_SetLocal(void) {
-  int iLocal = GetLocalVar();
-  CLdsVarMap &mapLocals = _psthCurrent->sth_mapLocals;
-  SLdsVar *pvar = &mapLocals.GetValue(iLocal);
+  SLdsVar *pvar = GetLocalVar();
   
   // check if it's a constant
   if (pvar->var_bConst > 1) {

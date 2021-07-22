@@ -52,8 +52,9 @@ typedef std::string string;
 #endif
 
 // Pre-declare types
-class CLdsValue;
 class ILdsValueBase;
+class CLdsValue;
+class CLdsStruct;
 
 struct SLdsFunc;
 struct SLdsInlineFunc;
@@ -76,8 +77,6 @@ typedef DSList<CLdsValue>             CLdsList;         // value list
 typedef DSMap<string, CLdsValue>      CLdsMap;          // value map
 typedef DSMap<string, SLdsFunc>       CLdsFuncMap;      // functions map
 typedef DSMap<string, SLdsInlineFunc> CLdsInFuncMap;    // inline functions map
-typedef DSMap<string, SLdsVar>        CLdsVarMap;       // variables map
-typedef DSMap<CLdsValue, CLdsValue *> CLdsSubVars;      // sub variables map
 typedef DSList<CLdsToken>             CTokenList;       // script token list
 typedef DSList<CBuildNode>            CNodeList;        // node list
 typedef DSList<CBuildNode *>          CDynamicNodeList; // dynamic node list

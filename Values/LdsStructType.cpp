@@ -34,7 +34,7 @@ void CLdsStructType::Write(class CLdsScriptEngine *pEngine, void *pStream) {
 
   // write each individual key-value pair
   for (int i = 0; i < ctStruct; i++) {
-    pEngine->LdsWriteMapVar(pStream, sStruct.mapVars, i);
+    pEngine->LdsWriteOneVar(pStream, sStruct.aFields, i);
   }
 };
 
@@ -51,15 +51,15 @@ void CLdsStructType::Read(class CLdsScriptEngine *pEngine, void *pStream, CLdsVa
   pEngine->_pLdsRead(pStream, &ctStruct, sizeof(int));
 
   // create a variable map
-  CLdsVarMap mapVars;
+  CLdsVars aVars;
 
   // read each individual key-value pair
   for (int i = 0; i < ctStruct; i++) {
-    pEngine->LdsReadMapVar(pStream, mapVars);
+    pEngine->LdsReadOneVar(pStream, aVars);
   }
 
   // create a structure
-  val = CLdsStructType(iID, mapVars, (bStatic != 0));
+  val = CLdsStructType(iID, aVars, (bStatic != 0));
 };
       
 // Print the value
@@ -138,7 +138,8 @@ CLdsValueRef CLdsStructType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
         LdsThrow(LEX_STRUCTVAR, "Variable '%s' does not exist in the structure at %s", strVar.c_str(), tkn.PrintPos().c_str());
       }
 
-      val1 = sCopy[strVar];
+      SLdsVar *pvar = sCopy.aFields.Find(strVar);
+      val1 = pvar->var_valValue;
         
       // get pointer to the value within the structure
       if (valRef1.vr_pvar != NULL) {
@@ -146,7 +147,7 @@ CLdsValueRef CLdsStructType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
 
         // get variable name and check for const
         strStructVar = strVar;
-        ubConstVar = (sCopy.mapVars[strVar].var_bConst > 0 ? CLdsValueRef::VRF_CONST : 0);
+        ubConstVar = (pvar->var_bConst > 0 ? CLdsValueRef::VRF_CONST : 0);
       }
 
       // add reference index

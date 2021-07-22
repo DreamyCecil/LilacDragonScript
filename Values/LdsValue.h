@@ -20,7 +20,7 @@ SOFTWARE. */
 
 #pragma once
 
-#include "../Types/LdsStruct.h"
+#include "../LdsBase.h"
 
 // Script value type
 enum ELdsValueType {
@@ -66,15 +66,15 @@ class LDS_API ILdsValueBase {
     virtual string Print(void) = 0;
   
     // Get integer value
-    virtual int GetIndex(void) { return 0; };
+    virtual int GetIndex(void);
     // Get float value
-    virtual double GetNumber(void) { return 0.0; };
+    virtual double GetNumber(void);
     // Get string value
-    virtual string GetString(void) { return ""; };
+    virtual string GetString(void);
     // Get array value
-    virtual CLdsArray &GetArray(void) { return *((CLdsArray *)NULL); };
+    virtual CLdsArray &GetArray(void);
     // Get struct value
-    virtual CLdsStruct &GetStruct(void) { return *((CLdsStruct *)NULL); };
+    virtual CLdsStruct &GetStruct(void);
     
     // Perform a unary operation
     virtual class CLdsValueRef UnaryOp(CLdsValueRef &valRef, const CLdsToken &tkn) = 0;

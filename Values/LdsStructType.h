@@ -32,10 +32,10 @@ class LDS_API CLdsStructType : public ILdsValueBase {
     CLdsStructType(void) : sStruct() {};
 
     // Structure constructor
-    CLdsStructType(const int &iSetID, const CLdsVarMap &map, const bool &bSetStatic) :
+    CLdsStructType(const int &iSetID, const CLdsVars &aFields, const bool &bSetStatic) :
       sStruct(iSetID)
     {
-      sStruct.mapVars = map;
+      sStruct.aFields = aFields;
       sStruct.bStatic = bSetStatic;
     };
 

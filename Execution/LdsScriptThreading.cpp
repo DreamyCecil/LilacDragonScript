@@ -21,9 +21,9 @@ SOFTWARE. */
 #include "StdH.h"
 
 // Create a new thread
-CLdsThread *CLdsScriptEngine::ThreadCreate(const CActionList &acaActions, CLdsVarMap &mapArgs) {
+CLdsThread *CLdsScriptEngine::ThreadCreate(const CActionList &acaActions, CLdsVars &aArgs) {
   CLdsThread *sthNew = new CLdsThread(acaActions, this);
-  sthNew->sth_mapLocals.CopyMap(mapArgs);
+  sthNew->sth_aLocals = aArgs;
   sthNew->sth_eStatus = ETS_RUNNING;
 
   return sthNew;

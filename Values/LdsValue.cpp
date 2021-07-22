@@ -32,6 +32,21 @@ void LdsBinaryError(const CLdsValue &val1, const CLdsValue &val2, const CLdsToke
            _astrBinaryOps[tkn->GetIndex()], val1->TypeName().c_str(), val2->TypeName().c_str(), tkn.PrintPos().c_str());
 };
 
+// Get integer value
+int ILdsValueBase::GetIndex(void) { return 0; };
+
+// Get float value
+double ILdsValueBase::GetNumber(void) { return 0.0; };
+
+// Get string value
+string ILdsValueBase::GetString(void) { return ""; };
+
+// Get array value
+CLdsArray &ILdsValueBase::GetArray(void) { return *(CLdsArray *)NULL; };
+
+// Get struct value
+CLdsStruct &ILdsValueBase::GetStruct(void) { return *(CLdsStruct *)NULL; };
+
 // Constructor
 CLdsValue::CLdsValue(void) :
   val_pBase(new CLdsIntType(0)) {};

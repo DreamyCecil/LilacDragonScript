@@ -91,8 +91,8 @@ class LDS_API CLdsScriptEngine {
     // Script values I/O
 
     // Write and read one variable
-    void LdsWriteMapVar(void *pStream, CLdsVarMap &map, const int &iVar);
-    void LdsReadMapVar(void *pStream, CLdsVarMap &map);
+    void LdsWriteOneVar(void *pStream, CLdsVars &aVars, const int &iVar);
+    void LdsReadOneVar(void *pStream, CLdsVars &aVars);
 
     // Write and read values
     void LdsWriteValue(void *pStream, CLdsValue &val);
@@ -133,18 +133,15 @@ class LDS_API CLdsScriptEngine {
     
   // Variables
   public:
-    CLdsVarMap _mapLdsDefVar; // default variables
-    CLdsVarMap _mapLdsVariables; // custom variables (used in I/O)
+    CLdsVars _aLdsDefVar; // default variables
+    CLdsVars _aLdsVariables; // custom variables (used in I/O)
     
     // Set default variables
     void SetDefaultVariables(void);
     // Set custom variables from the map
-    void SetCustomVariables(CLdsVarMap &mapFrom);
+    void SetCustomVariables(CLdsVars &aFrom);
     // Add more variables and replace ones that already exist
-    void AddCustomVariables(CLdsVarMap &mapFrom);
-    
-    // Get a variable by name
-    bool LdsVariableValue(const string &strVar, SLdsVar *&pvar);
+    void AddCustomVariables(CLdsVars &aFrom);
   
   // Parser
   public:
@@ -242,7 +239,7 @@ class LDS_API CLdsScriptEngine {
     LONG64 _llCurrentTick; // current timer tick (used in I/O)
   
     // Create a new thread
-    CLdsThread *ThreadCreate(const CActionList &acaActions, CLdsVarMap &mapArgs);
+    CLdsThread *ThreadCreate(const CActionList &acaActions, CLdsVars &aArgs);
     
   public:
     // Constructor

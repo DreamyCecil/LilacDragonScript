@@ -82,7 +82,7 @@ void CLdsScriptEngine::CompileGetter(CBuildNode &bn, CActionList &aca) {
       string strName = bn->GetString();
       
       // custom variables and constants
-      if (_mapLdsVariables.FindKeyIndex(strName) != -1) {
+      if (_aLdsVariables.Find(strName) != NULL) {
         aca.Add(CCompAction(LCA_GET, bn.lt_iPos, strName, 0));
         
       // locals (if allowed)
@@ -115,17 +115,17 @@ void CLdsScriptEngine::CompileSetter(CBuildNode &bn, CActionList &aca) {
     // iVal
     case EBN_IDENTIFIER: {
       string strName = bn->GetString();
-      bool bLocal = (_mapLdsVariables.FindKeyIndex(strName) == -1);
+      SLdsVar *pvarNonLocal = _aLdsVariables.Find(strName);
       
       // custom variables
-      if (!bLocal) {
+      if (pvarNonLocal != NULL) {
         // can't change constants
-        if (_mapLdsVariables[strName].var_bConst > 1) {
+        if (pvarNonLocal->var_bConst > 1) {
           LdsThrow(LEC_CONST, "Cannot change constant variable at %s", bn.PrintPos().c_str());
         }
       }
       
-      aca.Add(CCompAction(LCA_SET, bn.lt_iPos, strName, bLocal));
+      aca.Add(CCompAction(LCA_SET, bn.lt_iPos, strName, (pvarNonLocal == NULL)));
     } return;
       
     // aArr[value][...]
@@ -354,7 +354,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
       string strVar = bn->GetString();
       
       // global variable redefinition
-      if (_mapLdsVariables.FindKeyIndex(strVar) != -1) {
+      if (_aLdsVariables.Find(strVar) != NULL) {
         LdsThrow(LEC_VARDEF, "Variable '%s' redefinition at %s", strVar.c_str(), bn.PrintPos().c_str());
       }
       

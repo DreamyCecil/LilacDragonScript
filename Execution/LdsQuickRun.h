@@ -31,7 +31,7 @@ class LDS_API CLdsQuickRun {
   public:
     // Constructor
     CLdsQuickRun(CLdsScriptEngine &ldsEngine, const CActionList &acaActions,
-                 CLdsVarMap &mapArgs = CLdsVarMap(), CLdsInFuncMap &mapInline = CLdsInFuncMap());
+                 CLdsVars &aArgs = CLdsVars(), CLdsInFuncMap &mapInline = CLdsInFuncMap());
 
     // Destructor
     ~CLdsQuickRun(void);

@@ -55,7 +55,7 @@ class LDS_API CLdsThread {
   
     DSStack<CLdsValueRef> sth_avalStack; // stack of values
     DSStack<int> sth_aiJumpStack; // stack of actions to jump to
-    CLdsVarMap sth_mapLocals; // local variables to this specific thread (script)
+    CLdsVars sth_aLocals; // local variables to this specific thread
     CLdsInFuncMap sth_mapInlineFunc; // inline functions
   
     CLdsValue sth_valResult; // value or error depending on status

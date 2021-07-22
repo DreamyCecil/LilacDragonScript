@@ -23,10 +23,10 @@ SOFTWARE. */
 
 // Constructor
 CLdsQuickRun::CLdsQuickRun(CLdsScriptEngine &ldsEngine, const CActionList &acaActions,
-                           CLdsVarMap &mapArgs, CLdsInFuncMap &mapInline)
+                           CLdsVars &aArgs, CLdsInFuncMap &mapInline)
 {
   // create and execute the compiled script
-  qr_psthThread = ldsEngine.ThreadCreate(acaActions, mapArgs);
+  qr_psthThread = ldsEngine.ThreadCreate(acaActions, aArgs);
   qr_psthThread->SetFlag(CLdsThread::THF_QUICK, true);
   
   // copy provided inline function if there are any

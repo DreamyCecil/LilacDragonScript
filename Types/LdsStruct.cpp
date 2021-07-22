@@ -36,14 +36,16 @@ CLdsStruct::CLdsStruct(const int &iSetID) :
 // Clear the structure
 void CLdsStruct::Clear(void) {
   iID = -1;
-  mapVars.Clear();
+  aFields.Clear();
   pCallback = &DummyStructCallback;
 };
 
 // Print one variable
 string CLdsStruct::Print(int iVar) {
+  SLdsVar &var = aFields.aVars[iVar];
+
   // print value
-  CLdsValue &val = mapVars.GetValue(iVar).var_valValue;
+  CLdsValue &val = var.var_valValue;
   string strValue = val->Print();
 
   // surround with quotes
@@ -52,9 +54,7 @@ string CLdsStruct::Print(int iVar) {
   }
   
   // var = "val"
-  string strVar = mapVars.GetKey(iVar) + " = " + strValue;
-  
-  return strVar;
+  return var.var_strName + " = " + strValue;
 };
 
 // Assignment
@@ -67,17 +67,17 @@ CLdsStruct &CLdsStruct::operator=(const CLdsStruct &sOther) {
   Clear();
   
   iID = sOther.iID;
-  mapVars = sOther.mapVars;
+  aFields = sOther.aFields;
 
   return *this;
 };
 
 // Structure accessor
 CLdsValue &CLdsStruct::operator[](const string &strVar) {
-  return mapVars[strVar].var_valValue;
+  return aFields.Find(strVar)->var_valValue;
 };
 
 // Find variable index
 int CLdsStruct::FindIndex(const string &strVar) {
-  return mapVars.FindKeyIndex(strVar);
+  return aFields.FindIndex(strVar);
 };

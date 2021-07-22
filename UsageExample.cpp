@@ -84,11 +84,11 @@ LDS_FUNC(LDS_Data) {
 
   if (iStruct != 0) {
     // return structure
-    CLdsVarMap mapFields;
-    mapFields["info"] = SLdsVar(string("Two bytes"), true);
-    mapFields["data"] = SLdsVar(aData, true);
+    CLdsVars aFields;
+    aFields.Add(SLdsVar("info", string("Two bytes"), true));
+    aFields.Add(SLdsVar("data", aData, true));
 
-    return CLdsStructType(-1, mapFields, true);
+    return CLdsStructType(-1, aFields, true);
   }
 
   // return array
@@ -117,11 +117,11 @@ void SetupLDS(void) {
   _ldsEngine.SetCustomFunctions(mapFunc);
 
   // custom variables (values are preserved between runs)
-  CLdsVarMap mapVars;
-  mapVars["MAX_COUNT"] = SLdsVar(10, true);
-  mapVars["strHello"] = SLdsVar(string("Hello, world!"));
+  CLdsVars aVars;
+  aVars.Add(SLdsVar("MAX_COUNT", 10, true));
+  aVars.Add(SLdsVar("strHello", string("Hello, world!")));
   
-  _ldsEngine.SetCustomVariables(mapVars);
+  _ldsEngine.SetCustomVariables(aVars);
 };
 
 

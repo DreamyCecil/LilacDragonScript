@@ -26,31 +26,19 @@ void CLdsScriptEngine::SetDefaultVariables(void) {
 };
 
 // Set custom variables from the map
-void CLdsScriptEngine::SetCustomVariables(CLdsVarMap &mapFrom) {
+void CLdsScriptEngine::SetCustomVariables(CLdsVars &aFrom) {
   // reset the map
-  _mapLdsVariables.Clear();
+  _aLdsVariables.Clear();
   
   // readd default variables
-  _mapLdsVariables.CopyMap(_mapLdsDefVar);
+  _aLdsVariables = _aLdsDefVar;
   
   // add custom variables
-  _mapLdsVariables.AddFrom(mapFrom, true);
+  _aLdsVariables.AddFrom(aFrom, true);
 };
 
 // Add more variables and replace ones that already exist
-void CLdsScriptEngine::AddCustomVariables(CLdsVarMap &mapFrom) {
+void CLdsScriptEngine::AddCustomVariables(CLdsVars &aFrom) {
   // add custom variables
-  _mapLdsVariables.AddFrom(mapFrom, true);
-};
-
-// Get value from a number variable by name
-bool CLdsScriptEngine::LdsVariableValue(const string &strVar, SLdsVar *&pvar) {
-  // check the variable
-  if (_mapLdsVariables.FindKeyIndex(strVar) != -1) {
-    // return the variable
-    pvar = &_mapLdsVariables[strVar];
-    return true;
-  }
-
-  return false;
+  _aLdsVariables.AddFrom(aFrom, true);
 };
