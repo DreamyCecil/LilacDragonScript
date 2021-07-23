@@ -118,7 +118,7 @@ class LDS_API CLdsValue {
       return val_pBase;
     };
     inline ILdsValueBase &operator*(void) const {
-      return *val_pBase; 
+      return *val_pBase;
     };
 
   public:

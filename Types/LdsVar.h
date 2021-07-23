@@ -105,6 +105,17 @@ struct LDS_API SLdsVar {
 
   // Assignment by value
   SLdsVar &operator=(const CLdsValue &valOther);
+
+  // Quick value access
+  inline ILdsValueBase *operator->(void) const {
+    return var_valValue.val_pBase;
+  };
+  inline operator ILdsValueBase*(void) const {
+    return var_valValue.val_pBase;
+  };
+  inline ILdsValueBase &operator*(void) const {
+    return *var_valValue.val_pBase;
+  };
 };
 
 // Inline definitions

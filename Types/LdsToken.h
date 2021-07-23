@@ -190,6 +190,6 @@ class LDS_API CLdsToken {
       return lt_valValue.val_pBase;
     };
     inline ILdsValueBase &operator*(void) const {
-      return *lt_valValue.val_pBase; 
+      return *lt_valValue.val_pBase;
     };
 };
