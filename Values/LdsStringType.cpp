@@ -154,7 +154,7 @@ CLdsValueRef CLdsStringType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
     // accessor
     case LOP_ACCESS: {
       if (tkn.lt_iArg >= 1) {
-        LdsThrow(LEX_ACCESS, "Cannot use structure accessor on a string at %s", tkn.PrintPos().c_str());
+        LdsThrow(LEX_ACCESS, "Cannot use member accessor on a string at %s", tkn.PrintPos().c_str());
       }
 
       if (val2->GetType() > EVT_FLOAT) {

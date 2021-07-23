@@ -22,45 +22,45 @@ SOFTWARE. */
 
 #include "LdsVar.h"
 
-// Structure change callback function
-typedef void (*CLdsStructCallback)(class CLdsStruct *sStruct, const int &iVariable);
+// Object change callback function
+typedef void (*CLdsObjectCallback)(class CLdsObject *poObject, const int &iVariable);
 
-// Structure value
-class LDS_API CLdsStruct {
+// Object value
+class LDS_API CLdsObject {
   public:
-    // TODO: Each structure would have a unique ID (for example - Serious Sam entity ID) and a function that would be called
-    //       everytime a variable in the structure is changed and sends this variable (its position in the map) and a struct ID
+    // TODO: Each object would have a unique ID (for example - Serious Sam entity ID) and a function that would be called
+    //       everytime a property in the object is changed and sends this property (its position in the list) and the object ID
     //       That would allow hooking onto certain external objects and change them on the spot.
-    //       For example a line like 'entity.m_strName = "this";' would immediately change value in the 'm_strName' variable of this object in memory, not just the structure.
+    //       For example a line like 'entity.m_strName = "this";' would immediately change value in the 'm_strName' variable of this entity in memory, not just the object.
 
     int iID; // unique ID
-    CLdsVars aFields; // structure fields
-    bool bStatic; // static struct (cannot add new fields)
+    CLdsVars aFields; // object property fields
+    bool bStatic; // static object (cannot add new properties)
 
-    CLdsStructCallback pCallback; // callback function
+    CLdsObjectCallback pCallback; // callback function
   
   public:
     // Constructors
-    CLdsStruct(void);
-    CLdsStruct(const int &iSetID);
+    CLdsObject(void);
+    CLdsObject(const int &iSetID);
   
-    // Clear the structure
+    // Clear the object
     void Clear(void);
   
-    // Structure size
+    // Object size
     inline int Count(void) const {
       return aFields.Count();
     };
   
-    // Print one variable
+    // Print one property
     string Print(int iVar);
   
     // Assignment
-    CLdsStruct &operator=(const CLdsStruct &sOther);
+    CLdsObject &operator=(const CLdsObject &sOther);
   
-    // Structure accessor
+    // Property accessor
     CLdsValue &operator[](const string &strVar);
   
-    // Find variable index
+    // Find property index
     int FindIndex(const string &strVar);
 };

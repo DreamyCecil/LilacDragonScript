@@ -115,7 +115,7 @@ void CLdsScriptEngine::ParseScript(string strScript) {
       case '{': AddParserToken(LTK_CUR_OPEN, iPrintPos); break;
       case '}': AddParserToken(LTK_CUR_CLOSE, iPrintPos); break;
       
-      // structure accessor
+      // member access
       case '.': AddParserToken(LTK_ACCESS, iPrintPos); break;
 
       // comma

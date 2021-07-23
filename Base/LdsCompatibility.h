@@ -61,7 +61,7 @@ enum ELdsError {
   LEB_SWITCH    = 0x30, // expected next switch case or switch block end
   LEB_WHILE     = 0x31, // expected 'while' after 'do'
   LEB_ARRAY     = 0x32, // expected next array value or array end
-  LEB_STRUCT    = 0x33, // expected next structure variable or structure end
+  LEB_OBJECT    = 0x33, // expected next object property or object end
   LEB_FUNCTION  = 0x34, // expected next function argument or function end
   LEB_FUNCDEF   = 0x35, // function redefinition
 
@@ -91,9 +91,9 @@ enum ELdsError {
   LEX_BINARY     = 0x63, // cannot perform binary operation
   LEX_ARRAYEMPTY = 0x64, // cannot index an empty array
   LEX_ARRAYOUT   = 0x65, // array index out of bounds
-  LEX_STRUCTACC  = 0x66, // wrong structure accessor
-  LEX_EXPECTACC  = 0x67, // expected structure variable
-  LEX_STRUCTVAR  = 0x68, // invalid structure variable
+  LEX_OBJECTACC  = 0x66, // wrong object accessor
+  LEX_EXPECTACC  = 0x67, // expected object member
+  LEX_OBJECTMEM  = 0x68, // invalid object member
   LEX_ACCESS     = 0x69, // wrong accessor type
   LEX_NOACCESS   = 0x6a, // no accessor reference
   LEX_NOFUNC     = 0x6b, // no function pointer

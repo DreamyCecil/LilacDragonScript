@@ -50,12 +50,12 @@ void CLdsScriptEngine::SetDefaultFunctions(void) {
         Print("array received");
         break;
         
-      on (struct s) : {
-        var iID = GetID(s);
-        Print("got struct: " + iID);
+      on (object o) : {
+        var iID = GetID(o);
+        Print("got object: " + iID);
         
         if (iID == 0) {
-          iTemp = s.iValue;
+          iTemp = o.iValue;
         }
       } continue;
       

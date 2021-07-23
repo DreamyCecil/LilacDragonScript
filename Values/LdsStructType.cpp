@@ -21,84 +21,84 @@ SOFTWARE. */
 #include "StdH.h"
 
 // Write value into the stream
-void CLdsStructType::Write(class CLdsScriptEngine *pEngine, void *pStream) {
-  const int ctStruct = sStruct.Count();
+void CLdsObjectType::Write(class CLdsScriptEngine *pEngine, void *pStream) {
+  const int ctProps = oObject.Count();
 
-  // write structure ID and if it's static
-  char bStatic = sStruct.bStatic;
-  pEngine->_pLdsWrite(pStream, &sStruct.iID, sizeof(int));
+  // write object ID and if it's static
+  char bStatic = oObject.bStatic;
+  pEngine->_pLdsWrite(pStream, &oObject.iID, sizeof(int));
   pEngine->_pLdsWrite(pStream, &bStatic, sizeof(char));
 
   // write amount of keys
-  pEngine->_pLdsWrite(pStream, &ctStruct, sizeof(int));
+  pEngine->_pLdsWrite(pStream, &ctProps, sizeof(int));
 
-  // write each individual key-value pair
-  for (int i = 0; i < ctStruct; i++) {
-    pEngine->LdsWriteOneVar(pStream, sStruct.aFields, i);
+  // write properties
+  for (int i = 0; i < ctProps; i++) {
+    pEngine->LdsWriteOneVar(pStream, oObject.aFields, i);
   }
 };
 
 // Read value from the stream
-void CLdsStructType::Read(class CLdsScriptEngine *pEngine, void *pStream, CLdsValue &val) {
-  // read structure ID and if it's static
+void CLdsObjectType::Read(class CLdsScriptEngine *pEngine, void *pStream, CLdsValue &val) {
+  // read object ID and if it's static
   int iID = -1;
   char bStatic = false;
   pEngine->_pLdsRead(pStream, &iID, sizeof(int));
   pEngine->_pLdsRead(pStream, &bStatic, sizeof(char));
 
   // read amount of keys
-  int ctStruct = 0;
-  pEngine->_pLdsRead(pStream, &ctStruct, sizeof(int));
+  int ctProps = 0;
+  pEngine->_pLdsRead(pStream, &ctProps, sizeof(int));
 
-  // create a variable map
+  // create a variable list
   CLdsVars aVars;
 
-  // read each individual key-value pair
-  for (int i = 0; i < ctStruct; i++) {
+  // read properties
+  for (int i = 0; i < ctProps; i++) {
     pEngine->LdsReadOneVar(pStream, aVars);
   }
 
-  // create a structure
-  val = CLdsStructType(iID, aVars, (bStatic != 0));
+  // create an object
+  val = CLdsObjectType(iID, aVars, (bStatic != 0));
 };
       
 // Print the value
-string CLdsStructType::Print(void) {
-  int ctVars = sStruct.Count();
+string CLdsObjectType::Print(void) {
+  int ctVars = oObject.Count();
         
   if (ctVars <= 0) {
     return "{ }";
   }
 
-  // structure opening
-  string strStruct = "{ ";
+  // object opening
+  string strObject = "{ ";
         
   for (int iVar = 0; iVar < ctVars; iVar++) {
     if (iVar != 0) {
-      // next variable
-      strStruct += ", ";
+      // next property
+      strObject += ", ";
     }
           
-    // print structure variable
-    strStruct += sStruct.Print(iVar);
+    // print object property
+    strObject += oObject.Print(iVar);
   }
         
-  // structure closing
-  strStruct += " }";
+  // object closing
+  strObject += " }";
 
-  return strStruct;
+  return strObject;
 };
 
 // Perform a unary operation
-CLdsValueRef CLdsStructType::UnaryOp(CLdsValueRef &valRef, const CLdsToken &tkn) {
-  // cannot do unary operations on structures
+CLdsValueRef CLdsObjectType::UnaryOp(CLdsValueRef &valRef, const CLdsToken &tkn) {
+  // cannot do unary operations on objects
   LdsUnaryError(valRef.vr_val, tkn);
 
   return valRef;
 };
 
 // Perform a binary operation
-CLdsValueRef CLdsStructType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, const CLdsToken &tkn) {
+CLdsValueRef CLdsObjectType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef2, const CLdsToken &tkn) {
   // actual values and the operation
   CLdsValue val1 = valRef1.vr_val;
   CLdsValue val2 = valRef2.vr_val;
@@ -115,13 +115,13 @@ CLdsValueRef CLdsStructType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
     // accessor
     case LOP_ACCESS: {
       if (val2->GetType() != EVT_STRING) {
-        // using array accessor on a structure
+        // using array accessor on an object
         if (tkn.lt_iArg <= 0) {
-          LdsThrow(LEX_STRUCTACC, "Cannot use %s as a structure accessor at %s", strType2.c_str(), tkn.PrintPos().c_str());
+          LdsThrow(LEX_OBJECTACC, "Cannot use %s as an object accessor at %s", strType2.c_str(), tkn.PrintPos().c_str());
             
-        // structure accessor
+        // object accessor
         } else {
-          LdsThrow(LEX_EXPECTACC, "Expected a structure variable name at %s", tkn.PrintPos().c_str());
+          LdsThrow(LEX_EXPECTACC, "Expected a property name at %s", tkn.PrintPos().c_str());
         }
       }
         
@@ -129,13 +129,13 @@ CLdsValueRef CLdsStructType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
       CLdsVars aCopy = val1->GetVars();
 
       if (aCopy.FindIndex(strVar) == -1) {
-        LdsThrow(LEX_STRUCTVAR, "Variable '%s' does not exist in the structure at %s", strVar.c_str(), tkn.PrintPos().c_str());
+        LdsThrow(LEX_OBJECTMEM, "Property '%s' does not exist in the object at %s", strVar.c_str(), tkn.PrintPos().c_str());
       }
 
       SLdsVar *pvar = aCopy.Find(strVar);
       val1 = pvar->var_valValue;
         
-      // get pointer to the value within the structure
+      // get pointer to the object property
       if (valRef1.vr_pvar != NULL) {
         pvarField = valRef1.AccessVariable(strVar);
       }

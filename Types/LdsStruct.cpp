@@ -21,27 +21,27 @@ SOFTWARE. */
 #include "StdH.h"
 #include "LdsStruct.h"
 
-// Dummy structure callback function
-static void DummyStructCallback(CLdsStruct *sStruct, const int &iVariable) {
-  (void)0;
+// Dummy object callback function
+static void DummyObjectCallback(CLdsObject *poObject, const int &iVariable) {
+  (void)poObject;
 };
 
 // Constructors
-CLdsStruct::CLdsStruct(void) :
-  iID(-1), pCallback(&DummyStructCallback) {};
+CLdsObject::CLdsObject(void) :
+  iID(-1), pCallback(&DummyObjectCallback) {};
 
-CLdsStruct::CLdsStruct(const int &iSetID) :
-  iID(iSetID), pCallback(&DummyStructCallback) {};
+CLdsObject::CLdsObject(const int &iSetID) :
+  iID(iSetID), pCallback(&DummyObjectCallback) {};
 
-// Clear the structure
-void CLdsStruct::Clear(void) {
+// Clear the object
+void CLdsObject::Clear(void) {
   iID = -1;
   aFields.Clear();
-  pCallback = &DummyStructCallback;
+  pCallback = &DummyObjectCallback;
 };
 
-// Print one variable
-string CLdsStruct::Print(int iVar) {
+// Print one property
+string CLdsObject::Print(int iVar) {
   SLdsVar &var = aFields[iVar];
 
   // print value
@@ -58,12 +58,12 @@ string CLdsStruct::Print(int iVar) {
 };
 
 // Assignment
-CLdsStruct &CLdsStruct::operator=(const CLdsStruct &sOther) {
+CLdsObject &CLdsObject::operator=(const CLdsObject &sOther) {
   if (this == &sOther) {
     return *this;
   }
 
-  // copy variable fields
+  // clear current fields
   Clear();
   
   iID = sOther.iID;
@@ -72,12 +72,12 @@ CLdsStruct &CLdsStruct::operator=(const CLdsStruct &sOther) {
   return *this;
 };
 
-// Structure accessor
-CLdsValue &CLdsStruct::operator[](const string &strVar) {
+// Property accessor
+CLdsValue &CLdsObject::operator[](const string &strVar) {
   return aFields.Find(strVar)->var_valValue;
 };
 
-// Find variable index
-int CLdsStruct::FindIndex(const string &strVar) {
+// Find property index
+int CLdsObject::FindIndex(const string &strVar) {
   return aFields.FindIndex(strVar);
 };

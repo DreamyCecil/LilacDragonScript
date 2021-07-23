@@ -288,12 +288,12 @@ void CLdsScriptEngine::LdsWriteValueRef(void *pStream, CLdsThread &sth, CLdsValu
     _pLdsWrite(pStream, &bIndexRef, sizeof(char));
 
     if (bIndexRef) {
-      // write array index
+      // write index
       int iRefIndex = ri.GetIndex();
       _pLdsWrite(pStream, &iRefIndex, sizeof(int));
 
     } else {
-      // write structure variable
+      // write property
       LdsWriteString(pStream, ri.strIndex);
     }
   }
@@ -334,7 +334,7 @@ void CLdsScriptEngine::LdsReadValueRef(void *pStream, CLdsThread &sth, CLdsValue
     _pLdsRead(pStream, &bIndexRef, sizeof(char));
 
     if (bIndexRef) {
-      // read array index
+      // read index
       int iRefIndex = 0;
       _pLdsRead(pStream, &iRefIndex, sizeof(int));
 
@@ -345,7 +345,7 @@ void CLdsScriptEngine::LdsReadValueRef(void *pStream, CLdsThread &sth, CLdsValue
       vr.vr_pvarAccess = vr.AccessVariable(iRefIndex);
 
     } else {
-      // read structure variable
+      // read property
       string strVar = "";
       LdsReadString(pStream, strVar);
       

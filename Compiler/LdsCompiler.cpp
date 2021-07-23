@@ -242,15 +242,15 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
       aca.Add(CCompAction(LCA_VAL, bn.lt_iPos, 0, ctValues));
     } break;
     
-    // structures
-    case EBN_STRUCT_VAL: {
+    // objects
+    case EBN_OBJECT_VAL: {
       int ctVars = bn.lt_iArg;
 
       for (int iVar = 0; iVar < ctVars; iVar++) {
         Compile(*bn.bn_abnNodes[iVar], aca);
       }
 
-      // value signifies if it's a static structure or not
+      // value signifies if it's a static object or not
       aca.Add(CCompAction(LCA_VAL, bn.lt_iPos, bn.lt_valValue, ctVars));
     } break;
 
@@ -362,15 +362,15 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
       aca.Add(CCompAction(LCA_VAR, bn.lt_iPos, bn.lt_valValue, bn.lt_iArg));
     } break;
     
-    // structure variable definition
+    // object property definition
     case EBN_SVAR_DEF: {
-      // variable value
+      // property value
       Compile(*bn.bn_abnNodes[0], aca);
       
-      // constant variable
+      // constant property
       aca.Add(CCompAction(LCA_VAL, bn.lt_iPos, bn.lt_iArg, -1));
       
-      // variable name
+      // property name
       aca.Add(CCompAction(LCA_VAL, bn.lt_iPos, bn.lt_valValue, -1));
     } break;
     

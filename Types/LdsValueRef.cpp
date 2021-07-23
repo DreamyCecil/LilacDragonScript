@@ -21,15 +21,15 @@ SOFTWARE. */
 #include "StdH.h"
 #include "LdsValueRef.h"
 
-// Constructor
+// Default constructor
 SLdsRefIndex::SLdsRefIndex(void) :
   strIndex("0"), bIndex(true) {};
 
-// Structure variable constructor
+// Property constructor
 SLdsRefIndex::SLdsRefIndex(const string &strVar) :
   strIndex(strVar), bIndex(false) {};
 
-// Array index constructor
+// Index constructor
 SLdsRefIndex::SLdsRefIndex(const int &iIndex) : bIndex(true)
 {
   // write index into a stream

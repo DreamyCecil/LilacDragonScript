@@ -28,6 +28,6 @@ Out("Array: \"" + str + "\" - " + iByte + "\n");
 str = GetData(1).info;
 iByte = GetData(1).data[1];
 
-Out("Struct: \"" + str + "\" - " + iByte + "\n");
+Out("Object: \"" + str + "\" - " + iByte + "\n");
 
 return GetData(1).data;

@@ -25,7 +25,7 @@ SOFTWARE. */
 // TODO: Add '::' semi-operator that will access specific scope for a variable/function.
 //       E.g. if inside the inline function and need to access outside variable/function that was redefined, should use '::Out(::strName)'.
 //       Same with scopes of inline function above. If inside the inline function twice, can also use 'PrevFunc::MyFunc(FirstFunc::var)'.
-//       Or just use a dot operator and make structures kinda like a definitive values with custom functions and variables but no statements.
+//       Or just use a dot operator and make objects kinda like definitive values with custom functions and variables but no statements.
 // Script token types
 enum ELdsToken {
   LTK_END, // end of the script
@@ -34,7 +34,7 @@ enum ELdsToken {
   LTK_UNARYOP,  // unary operator
   LTK_SET,      // assignment
   LTK_ADJFIX,   // ++/--
-  LTK_ACCESS,   // structure accessor
+  LTK_ACCESS,   // array/object accessor
   
   LTK_PAR_OPEN,  // opening parenthesis
   LTK_PAR_CLOSE, // closing parenthesis
@@ -46,7 +46,7 @@ enum ELdsToken {
   LTK_VAL,    // value
   LTK_VAR,    // variable
   LTK_ID,     // identifier
-  LTK_STATIC, // static structure
+  LTK_STATIC, // static object
   
   LTK_COMMA,   // comma
   LTK_SEMICOL, // statement end
@@ -102,7 +102,7 @@ enum ELdsOperator {
   
   LOP_MAX = 0x60, // maximum priority
   
-  LOP_ACCESS = 0x61, // array or struct accessor
+  LOP_ACCESS = 0x61, // array/object accessor
 };
 
 // Binary operation symbols

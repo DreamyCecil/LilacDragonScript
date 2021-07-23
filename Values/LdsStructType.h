@@ -22,44 +22,44 @@ SOFTWARE. */
 
 #include "LdsValue.h"
 
-// Script struct value
-class LDS_API CLdsStructType : public ILdsValueBase {
+// Script object value
+class LDS_API CLdsObjectType : public ILdsValueBase {
   public:
-    CLdsStruct sStruct; // structure with value fields
+    CLdsObject oObject; // object with property fields
     
   public:
     // Default constructor
-    CLdsStructType(void) : sStruct() {};
+    CLdsObjectType(void) : oObject() {};
 
-    // Structure constructor
-    CLdsStructType(const int &iSetID, const CLdsVars &aFields, const bool &bSetStatic) :
-      sStruct(iSetID)
+    // Object constructor
+    CLdsObjectType(const int &iSetID, const CLdsVars &aFields, const bool &bSetStatic) :
+      oObject(iSetID)
     {
-      sStruct.aFields = aFields;
-      sStruct.bStatic = bSetStatic;
+      oObject.aFields = aFields;
+      oObject.bStatic = bSetStatic;
     };
 
-    // Structure copy constructor
-    CLdsStructType(const CLdsStruct &s) : sStruct(s) {};
+    // Object copy constructor
+    CLdsObjectType(const CLdsObject &oSet) : oObject(oSet) {};
 
     // Create new instance of this value
     virtual ILdsValueBase *MakeCopy(void) const {
-      return new CLdsStructType(sStruct);
+      return new CLdsObjectType(oObject);
     };
 
     // Get value type
     virtual ELdsValueType GetType(void) const {
-      return EVT_STRUCT;
+      return EVT_OBJECT;
     };
 
     // Type name
     virtual string TypeName(void) const {
-      return "struct";
+      return "object";
     };
 
     // Clear the value
     virtual void Clear(void) {
-      sStruct.Clear();
+      oObject.Clear();
     };
 
     // Value I/O
@@ -71,7 +71,7 @@ class LDS_API CLdsStructType : public ILdsValueBase {
     virtual string Print(void);
     
     // Get variables
-    virtual CLdsVars &GetVars(void) { return sStruct.aFields; };
+    virtual CLdsVars &GetVars(void) { return oObject.aFields; };
     
     // Perform a unary operation
     virtual CLdsValueRef UnaryOp(CLdsValueRef &valRef, const CLdsToken &tkn);
@@ -80,10 +80,10 @@ class LDS_API CLdsStructType : public ILdsValueBase {
 
     // Conditions
     virtual bool IsTrue(void) {
-      return (sStruct.iID != -1);
+      return (oObject.iID != -1);
     };
     
     virtual bool Compare(const ILdsValueBase &valOther) {
-      return (sStruct.iID == ((CLdsStructType &)valOther).sStruct.iID);
+      return (oObject.iID == ((CLdsObjectType &)valOther).oObject.iID);
     };
 };

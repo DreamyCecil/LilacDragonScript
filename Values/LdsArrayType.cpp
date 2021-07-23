@@ -200,7 +200,7 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
     // accessor
     case LOP_ACCESS: {
       if (tkn.lt_iArg >= 1) {
-        LdsThrow(LEX_ACCESS, "Cannot use structure accessor on an array at %s", tkn.PrintPos().c_str());
+        LdsThrow(LEX_ACCESS, "Cannot use member accessor on an array at %s", tkn.PrintPos().c_str());
       }
 
       if (val2->GetType() > EVT_FLOAT) {

@@ -27,7 +27,7 @@ enum EBuildNode {
   // values
   EBN_RAW_VAL,    // simple pure value
   EBN_ARRAY_VAL,  // array of values (arg: array size)
-  EBN_STRUCT_VAL, // structure with value fields (arg: amount of variables)
+  EBN_OBJECT_VAL, // object with property fields (arg: amount of properties)
   EBN_IDENTIFIER, // identifier
 
   // operations
@@ -38,7 +38,7 @@ enum EBuildNode {
   EBN_PREFIX,  // ++i
   EBN_POSTFIX, // i++
   EBN_ADJFIX,  // i += 1
-  EBN_ACCESS,  // variable accessor (arg: array or struct accessor)
+  EBN_ACCESS,  // variable accessor (arg: array or object)
   
   // actions
   EBN_CALL_ACT,   // function call (arg: amount of arguments)
@@ -50,7 +50,7 @@ enum EBuildNode {
   // definitions
   EBN_FUNC_DEF, // inline function definition
   EBN_VAR_DEF,  // variable definition (arg: constant)
-  EBN_SVAR_DEF, // structure variable definition (arg: constant)
+  EBN_SVAR_DEF, // object property definition (arg: constant)
   
   // blocks
   EBN_BLOCK, // (arg: amount of expressions)
@@ -70,7 +70,7 @@ enum EBuildNode {
 
 // Build node names
 static const char *_astrBuildNodes[EBN_LAST] = {
-  "RAW_VAL", "ARRAY_VAL", "STRUCT_VAL", "IDENTIFIER",
+  "RAW_VAL", "ARRAY_VAL", "OBJECT_VAL", "IDENTIFIER",
   "UNARY_OP", "BINARY_OP", "ASSIGN_OP",
   "PREFIX", "POSTFIX", "ADJFIX", "ACCESS",
   "CALL_ACT", "RETURN_ACT", "DISCARD_ACT",

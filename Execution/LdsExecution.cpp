@@ -85,28 +85,28 @@ void Exec_Val(void) {
       
       _pavalStack->Push(CLdsValueRef(valArray));
       
-    // structure
+    // object
     } else {
       bool bStatic = (iContainer > 1);
 
       CLdsVars aFields;
       aFields.aVars.New(ctValues);
       
-      // get structure variables
+      // get properties
       for (int iVar = 0; iVar < ctValues; iVar++) {
-        // variable name
+        // name
         string strVar = _pavalStack->Pop().vr_val->GetString();
-        // constant variable
+        // constant
         bool bConst = _pavalStack->Pop().vr_val->IsTrue();
         // value
         CLdsValue val = _pavalStack->Pop().vr_val;
         
-        // add the variable
+        // add the property
         aFields.aVars[iVar] = SLdsVar(strVar, val, bConst);
       }
       
-      // fill the structure
-      _pavalStack->Push(CLdsValueRef(CLdsStructType(-1, aFields, bStatic)));
+      // fill the object
+      _pavalStack->Push(CLdsValueRef(CLdsObjectType(-1, aFields, bStatic)));
     }
 
   // value

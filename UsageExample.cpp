@@ -75,21 +75,21 @@ LDS_FUNC(LDS_Sleep) {
   return 0;
 };
 
-// Return an array or a structure with some data
+// Return an array or an object with some data
 LDS_FUNC(LDS_Data) {
-  int iStruct = LDS_NEXT_INT;
+  int iObject = LDS_NEXT_INT;
 
   CLdsArrayType aData;
   aData.Add(0xFF);
   aData.Add(0x7F);
 
-  if (iStruct != 0) {
-    // return structure
+  if (iObject != 0) {
+    // return object
     CLdsVars aFields;
     aFields.Add(SLdsVar("info", string("Two bytes"), true));
     aFields.Add(SLdsVar("data", aData, true));
 
-    return CLdsStructType(-1, aFields, true);
+    return CLdsObjectType(-1, aFields, true);
   }
 
   // return array

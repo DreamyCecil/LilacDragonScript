@@ -28,7 +28,7 @@ enum ELdsValueType {
   EVT_FLOAT,
   EVT_STRING,
   EVT_ARRAY,
-  EVT_STRUCT,
+  EVT_OBJECT,
 
   EVT_LAST,
 };

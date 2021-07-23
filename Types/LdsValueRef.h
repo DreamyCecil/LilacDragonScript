@@ -24,14 +24,16 @@ SOFTWARE. */
 
 // Value reference index
 struct LDS_API SLdsRefIndex {
-  string strIndex; // reference index (array index or structure variable)
+  string strIndex; // reference index (array index or object property)
   bool bIndex; // it's an array index
 
-  // Constructor
+  // Default constructor
   SLdsRefIndex(void);
-  // Structure variable constructor
+
+  // Property constructor
   SLdsRefIndex(const string &strVar);
-  // Array index constructor
+
+  // Index constructor
   SLdsRefIndex(const int &iIndex);
 
   // Get index as a number
@@ -46,7 +48,7 @@ class LDS_API CLdsValueRef {
     CLdsValue vr_val; // value itself
 
     SLdsVar *vr_pvar; // variable reference (from CLdsScriptEngine::_mapLdsVariables or CLdsThread::sth_mapLocals)
-    SLdsVar *vr_pvarAccess; // array/structure variable reference
+    SLdsVar *vr_pvarAccess; // array/object property reference
 
     DSList<SLdsRefIndex> vr_ariIndices; // reference indices in order (to determine vr_pvalAccess for I/O)
 
@@ -66,12 +68,12 @@ class LDS_API CLdsValueRef {
     // Get variable by name
     SLdsVar *AccessVariable(const string &strVar);
 
-    // Add array index
+    // Add index
     inline void AddIndex(const int &iIndex) {
       vr_ariIndices.Add(SLdsRefIndex(iIndex));
     };
 
-    // Add structure index
+    // Add property
     inline void AddIndex(const string &strVar) {
       vr_ariIndices.Add(SLdsRefIndex(strVar));
     };

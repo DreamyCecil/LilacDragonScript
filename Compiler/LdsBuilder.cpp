@@ -664,7 +664,7 @@ void CLdsScriptEngine::ExpressionBuilder(const LdsFlags &ubFlags) {
         _bnNode = CBuildNode(EBN_ARRAY_VAL, et.lt_iPos, -1, abnArray.Count(), &abnArray);
       } break;
       
-      // structure
+      // object
       case LTK_STATIC:
       case LTK_CUR_OPEN: {
         CNodeList abnVars;
@@ -674,7 +674,7 @@ void CLdsScriptEngine::ExpressionBuilder(const LdsFlags &ubFlags) {
         if (et.lt_eType == LTK_STATIC) {
           iType = 2;
           
-          // expect structure opening
+          // expect object opening
           const CLdsToken &etOpening = _aetTokens[_iBuildPos++];
           
           if (etOpening.lt_eType != LTK_CUR_OPEN) {
@@ -705,10 +705,10 @@ void CLdsScriptEngine::ExpressionBuilder(const LdsFlags &ubFlags) {
           
           // read the variable name
           if (etNext.lt_eType != LTK_ID) {
-            LdsThrow(LEB_ID, "Expected a variable name at %s", etNext.PrintPos().c_str());
+            LdsThrow(LEB_ID, "Expected a property name at %s", etNext.PrintPos().c_str());
           }
           
-          CBuildNode bnStructVar = CBuildNode(EBN_SVAR_DEF, etNext.lt_iPos, etNext.lt_valValue, bConst);
+          CBuildNode bnProperty = CBuildNode(EBN_SVAR_DEF, etNext.lt_iPos, etNext.lt_valValue, bConst);
           
           // assignment operator
           etNext = _aetTokens[_iBuildPos++];
@@ -719,10 +719,10 @@ void CLdsScriptEngine::ExpressionBuilder(const LdsFlags &ubFlags) {
         
           // read the value and add it to the variable
           ExpressionBuilder(LBF_NONE);
-          bnStructVar.AddReference(&_bnNode);
+          bnProperty.AddReference(&_bnNode);
         
-          // add one structure variable
-          abnVars.Add(bnStructVar);
+          // add one property
+          abnVars.Add(bnProperty);
         
           // skip the comma
           etNext = _aetTokens[_iBuildPos];
@@ -731,16 +731,16 @@ void CLdsScriptEngine::ExpressionBuilder(const LdsFlags &ubFlags) {
             _iBuildPos++;
           
           } else if (etNext.lt_eType != LTK_CUR_CLOSE) {
-            LdsThrow(LEB_STRUCT, "Expected a comma or a '}' at %s", etNext.PrintPos().c_str());
+            LdsThrow(LEB_OBJECT, "Expected a comma or a '}' at %s", etNext.PrintPos().c_str());
           }
         }
       
         if (!bClosed) {
-          LdsThrow(LEB_CLOSECB, "Unclosed structure at %s", et.PrintPos().c_str());
+          LdsThrow(LEB_CLOSECB, "Unclosed object at %s", et.PrintPos().c_str());
         }
       
-        // create a structure
-        _bnNode = CBuildNode(EBN_STRUCT_VAL, et.lt_iPos, iType, abnVars.Count(), &abnVars);
+        // create an object
+        _bnNode = CBuildNode(EBN_OBJECT_VAL, et.lt_iPos, iType, abnVars.Count(), &abnVars);
       } break;
         
       // inside the parentheses
@@ -915,9 +915,9 @@ bool CLdsScriptEngine::PostfixBuilder(bool bChained) {
       _bnNode.AddReference(&bnVal);
     } break;
     
-    // aArr[value].variable[...]
+    // aArr[value].prop[...]
     case LTK_SQ_OPEN:
-    // sStruct.variable
+    // oObject.prop
     case LTK_ACCESS: {
       CBuildNode bnID;
       

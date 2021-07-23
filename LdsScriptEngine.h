@@ -276,7 +276,7 @@ class LDS_API CLdsScriptEngine {
       AddValueType(CLdsFloatType());
       AddValueType(CLdsStringType());
       AddValueType(CLdsArrayType());
-      AddValueType(CLdsStructType());
+      AddValueType(CLdsObjectType());
     };
     
     // Destructor

@@ -21,7 +21,7 @@ SOFTWARE. */
 // Script that accesses different values within data structures
 
 // specific data for each operation
-var sData = {
+var oData = {
   add = 8,
   mul = 10,
   sub = 2,
@@ -34,14 +34,14 @@ var aOps = ["sub", "add", "mul"];
 var iResult = 6;
 
 // print out the expression
-Out("(" + iResult + " - " + sData.sub + " + " + sData.add + ") * " + sData.mul + " = ");
+Out("(" + iResult + " - " + oData.sub + " + " + oData.add + ") * " + oData.mul + " = ");
 
 for (var i = 0; i < 3; i++) {
   // get operation from the array
   var strOperation = aOps[i];
   
   // get number under the operation name
-  var iData = sData[strOperation];
+  var iData = oData[strOperation];
   
   // perform operations
   switch (strOperation) {
