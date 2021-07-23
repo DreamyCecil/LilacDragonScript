@@ -24,4 +24,4 @@ SOFTWARE. */
 #include "LdsFloatType.h"
 #include "LdsStringType.h"
 #include "LdsArrayType.h"
-#include "LdsStructType.h"
+#include "LdsObjectType.h"

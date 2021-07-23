@@ -129,9 +129,6 @@
     <ClInclude Include="Functions\LdsFunctions.h">
       <Filter>Header Files\Functions</Filter>
     </ClInclude>
-    <ClInclude Include="Types\LdsStruct.h">
-      <Filter>Header Files\Types</Filter>
-    </ClInclude>
     <ClInclude Include="Values\LdsArrayType.h">
       <Filter>Header Files\Values</Filter>
     </ClInclude>
@@ -142,9 +139,6 @@
       <Filter>Header Files\Values</Filter>
     </ClInclude>
     <ClInclude Include="Values\LdsStringType.h">
-      <Filter>Header Files\Values</Filter>
-    </ClInclude>
-    <ClInclude Include="Values\LdsStructType.h">
       <Filter>Header Files\Values</Filter>
     </ClInclude>
     <ClInclude Include="Values\LdsValue.h">
@@ -161,6 +155,12 @@
     </ClInclude>
     <ClInclude Include="Execution\LdsQuickRun.h">
       <Filter>Header Files\Execution</Filter>
+    </ClInclude>
+    <ClInclude Include="Values\LdsObjectType.h">
+      <Filter>Header Files\Values</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\LdsObject.h">
+      <Filter>Header Files\Types</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -212,12 +212,6 @@
     <ClCompile Include="Variables\LdsVariables.cpp">
       <Filter>Source Files\Variables</Filter>
     </ClCompile>
-    <ClCompile Include="Types\LdsStruct.cpp">
-      <Filter>Source Files\Types</Filter>
-    </ClCompile>
-    <ClCompile Include="Values\LdsStructType.cpp">
-      <Filter>Source Files\Values</Filter>
-    </ClCompile>
     <ClCompile Include="Values\LdsValue.cpp">
       <Filter>Source Files\Values</Filter>
     </ClCompile>
@@ -238,6 +232,12 @@
     </ClCompile>
     <ClCompile Include="Types\LdsVar.cpp">
       <Filter>Source Files\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Types\LdsObject.cpp">
+      <Filter>Source Files\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Values\LdsObjectType.cpp">
+      <Filter>Source Files\Values</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

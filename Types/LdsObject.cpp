@@ -19,7 +19,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
 #include "StdH.h"
-#include "LdsStruct.h"
+#include "LdsObject.h"
 
 // Dummy object callback function
 static void DummyObjectCallback(CLdsObject *poObject, const int &iVariable) {
