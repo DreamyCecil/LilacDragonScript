@@ -120,7 +120,7 @@ void SetupLDS(void) {
   // custom variables (values are preserved between runs)
   CLdsVars aVars;
   aVars.Add() = SLdsVar("MAX_COUNT", 10, true);
-  aVars.Add() = SLdsVar("strHello", string("Hello, world!"), false);
+  aVars.Add() = SLdsVar("strHello", string("Hello, world!"));
   
   _ldsEngine.SetCustomVariables(aVars);
 };

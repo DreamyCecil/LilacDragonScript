@@ -124,10 +124,16 @@ SLdsVar &SLdsVar::operator=(const SLdsVar &varOther) {
   if (this == &varOther) {
     return *this;
   }
-    
+
   var_strName = varOther.var_strName;
   var_valValue = varOther.var_valValue;
   var_bConst = varOther.var_bConst;
-    
+
+  return *this;
+};
+
+// Assignment by value
+SLdsVar &SLdsVar::operator=(const CLdsValue &valOther) {
+  var_valValue = valOther;
   return *this;
 };

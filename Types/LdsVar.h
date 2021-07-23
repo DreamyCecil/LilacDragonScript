@@ -92,7 +92,7 @@ struct LDS_API SLdsVar {
   SLdsVar(void);
   
   // Property constructor
-  SLdsVar(const string &strName, const CLdsValue &val, const bool &bConst);
+  SLdsVar(const string &strName, const CLdsValue &val, const bool &bConst = false);
 
   // Value constructor
   SLdsVar(const CLdsValue &val);
@@ -102,6 +102,9 @@ struct LDS_API SLdsVar {
   
   // Assignment
   SLdsVar &operator=(const SLdsVar &varOther);
+
+  // Assignment by value
+  SLdsVar &operator=(const CLdsValue &valOther);
 };
 
 // Inline definitions

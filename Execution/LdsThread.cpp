@@ -406,7 +406,7 @@ void CLdsThread::CallInlineFunction(string strFunc, CLdsArray &aArgs) {
     string strArg = astrArgs[iArg];
     string strInline = icCall.VarName(strArg);
     
-    aInlineArgs.Add() = SLdsVar(strInline, aArgs[iArg], false);
+    aInlineArgs.Add() = SLdsVar(strInline, aArgs[iArg]);
     
     // add to the list of inline locals
     if (icCall.astrLocals.FindIndex(strInline) == -1) {
