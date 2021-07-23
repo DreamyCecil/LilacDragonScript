@@ -23,8 +23,6 @@ SOFTWARE. */
 #include "LdsBase.h"
 
 // Script values (any type)
-#include "Types/LdsObject.h"
-
 #include "Values/LdsValue.h"
 #include "Types/LdsValueRef.h"
 

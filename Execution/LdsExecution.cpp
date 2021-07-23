@@ -80,7 +80,7 @@ void Exec_Val(void) {
       
       // get array entries
       for (int iPopVal = ctValues - 1; iPopVal >= 0; iPopVal--) {
-        aVars[iPopVal] = SLdsVar("", _pavalStack->Pop().vr_val);
+        aVars[iPopVal] = _pavalStack->Pop().vr_val;
       }
       
       _pavalStack->Push(CLdsValueRef(valArray));

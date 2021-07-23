@@ -20,13 +20,34 @@ SOFTWARE. */
 
 #include "StdH.h"
 
+// Dummy object callback function
+static void DummyObjectCallback(CLdsObjectType *pvalObject, const int &iVariable) {
+  (void)pvalObject;
+};
+
+// Default constructor
+CLdsObjectType::CLdsObjectType(void) :
+  iID(-1), bStatic(false), pCallback(&DummyObjectCallback) {};
+
+// Object constructor
+CLdsObjectType::CLdsObjectType(const int &iSetID, const CLdsVars &aFields, const bool &bSetStatic) :
+  iID(iSetID), aProps(aFields), bStatic(bSetStatic), pCallback(&DummyObjectCallback) {};
+  
+// Clear the value
+void CLdsObjectType::Clear(void) {
+  iID = -1;
+  aProps.Clear();
+  bStatic = false;
+  pCallback = &DummyObjectCallback;
+};
+
 // Write value into the stream
 void CLdsObjectType::Write(class CLdsScriptEngine *pEngine, void *pStream) {
-  const int ctProps = oObject.Count();
+  const int ctProps = aProps.Count();
 
   // write object ID and if it's static
-  char bStatic = oObject.bStatic;
-  pEngine->_pLdsWrite(pStream, &oObject.iID, sizeof(int));
+  char bWriteStatic = bStatic;
+  pEngine->_pLdsWrite(pStream, &iID, sizeof(int));
   pEngine->_pLdsWrite(pStream, &bStatic, sizeof(char));
 
   // write amount of keys
@@ -34,17 +55,17 @@ void CLdsObjectType::Write(class CLdsScriptEngine *pEngine, void *pStream) {
 
   // write properties
   for (int i = 0; i < ctProps; i++) {
-    pEngine->LdsWriteOneVar(pStream, oObject.aFields, i);
+    pEngine->LdsWriteOneVar(pStream, aProps, i);
   }
 };
 
 // Read value from the stream
 void CLdsObjectType::Read(class CLdsScriptEngine *pEngine, void *pStream, CLdsValue &val) {
   // read object ID and if it's static
-  int iID = -1;
-  char bStatic = false;
-  pEngine->_pLdsRead(pStream, &iID, sizeof(int));
-  pEngine->_pLdsRead(pStream, &bStatic, sizeof(char));
+  int iReadID = -1;
+  char bReadStatic = false;
+  pEngine->_pLdsRead(pStream, &iReadID, sizeof(int));
+  pEngine->_pLdsRead(pStream, &bReadStatic, sizeof(char));
 
   // read amount of keys
   int ctProps = 0;
@@ -64,29 +85,46 @@ void CLdsObjectType::Read(class CLdsScriptEngine *pEngine, void *pStream, CLdsVa
       
 // Print the value
 string CLdsObjectType::Print(void) {
-  int ctVars = oObject.Count();
+  int ctProps = aProps.Count();
         
-  if (ctVars <= 0) {
+  if (ctProps <= 0) {
     return "{ }";
   }
 
   // object opening
   string strObject = "{ ";
         
-  for (int iVar = 0; iVar < ctVars; iVar++) {
-    if (iVar != 0) {
+  for (int iProp = 0; iProp < ctProps; iProp++) {
+    if (iProp != 0) {
       // next property
       strObject += ", ";
     }
           
     // print object property
-    strObject += oObject.Print(iVar);
+    strObject += PrintProperty(iProp);
   }
         
   // object closing
   strObject += " }";
 
   return strObject;
+};
+
+// Print one property
+string CLdsObjectType::PrintProperty(const int &iProp) {
+  SLdsVar &var = aProps[iProp];
+
+  // print value
+  CLdsValue &val = var.var_valValue;
+  string strValue = val->Print();
+
+  // surround with quotes
+  if (val->GetType() == EVT_STRING) {
+    strValue = '"' + strValue + '"';
+  }
+  
+  // var = "val"
+  return var.var_strName + " = " + strValue;
 };
 
 // Perform a unary operation

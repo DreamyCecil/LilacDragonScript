@@ -88,8 +88,11 @@ struct LDS_API SLdsVar {
   // Default constructor
   SLdsVar(void);
   
+  // Property constructor
+  SLdsVar(const string &strName, const CLdsValue &val, const bool &bConst);
+
   // Value constructor
-  SLdsVar(const string &strName, CLdsValue val, const bool &bConst = false);
+  SLdsVar(const CLdsValue &val);
   
   // Mark constants as set
   void SetConst(void);

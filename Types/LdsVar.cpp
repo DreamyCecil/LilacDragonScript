@@ -104,9 +104,13 @@ int CLdsVars::FindIndex(const string &strVar) {
 // Default constructor
 SLdsVar::SLdsVar(void) : var_strName(""), var_valValue(0), var_bConst(0) {};
   
-// Value constructor
-SLdsVar::SLdsVar(const string &strName, CLdsValue val, const bool &bConst) :
+// Property constructor
+SLdsVar::SLdsVar(const string &strName, const CLdsValue &val, const bool &bConst) :
   var_strName(strName), var_valValue(val), var_bConst(bConst) {};
+
+// Value constructor
+SLdsVar::SLdsVar(const CLdsValue &val) :
+  var_strName(""), var_valValue(val), var_bConst(false) {};
   
 // Mark constants as set
 void SLdsVar::SetConst(void) {

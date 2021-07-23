@@ -20,7 +20,7 @@ SOFTWARE. */
 
 #pragma once
 
-#include "LdsValue.h"
+#include "../Types/LdsVar.h"
 
 // Script array value
 class LDS_API CLdsArrayType : public ILdsValueBase {
@@ -36,7 +36,7 @@ class LDS_API CLdsArrayType : public ILdsValueBase {
       aArray.aVars.New(ct);
 
       for (int i = 0; i < ct; i++) {
-        aArray.aVars[i] = SLdsVar("", valDef);
+        aArray.aVars[i] = valDef;
       }
     };
 
@@ -72,7 +72,9 @@ class LDS_API CLdsArrayType : public ILdsValueBase {
     virtual string Print(void);
 
     // Add array value
-    virtual int Add(const CLdsValue &val);
+    inline int Add(const CLdsValue &val) {
+      return aArray.Add(val);
+    };
 
     // Get variables
     virtual CLdsVars &GetVars(void) { return aArray; };

@@ -20,31 +20,30 @@ SOFTWARE. */
 
 #pragma once
 
-#include "LdsValue.h"
+#include "../Types/LdsVar.h"
+
+// Object change callback function
+typedef void (*CLdsObjectCallback)(class CLdsObjectType *pvalObject, const int &iVariable);
 
 // Script object value
 class LDS_API CLdsObjectType : public ILdsValueBase {
   public:
-    CLdsObject oObject; // object with property fields
+    int iID; // unique ID
+    CLdsVars aProps; // object property fields
+    bool bStatic; // static object (cannot add new properties)
+
+    CLdsObjectCallback pCallback; // callback function
     
   public:
     // Default constructor
-    CLdsObjectType(void) : oObject() {};
+    CLdsObjectType(void);
 
     // Object constructor
-    CLdsObjectType(const int &iSetID, const CLdsVars &aFields, const bool &bSetStatic) :
-      oObject(iSetID)
-    {
-      oObject.aFields = aFields;
-      oObject.bStatic = bSetStatic;
-    };
-
-    // Object copy constructor
-    CLdsObjectType(const CLdsObject &oSet) : oObject(oSet) {};
+    CLdsObjectType(const int &iSetID, const CLdsVars &aFields, const bool &bSetStatic);
 
     // Create new instance of this value
     virtual ILdsValueBase *MakeCopy(void) const {
-      return new CLdsObjectType(oObject);
+      return new CLdsObjectType(iID, aProps, bStatic);
     };
 
     // Get value type
@@ -58,9 +57,7 @@ class LDS_API CLdsObjectType : public ILdsValueBase {
     };
 
     // Clear the value
-    virtual void Clear(void) {
-      oObject.Clear();
-    };
+    virtual void Clear(void);
 
     // Value I/O
     virtual void Write(class CLdsScriptEngine *pEngine, void *pStream);
@@ -69,9 +66,12 @@ class LDS_API CLdsObjectType : public ILdsValueBase {
   public:
     // Print the value
     virtual string Print(void);
+
+    // Print one property
+    string PrintProperty(const int &iProp);
     
     // Get variables
-    virtual CLdsVars &GetVars(void) { return oObject.aFields; };
+    virtual CLdsVars &GetVars(void) { return aProps; };
     
     // Perform a unary operation
     virtual CLdsValueRef UnaryOp(CLdsValueRef &valRef, const CLdsToken &tkn);
@@ -80,10 +80,10 @@ class LDS_API CLdsObjectType : public ILdsValueBase {
 
     // Conditions
     virtual bool IsTrue(void) {
-      return (oObject.iID != -1);
+      return (iID != -1);
     };
     
     virtual bool Compare(const ILdsValueBase &valOther) {
-      return (oObject.iID == ((CLdsObjectType &)valOther).oObject.iID);
+      return (iID == ((CLdsObjectType &)valOther).iID);
     };
 };

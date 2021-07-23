@@ -144,7 +144,6 @@
     <ClInclude Include="Types\LdsAction.h" />
     <ClInclude Include="Types\LdsBuildNode.h" />
     <ClInclude Include="Types\LdsFunc.h" />
-    <ClInclude Include="Types\LdsObject.h" />
     <ClInclude Include="Types\LdsToken.h" />
     <ClInclude Include="Types\LdsValueRef.h" />
     <ClInclude Include="Types\LdsVar.h" />
@@ -175,7 +174,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Types\LdsObject.cpp" />
     <ClCompile Include="Types\LdsValueRef.cpp" />
     <ClCompile Include="Types\LdsVar.cpp" />
     <ClCompile Include="UsageExample.cpp">
