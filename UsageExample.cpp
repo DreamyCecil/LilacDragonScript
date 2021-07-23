@@ -86,8 +86,8 @@ LDS_FUNC(LDS_Data) {
   if (iObject != 0) {
     // return object
     CLdsVars aFields;
-    aFields.Add(SLdsVar("info", string("Two bytes"), true));
-    aFields.Add(SLdsVar("data", aData, true));
+    aFields.Add() = SLdsVar("info", string("Two bytes"), true);
+    aFields.Add() = SLdsVar("data", aData, true);
 
     return CLdsObjectType(-1, aFields, true);
   }
@@ -119,8 +119,8 @@ void SetupLDS(void) {
 
   // custom variables (values are preserved between runs)
   CLdsVars aVars;
-  aVars.Add(SLdsVar("MAX_COUNT", 10, true));
-  aVars.Add(SLdsVar("strHello", string("Hello, world!"), false));
+  aVars.Add() = SLdsVar("MAX_COUNT", 10, true);
+  aVars.Add() = SLdsVar("strHello", string("Hello, world!"), false);
   
   _ldsEngine.SetCustomVariables(aVars);
 };

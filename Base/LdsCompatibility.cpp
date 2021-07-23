@@ -94,7 +94,7 @@ int LdsFileTell(void *pStream) {
 
 // Add new value type
 void CLdsScriptEngine::AddValueType(const ILdsValueBase &val) {
-  _ldsValueTypes.Add(val.MakeCopy());
+  _ldsValueTypes.Add() = val.MakeCopy();
 };
 
 // Set output printing functions

@@ -43,7 +43,7 @@ void CLdsScriptEngine::LdsReadProgram(void *pStream, CActionList &acaProgram) {
     CCompAction caAction;
     LdsReadAction(pStream, caAction);
 
-    acaProgram.Add(caAction);
+    acaProgram.Add() = caAction;
   }
 };
 
@@ -169,7 +169,7 @@ void CLdsScriptEngine::LdsReadInlineFunc(void *pStream, SLdsInlineFunc &inFunc) 
     string strArg = "";
     LdsReadString(pStream, strArg);
 
-    inFunc.in_astrArgs.Add(strArg);
+    inFunc.in_astrArgs.Add() = strArg;
   }
 
   // read inline functions count
@@ -222,7 +222,7 @@ void CLdsScriptEngine::LdsReadOneVar(void *pStream, CLdsVars &aVars) {
   _pLdsRead(pStream, &var.var_bConst, sizeof(char));
 
   // add one variable
-  aVars.Add(var);
+  aVars.Add() = var;
 };
 
 // Write value
@@ -339,7 +339,7 @@ void CLdsScriptEngine::LdsReadValueRef(void *pStream, CLdsThread &sth, CLdsValue
       _pLdsRead(pStream, &iRefIndex, sizeof(int));
 
       // add index
-      vr.vr_ariIndices.Add(SLdsRefIndex(iRefIndex));
+      vr.vr_ariIndices.Add() = SLdsRefIndex(iRefIndex);
 
       // get next reference by an index
       vr.vr_pvarAccess = vr.AccessVariable(iRefIndex);
@@ -350,7 +350,7 @@ void CLdsScriptEngine::LdsReadValueRef(void *pStream, CLdsThread &sth, CLdsValue
       LdsReadString(pStream, strVar);
       
       // add index
-      vr.vr_ariIndices.Add(SLdsRefIndex(strVar));
+      vr.vr_ariIndices.Add() = SLdsRefIndex(strVar);
 
       // get next reference by a variable name
       vr.vr_pvarAccess = vr.AccessVariable(strVar);
@@ -508,8 +508,7 @@ void CLdsScriptEngine::LdsReadEngine(void *pStream) {
     LdsReadThread(pStream, *psth, false);
       
     // add thread handler to the list
-    SLdsHandler thh(psth, llStart, llEnd);
-    _athhThreadHandlers.Add(thh);
+    _athhThreadHandlers.Add() = SLdsHandler(psth, llStart, llEnd);
   }
 };
 
@@ -705,7 +704,7 @@ void CLdsScriptEngine::LdsReadThread(void *pStream, CLdsThread &sth, bool bHandl
     int iJump = 0;
     _pLdsRead(pStream, &iJump, sizeof(int));
 
-    sth.sth_aiJumpStack.Add(iJump);
+    sth.sth_aiJumpStack.Add() = iJump;
   }
 
   // read inline calls count
@@ -731,7 +730,7 @@ void CLdsScriptEngine::LdsReadThread(void *pStream, CLdsThread &sth, bool bHandl
       string strLocal = "";
       LdsReadString(pStream, strLocal);
 
-      icCall.astrLocals.Add(strLocal);
+      icCall.astrLocals.Add() = strLocal;
     }
 
     // read inline stack count
@@ -770,8 +769,7 @@ void CLdsScriptEngine::LdsReadThread(void *pStream, CLdsThread &sth, bool bHandl
       _pLdsRead(pStream, &llEnd, sizeof(LONG64));
       
       // add thread handler to the list
-      SLdsHandler thh(&sth, llStart, llEnd);
-      _athhThreadHandlers.Add(thh);
+      _athhThreadHandlers.Add() = SLdsHandler(&sth, llStart, llEnd);
     }
   }
 };

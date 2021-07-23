@@ -43,10 +43,10 @@ SLdsRefIndex::SLdsRefIndex(const int &iIndex) : bIndex(true)
 
 // Constructors
 CLdsValueRef::CLdsValueRef(void) :
-  CLdsValueRef(CLdsIntType()) {};
+  vr_val(CLdsIntType()), vr_pvar(NULL), vr_pvarAccess(NULL), vr_ubFlags(0) {};
 
 CLdsValueRef::CLdsValueRef(const CLdsValue &val) :
-  CLdsValueRef(val, NULL, NULL, 0) {};
+  vr_val(val), vr_pvar(NULL), vr_pvarAccess(NULL), vr_ubFlags(0) {};
 
 CLdsValueRef::CLdsValueRef(const CLdsValue &val, SLdsVar *pvar, SLdsVar *pvarAccess, const LdsFlags &ubFlags) :
   vr_val(val), vr_pvar(pvar), vr_pvarAccess(pvarAccess), vr_ubFlags(ubFlags) {};

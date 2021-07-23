@@ -220,11 +220,11 @@ EThreadStatus CLdsThread::Resume(void) {
             int iInline = icCurrent.astrLocals.FindIndex(strName);
             
             if (iGlobal == -1 && iInline == -1) {
-              icCurrent.astrLocals.Add(strName);
+              icCurrent.astrLocals.Add() = strName;
             }
           }
           
-          sth_aLocals.Add(SLdsVar(strName, 0, bConst));
+          sth_aLocals.Add() = SLdsVar(strName, 0, bConst);
         } break;
         
         // Apply a thread directive
@@ -406,11 +406,11 @@ void CLdsThread::CallInlineFunction(string strFunc, CLdsArray &aArgs) {
     string strArg = astrArgs[iArg];
     string strInline = icCall.VarName(strArg);
     
-    aInlineArgs.Add(SLdsVar(strInline, aArgs[iArg], false));
+    aInlineArgs.Add() = SLdsVar(strInline, aArgs[iArg], false);
     
     // add to the list of inline locals
     if (icCall.astrLocals.FindIndex(strInline) == -1) {
-      icCall.astrLocals.Add(strInline);
+      icCall.astrLocals.Add() = strInline;
     }
   }
   

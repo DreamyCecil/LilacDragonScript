@@ -83,11 +83,11 @@ void CLdsScriptEngine::CompileGetter(CBuildNode &bn, CActionList &aca) {
       
       // custom variables and constants
       if (_aLdsVariables.Find(strName) != NULL) {
-        aca.Add(CCompAction(LCA_GET, bn.lt_iPos, strName, 0));
+        aca.Add() = CCompAction(LCA_GET, bn.lt_iPos, strName, 0);
         
       // locals (if allowed)
       } else if (!_bExpression) {
-        aca.Add(CCompAction(LCA_GET, bn.lt_iPos, strName, 1));
+        aca.Add() = CCompAction(LCA_GET, bn.lt_iPos, strName, 1);
         
       } else {
         LdsThrow(LEC_NOVAR, "Variable '%s' does not exist at %s", strName.c_str(), bn.PrintPos().c_str());
@@ -125,7 +125,7 @@ void CLdsScriptEngine::CompileSetter(CBuildNode &bn, CActionList &aca) {
         }
       }
       
-      aca.Add(CCompAction(LCA_SET, bn.lt_iPos, strName, (pvarNonLocal == NULL)));
+      aca.Add() = CCompAction(LCA_SET, bn.lt_iPos, strName, (pvarNonLocal == NULL));
     } return;
       
     // aArr[value][...]
@@ -199,7 +199,7 @@ void CLdsScriptEngine::CompileAccessors(CBuildNode &bn, CActionList &aca, bool b
     Compile(*pbnAccessVal, aca);
 
     // add access action
-    aca.Add(CCompAction(LCA_BIN, pbnCurrentAccess->lt_iPos, LOP_ACCESS, bn.lt_iArg));
+    aca.Add() = CCompAction(LCA_BIN, pbnCurrentAccess->lt_iPos, LOP_ACCESS, bn.lt_iArg);
 
     // no more accessors
     if (pbnCurrentAccess->bn_abnNodes.Count() <= 2) {
@@ -219,7 +219,7 @@ void CLdsScriptEngine::CompileAccessors(CBuildNode &bn, CActionList &aca, bool b
   }
 
   if (bSet) {
-    aca.Add(CCompAction(LCA_SET_ACCESS, bn.lt_iPos, -1, -1));
+    aca.Add() = CCompAction(LCA_SET_ACCESS, bn.lt_iPos, -1, -1);
   }
 };
 
@@ -227,7 +227,7 @@ void CLdsScriptEngine::CompileAccessors(CBuildNode &bn, CActionList &aca, bool b
 void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
   switch (bn.lt_eType) {
     // values
-    case EBN_RAW_VAL: aca.Add(CCompAction(LCA_VAL, bn.lt_iPos, bn.lt_valValue, -1)); break;
+    case EBN_RAW_VAL: aca.Add() = CCompAction(LCA_VAL, bn.lt_iPos, bn.lt_valValue, -1); break;
     case EBN_IDENTIFIER: CompileGetter(bn, aca); break;
 
     // arrays
@@ -239,7 +239,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
       }
 
       // value signifies if it's an array or not
-      aca.Add(CCompAction(LCA_VAL, bn.lt_iPos, 0, ctValues));
+      aca.Add() = CCompAction(LCA_VAL, bn.lt_iPos, 0, ctValues);
     } break;
     
     // objects
@@ -251,13 +251,13 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
       }
 
       // value signifies if it's a static object or not
-      aca.Add(CCompAction(LCA_VAL, bn.lt_iPos, bn.lt_valValue, ctVars));
+      aca.Add() = CCompAction(LCA_VAL, bn.lt_iPos, bn.lt_valValue, ctVars);
     } break;
 
     // unary operation value
     case EBN_UNARY_OP:
       Compile(*bn.bn_abnNodes[0], aca);
-      aca.Add(CCompAction(LCA_UN, bn.lt_iPos, bn.lt_valValue, -1));
+      aca.Add() = CCompAction(LCA_UN, bn.lt_iPos, bn.lt_valValue, -1);
       break;
 
     // binary operation values
@@ -288,7 +288,8 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
         default:
           Compile(*bn.bn_abnNodes[0], aca);
           Compile(*bn.bn_abnNodes[1], aca);
-          aca.Add(CCompAction(LCA_BIN, bn.lt_iPos, bn.lt_valValue, -1));
+
+          aca.Add() = CCompAction(LCA_BIN, bn.lt_iPos, bn.lt_valValue, -1);
       }
       break;
 
@@ -325,7 +326,8 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
       for (int iArg = 0; iArg < ctArgs; iArg++) {
         Compile(*bn.bn_abnNodes[iArg], aca);
       }
-      aca.Add(CCompAction(eAction, bn.lt_iPos, bn.lt_valValue, ctArgs));
+
+      aca.Add() = CCompAction(eAction, bn.lt_iPos, bn.lt_valValue, ctArgs);
     } break;
     
     // inline function
@@ -359,7 +361,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
       }
       
       // add new local variable
-      aca.Add(CCompAction(LCA_VAR, bn.lt_iPos, bn.lt_valValue, bn.lt_iArg));
+      aca.Add() = CCompAction(LCA_VAR, bn.lt_iPos, bn.lt_valValue, bn.lt_iArg);
     } break;
     
     // object property definition
@@ -368,15 +370,15 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
       Compile(*bn.bn_abnNodes[0], aca);
       
       // constant property
-      aca.Add(CCompAction(LCA_VAL, bn.lt_iPos, bn.lt_iArg, -1));
+      aca.Add() = CCompAction(LCA_VAL, bn.lt_iPos, bn.lt_iArg, -1);
       
       // property name
-      aca.Add(CCompAction(LCA_VAL, bn.lt_iPos, bn.lt_valValue, -1));
+      aca.Add() = CCompAction(LCA_VAL, bn.lt_iPos, bn.lt_valValue, -1);
     } break;
     
     // thread directive
     case EBN_DIR: {
-      aca.Add(CCompAction(LCA_DIR, bn.lt_iPos, bn.lt_valValue, bn.lt_iArg));
+      aca.Add() = CCompAction(LCA_DIR, bn.lt_iPos, bn.lt_valValue, bn.lt_iArg);
     } break;
 
     // block of expressions 
@@ -394,13 +396,14 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
       if (bn.lt_iArg > 0) {
         Compile(*bn.bn_abnNodes[0], aca);
       }
-      aca.Add(CCompAction(LCA_RETURN, bn.lt_iPos, -1, -1));
+
+      aca.Add() = CCompAction(LCA_RETURN, bn.lt_iPos, -1, -1);
       break;
     
     // discard last value
     case EBN_DISCARD_ACT:
       Compile(*bn.bn_abnNodes[0], aca);
-      aca.Add(CCompAction(LCA_DISCARD, bn.lt_iPos, -1, -1));
+      aca.Add() = CCompAction(LCA_DISCARD, bn.lt_iPos, -1, -1);
       break;
     
     // jump through the 'if' block unless the condition is true
@@ -458,7 +461,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
       }
       
       // discard the header value
-      aca.Add(CCompAction(LCA_DISCARD, bn.lt_iPos, -1, -1));
+      aca.Add() = CCompAction(LCA_DISCARD, bn.lt_iPos, -1, -1);
     
       // remember jump position for default actions (after all cases)
       CCompAction caDefJump = CCompAction(LCA_JUMP, bn.lt_iPos, -1, -1);
@@ -505,7 +508,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
         CompileGetter(*bn.bn_abnNodes[0], aca);
         Compile(*bn.bn_abnNodes[1], aca);
       
-        aca.Add(CCompAction(LCA_BIN, bn.lt_iPos, bn.lt_valValue, -1));
+        aca.Add() = CCompAction(LCA_BIN, bn.lt_iPos, bn.lt_valValue, -1);
       }
     
       // set the new value
@@ -517,8 +520,8 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
       CompileGetter(*bn.bn_abnNodes[0], aca);
 
       // add the value and perform the operation
-      aca.Add(CCompAction(LCA_VAL, bn.lt_iPos, bn.lt_valValue, -1));
-      aca.Add(CCompAction(LCA_BIN, bn.lt_iPos, LOP_ADD, -1));
+      aca.Add() = CCompAction(LCA_VAL, bn.lt_iPos, bn.lt_valValue, -1);
+      aca.Add() = CCompAction(LCA_BIN, bn.lt_iPos, LOP_ADD, -1);
       
       // set the new value
       CompileSetter(*bn.bn_abnNodes[0], aca);
@@ -529,9 +532,9 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
       CompileGetter(*bn.bn_abnNodes[0], aca);
       
       // add the value, perform the operation and duplicate the entry
-      aca.Add(CCompAction(LCA_VAL, bn.lt_iPos, bn.lt_valValue, -1));
-      aca.Add(CCompAction(LCA_BIN, bn.lt_iPos, LOP_ADD, -1));
-      aca.Add(CCompAction(LCA_DUP, bn.lt_iPos, -1, -1));
+      aca.Add() = CCompAction(LCA_VAL, bn.lt_iPos, bn.lt_valValue, -1);
+      aca.Add() = CCompAction(LCA_BIN, bn.lt_iPos, LOP_ADD, -1);
+      aca.Add() = CCompAction(LCA_DUP, bn.lt_iPos, -1, -1);
       
       // set the new value
       CompileSetter(*bn.bn_abnNodes[0], aca);
@@ -542,9 +545,9 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
       CompileGetter(*bn.bn_abnNodes[0], aca);
       
       // duplicate the entry, add the value and perform the operation
-      aca.Add(CCompAction(LCA_DUP, bn.lt_iPos, -1, -1));
-      aca.Add(CCompAction(LCA_VAL, bn.lt_iPos, bn.lt_valValue, -1));
-      aca.Add(CCompAction(LCA_BIN, bn.lt_iPos, LOP_ADD, -1));
+      aca.Add() = CCompAction(LCA_DUP, bn.lt_iPos, -1, -1);
+      aca.Add() = CCompAction(LCA_VAL, bn.lt_iPos, bn.lt_valValue, -1);
+      aca.Add() = CCompAction(LCA_BIN, bn.lt_iPos, LOP_ADD, -1);
       
       // set the new value
       CompileSetter(*bn.bn_abnNodes[0], aca);
@@ -568,7 +571,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
       int iStartPos = aca.Count();
     
       Compile(*bn.bn_abnNodes[1], aca);
-      aca.Add(CCompAction(LCA_JUMP, bn.lt_iPos, -1, iContPos));
+      aca.Add() = CCompAction(LCA_JUMP, bn.lt_iPos, -1, iContPos);
     
       // break from the loop
       int iBreakPos = aca.Count();
@@ -587,7 +590,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
       int iContPos = aca.Count();
     
       Compile(*bn.bn_abnNodes[1], aca);
-      aca.Add(CCompAction(LCA_JUMPIF, bn.lt_iPos, -1, iStartPos));
+      aca.Add() = CCompAction(LCA_JUMPIF, bn.lt_iPos, -1, iStartPos);
     
       // break from the loop
       int iBreakPos = aca.Count();
@@ -614,7 +617,7 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
       int iContPos = aca.Count();
     
       Compile(*bn.bn_abnNodes[2], aca);
-      aca.Add(CCompAction(LCA_JUMP, bn.lt_iPos, -1, iLoopPos));
+      aca.Add() = CCompAction(LCA_JUMP, bn.lt_iPos, -1, iLoopPos);
     
       // break from the loop
       int iBreakPos = aca.Count();
@@ -625,12 +628,12 @@ void CLdsScriptEngine::Compile(CBuildNode &bn, CActionList &aca) {
     
     // break from the statement
     case EBN_BREAK_ACT:
-      aca.Add(CCompAction(LCA_JUMP, bn.lt_iPos, -1, -10));
+      aca.Add() = CCompAction(LCA_JUMP, bn.lt_iPos, -1, -10);
       break;
     
     // continue to the next iteration
     case EBN_CONTINUE_ACT:
-      aca.Add(CCompAction(LCA_JUMP, bn.lt_iPos, -1, -11));
+      aca.Add() = CCompAction(LCA_JUMP, bn.lt_iPos, -1, -11);
       break;
 
     default: LdsThrow(LEC_NODE, "Cannot compile node type %d at %s", bn.lt_eType, bn.PrintPos().c_str());

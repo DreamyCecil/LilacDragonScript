@@ -70,7 +70,7 @@ LDS_FUNC(LDS_Wait) {
   SLdsHandler thh(_psthCurrent, llCurrent, llCurrent + llWait);
   
   // add it to the list
-  _pldsCurrent->_athhThreadHandlers.Add(thh);
+  _pldsCurrent->_athhThreadHandlers.Add() = thh;
   
   // return when started
   return dStarted;

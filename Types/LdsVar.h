@@ -40,6 +40,9 @@ class LDS_API CLdsVars {
     // Add a new variable
     inline int Add(const SLdsVar &varNew);
 
+    // Add an empty variable
+    inline SLdsVar &Add(void);
+
     // Delete variable by index
     inline void Delete(const int &iPos) {
       aVars.Delete(iPos);
@@ -106,4 +109,9 @@ struct LDS_API SLdsVar {
 // Add a new variable
 inline int CLdsVars::Add(const SLdsVar &varNew) {
   return aVars.Add(varNew);
+};
+
+// Add an empty variable
+inline SLdsVar &CLdsVars::Add(void) {
+  return aVars.Add();
 };

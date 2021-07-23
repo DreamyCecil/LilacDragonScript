@@ -50,7 +50,7 @@ void CLdsScriptEngine::LdsBuild(bool bExpression) {
     StatementBuilder();
 
     // add the statement
-    abnNodes.Add(_bnNode);
+    abnNodes.Add() = _bnNode;
   }
 
   // mark last node as a block of code
@@ -146,11 +146,10 @@ void CLdsScriptEngine::StatementBuilder(void) {
           if (etNext.lt_eType == LTK_CASE) {
             // read case value
             ExpressionBuilder(LBF_NONE);
-            abnCases.Add(_bnNode);
+            abnCases.Add() = _bnNode;
             
             // empty case actions
-            int iActions = abnActions.Add(CBuildNode(EBN_BLOCK, etNext.lt_iPos, -1, -1));
-            pbnActions = &abnActions[iActions];
+            pbnActions = &(abnActions.Add() = CBuildNode(EBN_BLOCK, etNext.lt_iPos, -1, -1));
           
           // default option
           } else {
@@ -231,7 +230,7 @@ void CLdsScriptEngine::StatementBuilder(void) {
       
         // build next statement
         StatementBuilder();
-        abnNodes.Add(_bnNode);
+        abnNodes.Add() = _bnNode;
       }
     
       if (!bClosed) {
@@ -421,7 +420,7 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
         
         // define the variable
         CBuildNode bnDefine = CBuildNode(EBN_VAR_DEF, etNext.lt_iPos, strName, bConst);
-        abnNodes.Add(bnDefine);
+        abnNodes.Add() = bnDefine;
       
         etNext = _aetTokens[_iBuildPos];
         CBuildNode bnExp;
@@ -441,7 +440,7 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
           bnSetVar.AddReference(&bnExp);
         
           // assign value to this variable
-          abnNodes.Add(bnSetVar);
+          abnNodes.Add() = bnSetVar;
         }
       
         // check for a comma
@@ -494,7 +493,7 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
           LdsThrow(LEB_ID, "Expected an argument name at %s", etNext.PrintPos().c_str());
         }
         
-        astrArgs.Add(etNext->GetString());
+        astrArgs.Add() = etNext->GetString();
 
         // skip commas
         etNext = _aetTokens[_iBuildPos];
@@ -643,7 +642,7 @@ void CLdsScriptEngine::ExpressionBuilder(const LdsFlags &ubFlags) {
           ExpressionBuilder(LBF_NONE);
           CBuildNode bnVal = _bnNode;
         
-          abnArray.Add(bnVal);
+          abnArray.Add() = bnVal;
         
           // skip the comma
           etNext = _aetTokens[_iBuildPos];
@@ -722,7 +721,7 @@ void CLdsScriptEngine::ExpressionBuilder(const LdsFlags &ubFlags) {
           bnProperty.AddReference(&_bnNode);
         
           // add one property
-          abnVars.Add(bnProperty);
+          abnVars.Add() = bnProperty;
         
           // skip the comma
           etNext = _aetTokens[_iBuildPos];
@@ -862,7 +861,7 @@ bool CLdsScriptEngine::ScopeBuilder(void) {
           ExpressionBuilder(LBF_NONE);
 
           // save it
-          abnArgs.Add(_bnNode);
+          abnArgs.Add() = _bnNode;
 
           // skip commas
           etNext = _aetTokens[_iBuildPos];
@@ -981,24 +980,24 @@ bool CLdsScriptEngine::PostfixBuilder(bool bChained) {
 // Build one operation
 void CLdsScriptEngine::OperationBuilder(CLdsToken etFirst) {
   CNodeList abnNodes;
-  abnNodes.Add(_bnNode);
+  abnNodes.Add() = _bnNode;
 
   CTokenList aetOperators;
-  aetOperators.Add(etFirst);
+  aetOperators.Add() = etFirst;
 
   CLdsToken et;
 
   while (true) {
     // build next expression
     ExpressionBuilder(LBF_NOOPS);
-    abnNodes.Add(_bnNode);
+    abnNodes.Add() = _bnNode;
 
     et = _aetTokens[_iBuildPos];
 
     // add operation to the list
     if (et.lt_eType == LTK_OPERATOR) {
       _iBuildPos++;
-      aetOperators.Add(et);
+      aetOperators.Add() = et;
 
     } else {
       break;
@@ -1040,8 +1039,8 @@ void CLdsScriptEngine::OperationBuilder(CLdsToken etFirst) {
       } else {
         // add binary operation
         CNodeList abn;
-        abn.Add(bnNode1);
-        abn.Add(bnNode2);
+        abn.Add() = bnNode1;
+        abn.Add() = bnNode2;
 
         abnNodes[iOperator] = CBuildNode(EBN_BINARY_OP, et.lt_iPos, et.lt_valValue, -1, &abn);
         abn.Clear();

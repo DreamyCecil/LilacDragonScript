@@ -70,12 +70,12 @@ class LDS_API CLdsValueRef {
 
     // Add index
     inline void AddIndex(const int &iIndex) {
-      vr_ariIndices.Add(SLdsRefIndex(iIndex));
+      vr_ariIndices.Add() = SLdsRefIndex(iIndex);
     };
 
     // Add property
     inline void AddIndex(const string &strVar) {
-      vr_ariIndices.Add(SLdsRefIndex(strVar));
+      vr_ariIndices.Add() = SLdsRefIndex(strVar);
     };
 
     // Set the flag

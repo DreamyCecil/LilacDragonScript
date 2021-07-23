@@ -585,9 +585,9 @@ void CLdsScriptEngine::ParseScript(string strScript) {
 
 // Add expression token
 void CLdsScriptEngine::AddParserToken(const ELdsToken &eType, const int &iPos) {
-  _aetTokens.Add(CLdsToken(eType, iPos, -1));
+  _aetTokens.Add() = CLdsToken(eType, iPos, -1);
 };
 
 void CLdsScriptEngine::AddParserToken(const ELdsToken &eType, const int &iPos, const CLdsValue &valValue) {
-  _aetTokens.Add(CLdsToken(eType, iPos, valValue, -1));
+  _aetTokens.Add() = CLdsToken(eType, iPos, valValue, -1);
 };

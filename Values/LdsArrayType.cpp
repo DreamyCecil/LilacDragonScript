@@ -47,7 +47,7 @@ void CLdsArrayType::Read(class CLdsScriptEngine *pEngine, void *pStream, CLdsVal
     CLdsValue valArray;
     pEngine->LdsReadValue(pStream, valArray);
 
-    val->GetVars().Add(valArray);
+    val->GetVars().Add() = valArray;
   }
 };
 
@@ -138,7 +138,7 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
       int ctAdd = val2->GetIndex();
 
       while (--ctAdd >= 0) {
-        val1->GetVars().Add(SLdsVar(CLdsIntType()));
+        val1->GetVars().Add() = SLdsVar(CLdsIntType());
       }
     } break;
 
