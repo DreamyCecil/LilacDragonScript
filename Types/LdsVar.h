@@ -68,6 +68,10 @@ class LDS_API CLdsVars {
       return aVars[iPos];
     };
 
+    const SLdsVar &operator[](const int &iPos) const {
+      return aVars[iPos];
+    };
+
     // Add variables from another list
     void AddFrom(CLdsVars &aOther, const bool &bReplace = true);
 
@@ -78,7 +82,7 @@ class LDS_API CLdsVars {
     SLdsVar *Find(const string &strVar);
 
     // Get variable index by name
-    int FindIndex(const string &strVar);
+    int FindIndex(const string &strVar) const;
 };
 
 // Script variable

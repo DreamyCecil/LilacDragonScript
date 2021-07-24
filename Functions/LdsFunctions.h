@@ -27,6 +27,8 @@ SOFTWARE. */
 
 // Get value of the next function argument
 #define LDS_NEXT_ARG (*_LDS_FuncArgs++)
+#define LDS_NEXT_LIST(_MinVars) (LDS_NEXT_ARG.AssertList(_MinVars))
+
 #define LDS_NEXT_INT (LDS_NEXT_ARG.Assert(CLdsIntType())->GetIndex())
 #define LDS_NEXT_NUM (LDS_NEXT_ARG.Assert(CLdsFloatType())->GetNumber())
 #define LDS_NEXT_STR (LDS_NEXT_ARG.Assert(CLdsStringType())->GetString())

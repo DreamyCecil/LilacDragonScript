@@ -71,7 +71,7 @@ class LDS_API CLdsObjectType : public ILdsValueBase {
     string PrintProperty(const int &iProp);
     
     // Get variables
-    virtual CLdsVars &GetVars(void) { return aProps; };
+    virtual CLdsVars *GetVars(void) { return &aProps; };
     
     // Perform a unary operation
     virtual CLdsValueRef UnaryOp(CLdsValueRef &valRef, const CLdsToken &tkn);

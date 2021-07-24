@@ -72,7 +72,7 @@ class LDS_API ILdsValueBase {
     // Get string value
     virtual string GetString(void);
     // Get variables
-    virtual CLdsVars &GetVars(void);
+    virtual CLdsVars *GetVars(void);
     
     // Perform a unary operation
     virtual class CLdsValueRef UnaryOp(CLdsValueRef &valRef, const CLdsToken &tkn) = 0;
@@ -132,6 +132,9 @@ class LDS_API CLdsValue {
   
     // Type assertion (for function arguments)
     CLdsValue &Assert(const ILdsValueBase &valDesired);
+
+    // Variable list assertion (for function arguments)
+    CLdsVars &AssertList(const int &ctMinVars);
 
     // Conditions
     bool operator==(const CLdsValue &valOther) const;

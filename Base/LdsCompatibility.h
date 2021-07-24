@@ -27,7 +27,7 @@ enum ELdsError {
   // Generic
   LER_OK = 0x00, // no error
 
-  LER_TYPE  = 0x01, // value type mismatch
+  LER_VALUE = 0x01, // value error
   LER_WRITE = 0x02, // cannot write data
   LER_READ  = 0x03, // cannot read data
 

@@ -87,10 +87,10 @@ SLdsVar *CLdsVars::Find(const string &strVar) {
 };
 
 // Get variable index by name
-int CLdsVars::FindIndex(const string &strVar) {
+int CLdsVars::FindIndex(const string &strVar) const {
   // go through variables
   for (int iVar = 0; iVar < aVars.Count(); iVar++) {
-    SLdsVar &var = aVars[iVar];
+    const SLdsVar &var = aVars[iVar];
 
     // return matching variable
     if (var.var_strName == strVar) {

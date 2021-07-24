@@ -53,14 +53,14 @@ CLdsValueRef::CLdsValueRef(const CLdsValue &val, SLdsVar *pvar, SLdsVar *pvarAcc
 
 // Get variable by index
 SLdsVar *CLdsValueRef::AccessVariable(const int &iIndex) {
-  CLdsVars *paVars = &vr_val->GetVars();
+  CLdsVars *paVars = vr_val->GetVars();
 
   if (vr_pvar != NULL) {
     if (vr_pvarAccess != NULL) {
-      paVars = &vr_pvarAccess->var_valValue->GetVars();
+      paVars = vr_pvarAccess->var_valValue->GetVars();
 
     } else {
-      paVars = &vr_pvar->var_valValue->GetVars();
+      paVars = vr_pvar->var_valValue->GetVars();
     }
   }
   
@@ -69,14 +69,14 @@ SLdsVar *CLdsValueRef::AccessVariable(const int &iIndex) {
     
 // Get variable by name
 SLdsVar *CLdsValueRef::AccessVariable(const string &strVar) {
-  CLdsVars *paVars = &vr_val->GetVars();
+  CLdsVars *paVars = vr_val->GetVars();
 
   if (vr_pvar != NULL) {
     if (vr_pvarAccess != NULL) {
-      paVars = &vr_pvarAccess->var_valValue->GetVars();
+      paVars = vr_pvarAccess->var_valValue->GetVars();
 
     } else {
-      paVars = &vr_pvar->var_valValue->GetVars();
+      paVars = vr_pvar->var_valValue->GetVars();
     }
   }
   

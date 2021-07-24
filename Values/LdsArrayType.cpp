@@ -47,7 +47,7 @@ void CLdsArrayType::Read(class CLdsScriptEngine *pEngine, void *pStream, CLdsVal
     CLdsValue valArray;
     pEngine->LdsReadValue(pStream, valArray);
 
-    val->GetVars().Add() = valArray;
+    val->GetVars()->Add() = valArray;
   }
 };
 
@@ -87,17 +87,17 @@ CLdsValueRef CLdsArrayType::UnaryOp(CLdsValueRef &valRef, const CLdsToken &tkn) 
   switch (iOperation) {
     // reverse order of array values
     case UOP_INVERT: {
-      CLdsVars aArrayCopy = val->GetVars();
+      CLdsVars aArrayCopy = *val->GetVars();
       const int ctArray = aArrayCopy.Count() - 1;
 
       for (int i = 0; i <= ctArray; i++) {
-        val->GetVars()[i] = aArrayCopy[ctArray - i];
+        (*val->GetVars())[i] = aArrayCopy[ctArray - i];
       }
     } break;
     
     // concatenate every array entry into a string
     case UOP_STRINGIFY: {
-      CLdsVars &aArrayValues = val->GetVars();
+      CLdsVars &aArrayValues = *val->GetVars();
       string strArray = "";
 
       for (int i = 0; i < aArrayValues.Count(); i++) {
@@ -138,7 +138,7 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
       int ctAdd = val2->GetIndex();
 
       while (--ctAdd >= 0) {
-        val1->GetVars().Add() = SLdsVar(CLdsIntType());
+        val1->GetVars()->Add() = SLdsVar(CLdsIntType());
       }
     } break;
 
@@ -151,7 +151,7 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
       int ctSub = val2->GetIndex();
 
       while (--ctSub >= 0) {
-        val1->GetVars().Delete(val1->GetVars().Count() - 1);
+        val1->GetVars()->Delete(val1->GetVars()->Count() - 1);
       }
     } break;
 
@@ -161,10 +161,10 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
       }
         
       // copy array contents several times
-      int ctOld = val1->GetVars().Count();
+      int ctOld = val1->GetVars()->Count();
       int ctNew = int(ctOld * val2->GetNumber());
 
-      CLdsVars &aOldArray = val1->GetVars();
+      CLdsVars &aOldArray = *val1->GetVars();
       CLdsArrayType valNewArray(ctNew, 0);
 
       for (int i = 0; i < ctNew; i++) {
@@ -183,10 +183,10 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
       }
 
       switch (iOperation) {
-        case LOP_GT:  val1 = int(val1->GetVars().Count() >  val2->GetVars().Count()); break;
-        case LOP_GOE: val1 = int(val1->GetVars().Count() >= val2->GetVars().Count()); break;
-        case LOP_LT:  val1 = int(val1->GetVars().Count() <  val2->GetVars().Count()); break;
-        case LOP_LOE: val1 = int(val1->GetVars().Count() <= val2->GetVars().Count()); break;
+        case LOP_GT:  val1 = int(val1->GetVars()->Count() >  val2->GetVars()->Count()); break;
+        case LOP_GOE: val1 = int(val1->GetVars()->Count() >= val2->GetVars()->Count()); break;
+        case LOP_LT:  val1 = int(val1->GetVars()->Count() <  val2->GetVars()->Count()); break;
+        case LOP_LOE: val1 = int(val1->GetVars()->Count() <= val2->GetVars()->Count()); break;
         case LOP_EQ:  val1 = int(val1 == val2); break;
         case LOP_NEQ: val1 = int(val1 != val2); break;
       }
@@ -202,7 +202,7 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
         LdsBinaryError(val1, val2, tkn);
       }
 
-      CLdsVars aCopy = val1->GetVars();
+      CLdsVars aCopy = *val1->GetVars();
 
       int iArrayIndex = val2->GetIndex();
       int iSize = aCopy.Count();

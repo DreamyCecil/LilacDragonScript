@@ -77,7 +77,7 @@ class LDS_API CLdsArrayType : public ILdsValueBase {
     };
 
     // Get variables
-    virtual CLdsVars &GetVars(void) { return aArray; };
+    virtual CLdsVars *GetVars(void) { return &aArray; };
     
     // Perform a unary operation
     virtual CLdsValueRef UnaryOp(CLdsValueRef &valRef, const CLdsToken &tkn);

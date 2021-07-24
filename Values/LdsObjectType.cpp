@@ -164,7 +164,7 @@ CLdsValueRef CLdsObjectType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
       }
         
       string strVar = val2->GetString();
-      CLdsVars aCopy = val1->GetVars();
+      CLdsVars aCopy = *val1->GetVars();
 
       if (aCopy.FindIndex(strVar) == -1) {
         LdsThrow(LEX_OBJECTMEM, "Property '%s' does not exist in the object at %s", strVar.c_str(), tkn.PrintPos().c_str());

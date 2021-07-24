@@ -561,10 +561,10 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
 
       // wrong type
       if (iDesiredVal != -1 && valDir->GetType() != iDesiredVal) {
-        string strDesired = (iDesiredVal == EVT_STRING ? "string" : "number");
-        string strValType = valDir->TypeName();
+        const char *strDesired = (iDesiredVal == EVT_STRING ? "string" : "number");
+        const char *strValType = valDir->TypeName().c_str();
         
-        LdsThrow(LER_TYPE, "Expected a %s but got a %s at %s", strDesired.c_str(), strValType.c_str(), etNext.PrintPos().c_str());
+        LdsThrow(LER_VALUE, "Expected a %s but got a %s at %s", strDesired, strValType, etNext.PrintPos().c_str());
       }
 
       _bnNode = CBuildNode(EBN_DIR, et.lt_iPos, valDir, iDirType);

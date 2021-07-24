@@ -42,7 +42,7 @@ double ILdsValueBase::GetNumber(void) { return 0.0; };
 string ILdsValueBase::GetString(void) { return ""; };
 
 // Get variables
-CLdsVars &ILdsValueBase::GetVars(void) { return *(CLdsVars *)NULL; };
+CLdsVars *ILdsValueBase::GetVars(void) { return NULL; };
 
 // Constructor
 CLdsValue::CLdsValue(void) :
@@ -92,12 +92,32 @@ CLdsValue &CLdsValue::Assert(const ILdsValueBase &valDesired) {
   }
   
   // type mismatch
-  string strExpected = valDesired.TypeName();
-  string strGot = val_pBase->TypeName();
+  const char *strExpected = valDesired.TypeName().c_str();
+  const char *strGot = val_pBase->TypeName().c_str();
   
-  LdsThrow(LER_TYPE, "Expected %s but got %s at %s", strExpected.c_str(), strGot.c_str(), LdsPrintPos(LDS_iActionPos).c_str());
+  LdsThrow(LER_VALUE, "Expected %s but got %s at %s", strExpected, strGot, LdsPrintPos(LDS_iActionPos).c_str());
 
   return *this;
+};
+
+// Variable list assertion (for function arguments)
+CLdsVars &CLdsValue::AssertList(const int &ctMinVars) {
+  CLdsVars *paVars = val_pBase->GetVars();
+
+  const char *strGot = val_pBase->TypeName().c_str();
+  const char *strPos = LdsPrintPos(LDS_iActionPos).c_str();
+
+  // no value list
+  if (paVars == NULL) {
+    LdsThrow(LER_VALUE, "Expected a type with the value list but got %s at %s", strGot, strPos);
+  }
+
+  // not enough values
+  if (ctMinVars > 0 && paVars->Count() < ctMinVars) {
+    LdsThrow(LER_VALUE, "Expected at least %d values in %s but got %d at %s", ctMinVars, strGot, paVars->Count(), strPos);
+  }
+
+  return *val_pBase->GetVars();
 };
 
 // Assignment
