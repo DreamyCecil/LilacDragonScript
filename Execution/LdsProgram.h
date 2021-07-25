@@ -20,33 +20,25 @@ SOFTWARE. */
 
 #pragma once
 
-#include "../Functions/LdsFunctions.h"
-#include "../Execution/LdsProgram.h"
+#include "../LdsTypes.h"
 
-// List of function arguments
-typedef DSList<string> CLdsInlineArgs;
+// Compiled script program
+class LDS_API CLdsProgram {
+  public:
+    CActionList acaProgram; // compiled actions
 
-// Global script function
-struct LDS_API SLdsFunc {
-  int ef_iArgs; // amount of arguments
-  LdsReturn (*ef_pFunc)(LDS_ARGS); // pointer to the function
+  public:
+    // Default constructor
+    inline CLdsProgram(void) {};
 
-  // Constructors
-  SLdsFunc(void) : ef_iArgs(0), ef_pFunc(NULL) {};
-  SLdsFunc(int ct, void *pFunc) : ef_iArgs(ct), ef_pFunc((LdsReturn (*)(CLdsValue *))pFunc) {};
-};
+    // Actions constructor
+    inline CLdsProgram(const CActionList &aca) {
+      acaProgram.CopyArray(aca);
+    };
 
-// Inline function
-struct LDS_API SLdsInlineFunc {
-  CLdsInlineArgs in_astrArgs; // list of arguments
-  CLdsProgram in_pgFunc; // function actions
+    // Clear the program
+    void Clear(void);
 
-  CLdsInFuncMap in_mapInlineFunc; // inline functions within this function
-
-  // Constructors
-  SLdsInlineFunc(void) {};
-  SLdsInlineFunc(CLdsInlineArgs &astrArgs, const CLdsProgram &pg) {
-    in_astrArgs.CopyArray(astrArgs);
-    in_pgFunc = pg;
-  };
+    // Assignment
+    CLdsProgram &operator=(const CLdsProgram &pgOther);
 };

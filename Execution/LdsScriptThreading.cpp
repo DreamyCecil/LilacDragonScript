@@ -21,8 +21,8 @@ SOFTWARE. */
 #include "StdH.h"
 
 // Create a new thread
-CLdsThread *CLdsScriptEngine::ThreadCreate(const CActionList &acaActions, CLdsVars &aArgs) {
-  CLdsThread *sthNew = new CLdsThread(acaActions, this);
+CLdsThread *CLdsScriptEngine::ThreadCreate(const CLdsProgram &pgProgram, CLdsVars &aArgs) {
+  CLdsThread *sthNew = new CLdsThread(pgProgram, this);
   sthNew->sth_aLocals = aArgs;
   sthNew->sth_eStatus = ETS_RUNNING;
 

@@ -28,7 +28,7 @@ struct SLdsInlineCall {
   DSList<string> astrLocals; // inline function locals 
   DSStack<CLdsValueRef> avalStack; // stack of inline values
   
-  CActionList acaReturn; // actions to return
+  CLdsProgram pgReturn; // program to return
   int iPos; // position to return to
   
   // Constructors
@@ -37,7 +37,7 @@ struct SLdsInlineCall {
   
   // Destructor
   ~SLdsInlineCall(void) {
-    acaReturn.Clear();
+    pgReturn.Clear();
     astrLocals.Clear();
     avalStack.Clear();
   };

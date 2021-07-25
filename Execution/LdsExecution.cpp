@@ -28,7 +28,8 @@ extern CLdsScriptEngine *_pldsCurrent = NULL;
 // Execution stack
 extern DSStack<CLdsValueRef> *_pavalStack = NULL;
 
-// Current action
+// Current program and action
+extern CLdsProgram *_ppgCurrent = NULL;
 static CCompAction *_ca = NULL;
 
 extern CCompAction &SetCurrentAction(CCompAction *pcaCurrent) {

@@ -32,6 +32,7 @@ SOFTWARE. */
 #include "Types/LdsToken.h"
 #include "Types/LdsBuildNode.h"
 #include "Types/LdsAction.h"
+#include "Execution/LdsProgram.h"
 
 // Script functions and variables
 #include "Types/LdsFunc.h"

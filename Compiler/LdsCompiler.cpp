@@ -24,7 +24,7 @@ SOFTWARE. */
 static bool _bExpression = true;
 
 // General compilation
-ELdsError CLdsScriptEngine::LdsCompileGeneral(const string &strSource, CActionList &acaActions, const bool &bExpression) {
+ELdsError CLdsScriptEngine::LdsCompileGeneral(const string &strSource, CLdsProgram &pgProgram, const bool &bExpression) {
   // calculate hash value of the script
   LdsHash iScriptHash;
 
@@ -36,7 +36,7 @@ ELdsError CLdsScriptEngine::LdsCompileGeneral(const string &strSource, CActionLi
     int iInCache = _mapScriptCache.FindKeyIndex(iScriptHash);
 
     if (iInCache != -1) {
-      acaActions = _mapScriptCache.GetValue(iInCache).acaCache;
+      pgProgram = _mapScriptCache.GetValue(iInCache).pgCache;
       return LER_OK;
     }
   }
@@ -56,22 +56,23 @@ ELdsError CLdsScriptEngine::LdsCompileGeneral(const string &strSource, CActionLi
 
   // cache the script
   if (_bUseScriptCaching) {
-    _mapScriptCache.Add(iScriptHash, SLdsCache(acaCompiled, bExpression));
+    CLdsProgram pgCache(acaCompiled);
+    _mapScriptCache.Add(iScriptHash, SLdsCache(pgCache, bExpression));
   }
 
   // copy compiled actions
-  acaActions.MoveArray(acaCompiled);
+  pgProgram.acaProgram.MoveArray(acaCompiled);
   return LER_OK;
 };
 
 // Compile the script
-ELdsError CLdsScriptEngine::LdsCompileScript(const string &strScript, CActionList &acaActions) {
-  return LdsCompileGeneral(strScript, acaActions, false);
+ELdsError CLdsScriptEngine::LdsCompileScript(const string &strScript, CLdsProgram &pgProgram) {
+  return LdsCompileGeneral(strScript, pgProgram, false);
 };
 
 // Compile the expression
-ELdsError CLdsScriptEngine::LdsCompileExpression(const string &strExpression, CActionList &acaActions) {
-  return LdsCompileGeneral(strExpression, acaActions, true);
+ELdsError CLdsScriptEngine::LdsCompileExpression(const string &strExpression, CLdsProgram &pgProgram) {
+  return LdsCompileGeneral(strExpression, pgProgram, true);
 };
 
 // Get the variable

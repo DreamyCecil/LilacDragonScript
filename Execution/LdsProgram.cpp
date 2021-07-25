@@ -19,39 +19,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
 #include "StdH.h"
-#include "LdsQuickRun.h"
+#include "LdsProgram.h"
 
-// Constructor
-CLdsQuickRun::CLdsQuickRun(CLdsScriptEngine &ldsEngine, const CLdsProgram &pgProgram,
-                           CLdsVars &aArgs, CLdsInFuncMap &mapInline)
-{
-  // create and execute the compiled script
-  qr_psthThread = ldsEngine.ThreadCreate(pgProgram, aArgs);
-  qr_psthThread->SetFlag(CLdsThread::THF_QUICK, true);
-  
-  // copy provided inline function if there are any
-  qr_psthThread->sth_mapInlineFunc.AddFrom(mapInline, true);
-
-  // start the script and get its status
-  qr_eStatus = qr_psthThread->Resume();
-
-  switch (qr_eStatus) {
-    // ran successfully
-    case ETS_FINISHED: return;
-    
-    // encountered an error
-    case ETS_ERROR: {
-      string strError = qr_psthThread->sth_valResult->GetString();
-      ldsEngine.LdsErrorOut("%s (code: 0x%X)\n", strError.c_str(), qr_psthThread->sth_eError);
-    } break;
-    
-    // thread got paused
-    default: ldsEngine.LdsErrorOut("Thread execution got paused during a quick run\n");
-  }
+// Clear the program
+void CLdsProgram::Clear(void) {
+  acaProgram.Clear();
 };
 
-// Destructor
-CLdsQuickRun::~CLdsQuickRun(void) {
-  // delete the thread
-  delete qr_psthThread;
+// Assignment
+CLdsProgram &CLdsProgram::operator=(const CLdsProgram &pgOther) {
+  if (this == &pgOther) {
+    return *this;
+  }
+
+  acaProgram.CopyArray(pgOther.acaProgram);
+
+  return *this;
 };

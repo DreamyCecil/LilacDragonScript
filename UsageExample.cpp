@@ -145,11 +145,11 @@ static bool RunScript(string strFile, const bool &bInfo)
     return false;
   }
 
-  // list of compiled actions
-  CActionList acaActions;
+  // compiled script
+  CLdsProgram pgProgram;
 
   // compile the script
-  ELdsError eResult = _ldsEngine.LdsCompileScript(strScript, acaActions);
+  ELdsError eResult = _ldsEngine.LdsCompileScript(strScript, pgProgram);
   
   // didn't compile OK
   if (eResult != LER_OK) {
@@ -159,7 +159,7 @@ static bool RunScript(string strFile, const bool &bInfo)
 
   // display action count
   if (bInfo) {
-    printf("[LDS]: Compiled %d actions\n", acaActions.Count());
+    printf("[LDS]: Compiled %d actions\n", pgProgram.acaProgram.Count());
 
     if (!_bAllScriptsTest) {
       printf("--------------------------------\n");
@@ -167,7 +167,7 @@ static bool RunScript(string strFile, const bool &bInfo)
   }
   
   // execute script in quick run mode
-  CLdsQuickRun qrScript(_ldsEngine, acaActions);
+  CLdsQuickRun qrScript(_ldsEngine, pgProgram);
   
   if (qrScript.GetStatus() != ETS_FINISHED) {
     // execution has failed
@@ -286,7 +286,7 @@ int main() {
         } else {
           for (int iCache = 0; iCache < _ldsEngine._mapScriptCache.Count(); iCache++) {
             LdsHash iHash = _ldsEngine._mapScriptCache.GetKey(iCache);
-            CActionList &aca = _ldsEngine._mapScriptCache.GetValue(iCache).acaCache;
+            CActionList &aca = _ldsEngine._mapScriptCache.GetValue(iCache).pgCache.acaProgram;
 
             printf("%d - %.8X (%d actions)\n", iCache + 1, iHash, aca.Count());
           }

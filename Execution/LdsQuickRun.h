@@ -30,7 +30,7 @@ class LDS_API CLdsQuickRun {
 
   public:
     // Constructor
-    CLdsQuickRun(CLdsScriptEngine &ldsEngine, const CActionList &acaActions,
+    CLdsQuickRun(CLdsScriptEngine &ldsEngine, const CLdsProgram &pgProgram,
                  CLdsVars &aArgs = CLdsVars(), CLdsInFuncMap &mapInline = CLdsInFuncMap());
 
     // Destructor

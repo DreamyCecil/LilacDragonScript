@@ -23,26 +23,31 @@ SOFTWARE. */
 
 extern CLdsScriptEngine *_pldsCurrent;
 extern DSStack<CLdsValueRef> *_pavalStack;
+extern CLdsProgram *_ppgCurrent;
 
 extern CCompAction &SetCurrentAction(CCompAction *pcaCurrent);
 
 // Execute the compiled expression
-CLdsValue CLdsScriptEngine::LdsExecute(CActionList &acaActions) {
+CLdsValue CLdsScriptEngine::LdsExecute(CLdsProgram &pgProgram) {
+  CActionList &acaActions = pgProgram.acaProgram;
+
   int iPos = 0;
   int ctActions = acaActions.Count();
 
   if (ctActions <= 0) {
     LdsThrow(LEX_EMPTY, "No compile actions");
   }
+
+  // remember previous script
+  CLdsProgram *ppgPrev = _ppgCurrent;
+  CLdsScriptEngine *pldsPrev = _pldsCurrent;
+  DSStack<CLdsValueRef> *pavalPrev = _pavalStack;
   
-  // remember previous stack
-  DSStack<CLdsValueRef> *pavalStackPrev = _pavalStack;
-  
+  _ppgCurrent = &pgProgram;
+  _pldsCurrent = this;
+
   DSStack<CLdsValueRef> avalStack;
   _pavalStack = &avalStack;
-  
-  // use this engine for the thread
-  _pldsCurrent = this;
   
   while (iPos < ctActions) {
     CCompAction &ca = SetCurrentAction(&acaActions[iPos++]);
@@ -63,8 +68,10 @@ CLdsValue CLdsScriptEngine::LdsExecute(CActionList &acaActions) {
   
   _pldsCurrent = NULL;
   
-  // restore previous stack
-  _pavalStack = pavalStackPrev;
+  // restore previous script
+  _ppgCurrent = ppgPrev;
+  _pldsCurrent = pldsPrev;
+  _pavalStack = pavalPrev;
   
   CLdsValue valResult = avalStack.Pop().vr_val;
   avalStack.Clear();
@@ -77,14 +84,14 @@ ELdsError CLdsScriptEngine::LdsEvaluate(const string &strExpression, CLdsValue &
   valResult = 0;
 
   // try to compile
-  CActionList acaActions;
+  CLdsProgram pgProgram;
 
-  ELdsError eResult = LdsCompileExpression(strExpression, acaActions);
+  ELdsError eResult = LdsCompileExpression(strExpression, pgProgram);
 
   if (eResult == LER_OK) {
     // try to execute
     try {
-      valResult = LdsExecute(acaActions);
+      valResult = LdsExecute(pgProgram);
       
     // plain error
     } catch (char *strError) {
@@ -102,12 +109,12 @@ ELdsError CLdsScriptEngine::LdsEvaluate(const string &strExpression, CLdsValue &
 };
 
 // Evaluate compiled expression
-ELdsError CLdsScriptEngine::LdsEvaluateCompiled(CActionList &acaActions, CLdsValue &valResult) {
+ELdsError CLdsScriptEngine::LdsEvaluateCompiled(CLdsProgram &pgProgram, CLdsValue &valResult) {
   valResult = 0;
 
   // try to execute
   try {
-    valResult = LdsExecute(acaActions);
+    valResult = LdsExecute(pgProgram);
 
   // plain error
   } catch (char *strError) {

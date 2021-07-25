@@ -47,7 +47,7 @@ class LDS_API CLdsThread {
 
     LdsFlags sth_ubFlags;
     
-    CActionList sth_acaActions; // compiled actions
+    CLdsProgram sth_pgProgram; // compiled program
     int sth_iPos; // current position in the thread
     int sth_ctActions; // how many actions the thread has executed so far
     
@@ -67,7 +67,7 @@ class LDS_API CLdsThread {
     void (*sth_pResult)(CLdsThread *psth); // function call in the end of the run
 
     // Constructor & destructor
-    CLdsThread(const CActionList &aca, CLdsScriptEngine *plds);
+    CLdsThread(const CLdsProgram &pg, CLdsScriptEngine *plds);
     ~CLdsThread(void);
 
     // Clear the thread

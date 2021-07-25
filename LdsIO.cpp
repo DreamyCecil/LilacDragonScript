@@ -23,18 +23,18 @@ SOFTWARE. */
 // Compiled scripts I/O
 
 // Write program
-void CLdsScriptEngine::LdsWriteProgram(void *pStream, CActionList &acaProgram) {
-  int ctActions = acaProgram.Count();
+void CLdsScriptEngine::LdsWriteProgram(void *pStream, CLdsProgram &pgProgram) {
+  int ctActions = pgProgram.acaProgram.Count();
   _pLdsWrite(pStream, &ctActions, sizeof(int));
 
   // for each action
   for (int iAction = 0; iAction < ctActions; iAction++) {
-    LdsWriteAction(pStream, acaProgram[iAction]);
+    LdsWriteAction(pStream, pgProgram.acaProgram[iAction]);
   }
 };
 
 // Read program
-void CLdsScriptEngine::LdsReadProgram(void *pStream, CActionList &acaProgram) {
+void CLdsScriptEngine::LdsReadProgram(void *pStream, CLdsProgram &pgProgram) {
   int ctActions = 0;
   _pLdsRead(pStream, &ctActions, sizeof(int));
 
@@ -43,7 +43,7 @@ void CLdsScriptEngine::LdsReadProgram(void *pStream, CActionList &acaProgram) {
     CCompAction caAction;
     LdsReadAction(pStream, caAction);
 
-    acaProgram.Add() = caAction;
+    pgProgram.acaProgram.Add() = caAction;
   }
 };
 
@@ -155,7 +155,7 @@ void CLdsScriptEngine::LdsWriteInlineFunc(void *pStream, SLdsInlineFunc &inFunc)
   }
 
   // write the function
-  LdsWriteProgram(pStream, inFunc.in_acaFunc);
+  LdsWriteProgram(pStream, inFunc.in_pgFunc);
 };
 
 // Read inline function
@@ -189,7 +189,7 @@ void CLdsScriptEngine::LdsReadInlineFunc(void *pStream, SLdsInlineFunc &inFunc) 
   }
 
   // read the function
-  LdsReadProgram(pStream, inFunc.in_acaFunc);
+  LdsReadProgram(pStream, inFunc.in_pgFunc);
 };
 
 // Script values I/O
@@ -409,10 +409,10 @@ void CLdsScriptEngine::LdsWriteEngine(void *pStream) {
       LdsHash iHash = mapCache.GetKey(iCache);
       _pLdsWrite(pStream, &iHash, sizeof(LdsHash));
 
-      // write compiled script
+      // write compiled program
       SLdsCache &scCache = mapCache.GetValue(iCache);
 
-      LdsWriteProgram(pStream, scCache.acaCache);
+      LdsWriteProgram(pStream, scCache.pgCache);
 
       char bExpression = scCache.bExpression;
       _pLdsWrite(pStream, &bExpression, sizeof(char));
@@ -467,15 +467,15 @@ void CLdsScriptEngine::LdsReadEngine(void *pStream) {
       LdsHash iHash;
       _pLdsRead(pStream, &iHash, sizeof(LdsHash));
 
-      // read compiled script
-      CActionList acaCache;
-      LdsReadProgram(pStream, acaCache);
+      // read compiled program
+      CLdsProgram pgCache;
+      LdsReadProgram(pStream, pgCache);
 
       char bExpression = false;
       _pLdsRead(pStream, &bExpression, sizeof(char));
 
       // add to the cache list
-      _mapScriptCache.Add(iHash, SLdsCache(acaCache, bExpression != 0));
+      _mapScriptCache.Add(iHash, SLdsCache(pgCache, bExpression != 0));
     }
   }
 
@@ -504,7 +504,7 @@ void CLdsScriptEngine::LdsReadEngine(void *pStream) {
     _pLdsRead(pStream, &llEnd, sizeof(LONG64));
 
     // read the thread
-    CLdsThread *psth = new CLdsThread(CActionList(), this);
+    CLdsThread *psth = new CLdsThread(CLdsProgram(), this);
     LdsReadThread(pStream, *psth, false);
       
     // add thread handler to the list
@@ -609,12 +609,12 @@ void CLdsScriptEngine::LdsWriteThread(void *pStream, CLdsThread &sth, bool bHand
       LdsWriteValueRef(pStream, sth, icCall.avalStack[iInline]);
     }
 
-    // write actions to return
-    LdsWriteProgram(pStream, icCall.acaReturn);
+    // write program to return
+    LdsWriteProgram(pStream, icCall.pgReturn);
   }
 
-  // write thread actions
-  LdsWriteProgram(pStream, sth.sth_acaActions);
+  // write thread program
+  LdsWriteProgram(pStream, sth.sth_pgProgram);
 
   // write handler if needed
   if (bHandler) {
@@ -745,15 +745,15 @@ void CLdsScriptEngine::LdsReadThread(void *pStream, CLdsThread &sth, bool bHandl
       icCall.avalStack.Push(vr);
     }
 
-    // read actions to return
-    LdsReadProgram(pStream, icCall.acaReturn);
+    // read program to return
+    LdsReadProgram(pStream, icCall.pgReturn);
 
     // add inline call
     sth.sth_aicCalls.Push(icCall);
   }
 
-  // read thread actions
-  LdsReadProgram(pStream, sth.sth_acaActions);
+  // read thread program
+  LdsReadProgram(pStream, sth.sth_pgProgram);
 
   // read handler if needed
   if (bHandler) {

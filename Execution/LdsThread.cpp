@@ -24,6 +24,8 @@ SOFTWARE. */
 
 extern CLdsScriptEngine *_pldsCurrent;
 extern DSStack<CLdsValueRef> *_pavalStack;
+extern CLdsProgram *_ppgCurrent;
+
 extern CCompAction &SetCurrentAction(CCompAction *pcaCurrent);
 
 // Currently active thread
@@ -33,9 +35,9 @@ extern CLdsThread *_psthCurrent = NULL;
 extern int LDS_iActionPos = 0;
 
 // Constructor
-CLdsThread::CLdsThread(const CActionList &aca, CLdsScriptEngine *plds) :
+CLdsThread::CLdsThread(const CLdsProgram &pg, CLdsScriptEngine *plds) :
   sth_pldsEngine(plds), sth_ubFlags(0),
-  sth_acaActions(aca), sth_iPos(0), sth_ctActions(0),
+  sth_pgProgram(pg), sth_iPos(0), sth_ctActions(0),
   sth_eStatus(ETS_FINISHED), sth_eError(LER_OK),
   sth_pReference(NULL), sth_pPreRun(NULL), sth_pResult(NULL)
 {
@@ -52,7 +54,7 @@ void CLdsThread::Clear(void) {
   sth_aiJumpStack.Clear();
   sth_aLocals.Clear();
 
-  sth_acaActions.Clear();
+  sth_pgProgram.Clear();
   sth_eStatus = ETS_FINISHED;
 };
 
@@ -92,7 +94,7 @@ bool CLdsThread::Run(CLdsThread **ppsth) {
 
 // Resume the thread
 EThreadStatus CLdsThread::Resume(void) {
-  CActionList &aca = sth_acaActions;
+  CActionList &aca = sth_pgProgram.acaProgram;
 
   // nothing to execute
   if (aca.Count() <= 0) {
@@ -107,10 +109,12 @@ EThreadStatus CLdsThread::Resume(void) {
   }
 
   // remember previous thread
+  CLdsProgram *ppgPrev = _ppgCurrent;
   CLdsScriptEngine *pldsPrev = _pldsCurrent;
   CLdsThread *psthPrev = _psthCurrent;
   DSStack<CLdsValueRef> *pavalPrev = _pavalStack;
   
+  _ppgCurrent = &sth_pgProgram;
   _pldsCurrent = sth_pldsEngine;
   _psthCurrent = this;
   _pavalStack = &sth_avalStack;
@@ -346,6 +350,7 @@ EThreadStatus CLdsThread::Resume(void) {
   sth_iPos = iPos;
   
   // restore previous thread
+  _ppgCurrent = ppgPrev;
   _pldsCurrent = pldsPrev;
   _psthCurrent = psthPrev;
   _pavalStack = pavalPrev;
@@ -391,7 +396,7 @@ void CLdsThread::CallInlineFunction(string strFunc, CLdsArray &aArgs) {
   int iInline = sth_mapInlineFunc.FindKeyIndex(strFunc);
   SLdsInlineFunc inFunc = sth_mapInlineFunc.GetValue(iInline);
   
-  CActionList &acaFunc = inFunc.in_acaFunc;
+  CLdsProgram &pgFunc = inFunc.in_pgFunc;
   CLdsInlineArgs &astrArgs = inFunc.in_astrArgs;
   
   // create an inline call
@@ -414,11 +419,11 @@ void CLdsThread::CallInlineFunction(string strFunc, CLdsArray &aArgs) {
     }
   }
   
-  // store original actions
-  icCall.acaReturn.MoveArray(sth_acaActions);
+  // store original program
+  icCall.pgReturn = sth_pgProgram;
   
-  // set new actions
-  sth_acaActions.CopyArray(acaFunc);
+  // set new program
+  sth_pgProgram = pgFunc;
   sth_iPos = 0;
   
   // add argument variables
@@ -438,8 +443,8 @@ int CLdsThread::ReturnFromInline(void) {
   // return position
   sth_iPos = icCall.iPos;
   
-  // restore actions
-  sth_acaActions.CopyArray(icCall.acaReturn);
+  // restore program
+  sth_pgProgram = icCall.pgReturn;
   
   // remove inline locals
   for (int iLocal = 0; iLocal < icCall.astrLocals.Count(); iLocal++) {

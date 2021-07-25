@@ -131,6 +131,7 @@
     <ClInclude Include="Execution\LdsExecution.h" />
     <ClInclude Include="Execution\LdsHandler.h" />
     <ClInclude Include="Execution\LdsInlineCall.h" />
+    <ClInclude Include="Execution\LdsProgram.h" />
     <ClInclude Include="Execution\LdsQuickRun.h" />
     <ClInclude Include="Execution\LdsThread.h" />
     <ClInclude Include="Functions\LdsDefFunctions.h" />
@@ -163,6 +164,7 @@
     <ClCompile Include="Compiler\LdsParser.cpp" />
     <ClCompile Include="Execution\LdsEvaluator.cpp" />
     <ClCompile Include="Execution\LdsExecution.cpp" />
+    <ClCompile Include="Execution\LdsProgram.cpp" />
     <ClCompile Include="Execution\LdsQuickRun.cpp" />
     <ClCompile Include="Execution\LdsScriptThreading.cpp" />
     <ClCompile Include="Execution\LdsThread.cpp" />
