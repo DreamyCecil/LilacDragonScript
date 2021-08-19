@@ -48,7 +48,8 @@ typedef std::string string;
 
 // Include Dreamy Structures if needed
 #ifndef LDS_EXCLUDE_DSTRUCT
-#include "DreamyStructures/DataStructures.h"
+  #define DSTRUCT_USE_VECTOR
+  #include "DreamyStructures/DataStructures.h"
 #endif
 
 // Pre-declare types

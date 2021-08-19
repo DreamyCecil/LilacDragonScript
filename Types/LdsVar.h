@@ -59,8 +59,8 @@ class LDS_API CLdsVars {
     };
 
     // Get index of some variable
-    inline int Index(SLdsVar *pvar) const {
-      return aVars.Index(pvar);
+    inline int Index(SLdsVar &var) const {
+      return aVars.FindIndex(var);
     };
 
     // Get variable by index

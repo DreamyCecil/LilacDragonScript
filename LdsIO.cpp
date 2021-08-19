@@ -265,11 +265,11 @@ void CLdsScriptEngine::LdsWriteValueRef(void *pStream, CLdsThread &sth, CLdsValu
   if (vr.vr_pvar != NULL) {
     if (vr.IsGlobal()) {
       // global index
-      iVarReference = _aLdsVariables.Index(vr.vr_pvar);
+      iVarReference = _aLdsVariables.Index(*vr.vr_pvar);
 
     } else {
       // local index
-      iVarReference = sth.sth_aLocals.Index(vr.vr_pvar);
+      iVarReference = sth.sth_aLocals.Index(*vr.vr_pvar);
     }
   }
 
