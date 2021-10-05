@@ -147,30 +147,37 @@ inline LdsReturn LdsClamp(LDS_ARGS) {
   return (dNum >= dDown ? (dNum <= dUp ? dNum : dUp) : dDown);
 };
 
+// Math functions
 inline void SetMathFunctions(CLdsFuncMap &map) {
-  map["Sin"] = SLdsFunc(1, &LdsSin);
-  map["Cos"] = SLdsFunc(1, &LdsCos);
-  map["Tan"] = SLdsFunc(1, &LdsTan);
-  map["ASin"] = SLdsFunc(1, &LdsASin);
-  map["ACos"] = SLdsFunc(1, &LdsACos);
-  map["ATan"] = SLdsFunc(1, &LdsATan);
-  map["ATan2"] = SLdsFunc(2, &LdsATan2);
+  map["atan2"] = SLdsFunc(2, &LdsATan2);
   
-  map["Sqrt"] = SLdsFunc(1, &LdsSqrt);
-  map["Root"] = SLdsFunc(2, &LdsRoot);
-  map["Pow"] = SLdsFunc(2, &LdsPow);
+  map["root"] = SLdsFunc(2, &LdsRoot);
+  map["pow"] = SLdsFunc(2, &LdsPow);
   
-  map["Exp"] = SLdsFunc(1, &LdsExp);
-  map["Log"] = SLdsFunc(1, &LdsLog);
-  map["Log2"] = SLdsFunc(1, &LdsLog2);
-  map["Log10"] = SLdsFunc(1, &LdsLog10);
+  map["min"] = SLdsFunc(2, &LdsMin);
+  map["max"] = SLdsFunc(2, &LdsMax);
+  map["clamp"] = SLdsFunc(3, &LdsClamp);
+};
+
+// Math operators
+inline void SetMathOperators(CLdsFuncPtrMap &map) {
+  map["sin"] = &LdsSin;
+  map["cos"] = &LdsCos;
+  map["tan"] = &LdsTan;
+  map["asin"] = &LdsASin;
+  map["acos"] = &LdsACos;
+  map["atan"] = &LdsATan;
   
-  map["Ceil"] = SLdsFunc(1, &LdsCeil);
-  map["Round"] = SLdsFunc(1, &LdsRound);
-  map["Floor"] = SLdsFunc(1, &LdsFloor);
+  map["sqrt"] = &LdsSqrt;
   
-  map["Abs"] = SLdsFunc(1, &LdsAbs);
-  map["Min"] = SLdsFunc(2, &LdsMin);
-  map["Max"] = SLdsFunc(2, &LdsMax);
-  map["Clamp"] = SLdsFunc(3, &LdsClamp);
+  map["exp"] = &LdsExp;
+  map["log"] = &LdsLog;
+  map["log2"] = &LdsLog2;
+  map["log10"] = &LdsLog10;
+  
+  map["ceil"] = &LdsCeil;
+  map["round"] = &LdsRound;
+  map["floor"] = &LdsFloor;
+  
+  map["abs"] = &LdsAbs;
 };

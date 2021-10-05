@@ -73,9 +73,13 @@ void CLdsScriptEngine::SetDefaultFunctions(void) {
   
   // set math functions
   SetMathFunctions(_mapLdsDefFunc);
+
+  // set math operators
+  SetMathOperators(_mapLdsDefUnary);
   
   // add default functions
   _mapLdsFunctions.CopyMap(_mapLdsDefFunc);
+  _mapLdsUnaryOps.CopyMap(_mapLdsDefUnary);
 };
 
 // Set custom functions from the map

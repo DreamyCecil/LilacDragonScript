@@ -146,12 +146,17 @@ class LDS_API CLdsScriptEngine {
   // Parser
   public:
     CLdsMap _mapLdsConstants; // custom constants
+
+    CLdsFuncPtrMap _mapLdsDefUnary; // default unary operators
     CLdsFuncPtrMap _mapLdsUnaryOps; // custom unary operators
     
     // Set custom constants
     void SetParserConstants(CLdsMap &mapFrom);
+
     // Set custom unary operators
     void SetUnaryOperators(CLdsFuncPtrMap &mapFrom);
+    // Add more operators and replace ones that already exist
+    void AddUnaryOperators(CLdsFuncPtrMap &mapFrom);
     
   private:
     CTokenList _aetTokens; // tokens from the script

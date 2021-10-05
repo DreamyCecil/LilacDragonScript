@@ -79,8 +79,17 @@ void CLdsScriptEngine::SetParserConstants(CLdsMap &mapFrom) {
 void CLdsScriptEngine::SetUnaryOperators(CLdsFuncPtrMap &mapFrom) {
   // reset the map
   _mapLdsUnaryOps.Clear();
+
+  // readd default operators
+  _mapLdsUnaryOps.CopyMap(_mapLdsDefUnary);
   
-  // add custom functions
+  // add custom operators
+  _mapLdsUnaryOps.AddFrom(mapFrom, true);
+};
+
+// Add more operators and replace ones that already exist
+void CLdsScriptEngine::AddUnaryOperators(CLdsFuncPtrMap &mapFrom) {
+  // add custom operators
   _mapLdsUnaryOps.AddFrom(mapFrom, true);
 };
 
