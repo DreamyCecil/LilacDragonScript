@@ -752,25 +752,25 @@ void CLdsScriptEngine::ExpressionBuilder(const LdsFlags &ubFlags) {
         }
       } break;
       
-      // binary/unary operation
+      // unary operation
       case LTK_OPERATOR:
       case LTK_UNARYOP: {
         // build expression for the operation
         ExpressionBuilder(LBF_NOOPS);
 
         // get operation
-        int iOperation = et->GetIndex();
+        string strOperation = "";
 
         // if it's an operator
         if (et.lt_eType == LTK_OPERATOR) {
           bool bSkip = false;
 
           // select unary operation
-          switch (iOperation) {
+          switch (et->GetIndex()) {
             // skip positive operator
             case LOP_ADD: bSkip = true; break;
 
-            case LOP_SUB: iOperation = UOP_NEGATE; break;
+            case LOP_SUB: strOperation = "-"; break;
 
             // invalid operation
             default: LdsThrow(LEB_OPERATOR, "Unexpected operator token at %s", et.PrintPos().c_str());
@@ -780,6 +780,10 @@ void CLdsScriptEngine::ExpressionBuilder(const LdsFlags &ubFlags) {
           if (bSkip) {
             break;
           }
+          
+        // unary operator
+        } else {
+          strOperation = et->GetString();
         }
 
         // built expression
@@ -788,7 +792,7 @@ void CLdsScriptEngine::ExpressionBuilder(const LdsFlags &ubFlags) {
         // if it's a pure value
         if (bnUnaryExp.lt_eType == EBN_RAW_VAL) {
           // perform operation in place
-          CLdsToken tknOp(LTK_OPERATOR, et.lt_iPos, iOperation, -1);
+          CLdsToken tknOp(LTK_OPERATOR, et.lt_iPos, strOperation, -1);
 
           CLdsValueRef valRef(bnUnaryExp.lt_valValue);
           valRef = valRef.vr_val->UnaryOp(valRef, tknOp);
@@ -799,7 +803,7 @@ void CLdsScriptEngine::ExpressionBuilder(const LdsFlags &ubFlags) {
         // if an identifier
         } else {
           // build unary operation
-          _bnNode = CBuildNode(EBN_UNARY_OP, et.lt_iPos, iOperation, -1);
+          _bnNode = CBuildNode(EBN_UNARY_OP, et.lt_iPos, strOperation, -1);
           _bnNode.AddReference(&bnUnaryExp);
         }
       } break;

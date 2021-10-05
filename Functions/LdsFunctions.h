@@ -38,5 +38,11 @@ SOFTWARE. */
 // Script function template
 #define LDS_FUNC(_Name) LdsReturn _Name(LDS_ARGS)
 
+// Script function pointer
+typedef LdsReturn (*LdsFuncPtr)(LDS_ARGS);
+
+// Map of function pointers
+typedef DSMap<string, LdsFuncPtr> CLdsFuncPtrMap;
+
 // External function error
 LDS_API void LdsError(const char *strFormat, ...);

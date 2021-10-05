@@ -42,31 +42,29 @@ string CLdsIntType::Print(void) {
 CLdsValueRef CLdsIntType::UnaryOp(CLdsValueRef &valRef, const CLdsToken &tkn) {
   // actual value and the operation
   CLdsValue val = valRef.vr_val;
-  int iOperation = tkn->GetIndex();
+  string strOperator = tkn->GetString();
 
-  switch (iOperation) {
-    case UOP_NEGATE:
-      val = -val->GetIndex();
-      break;
+  IF_UN("-") {
+    val = -val->GetIndex();
 
-    case UOP_INVERT: {
-      val = (int)!val->IsTrue();
-    } break;
+  } ELSE_UN("!") {
+    val = (int)!val->IsTrue();
 
-    case UOP_BINVERT: {
-      int iInvert = val->GetIndex();
-      val = ~iInvert;
-    } break;
-    
-    // turn char index into a char string
-    case UOP_STRINGIFY: {
-      int iChar = val->GetIndex();
+  } ELSE_UN("~") {
+    int iInvert = val->GetIndex();
+    val = ~iInvert;
 
-      char strChar[2];
-      SPRINTF_FUNC(strChar, "%c", iChar);
+  // turn char index into a char string
+  } ELSE_UN("$") {
+    int iChar = val->GetIndex();
 
-      val = string(strChar);
-    } break;
+    char strChar[2];
+    SPRINTF_FUNC(strChar, "%c", iChar);
+
+    val = string(strChar);
+
+  } else {
+    LdsUnaryError(val, tkn);
   }
 
   return CLdsValueRef(val);

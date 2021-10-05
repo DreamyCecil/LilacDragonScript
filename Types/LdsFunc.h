@@ -29,7 +29,7 @@ typedef DSList<string> CLdsInlineArgs;
 // Global script function
 struct LDS_API SLdsFunc {
   int ef_iArgs; // amount of arguments
-  LdsReturn (*ef_pFunc)(LDS_ARGS); // pointer to the function
+  LdsFuncPtr ef_pFunc; // pointer to the function
 
   // Constructors
   SLdsFunc(void) : ef_iArgs(0), ef_pFunc(NULL) {};

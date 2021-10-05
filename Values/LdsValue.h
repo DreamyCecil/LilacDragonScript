@@ -33,6 +33,10 @@ enum ELdsValueType {
   EVT_LAST,
 };
 
+// Check unary operator name
+#define IF_UN(_UnaryOp) if (strOperator == _UnaryOp)
+#define ELSE_UN(_UnaryOp) else if (strOperator == _UnaryOp)
+
 // Unary operation error
 LDS_API void LdsUnaryError(const CLdsValue &val, const CLdsToken &tkn);
 

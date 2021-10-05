@@ -75,6 +75,15 @@ void CLdsScriptEngine::SetParserConstants(CLdsMap &mapFrom) {
   _mapLdsConstants.AddFrom(mapFrom, true);
 };
 
+// Set custom unary operators
+void CLdsScriptEngine::SetUnaryOperators(CLdsFuncPtrMap &mapFrom) {
+  // reset the map
+  _mapLdsUnaryOps.Clear();
+  
+  // add custom functions
+  _mapLdsUnaryOps.AddFrom(mapFrom, true);
+};
+
 // Clamp the value
 static inline int Clamp(const int &iNum, const int &iDown, const int &iUp) {
   return (iNum >= iDown ? (iNum <= iUp ? iNum : iUp) : iDown);
@@ -190,11 +199,11 @@ void CLdsScriptEngine::ParseScript(string strScript) {
         break;
 
       case '~':
-        AddParserToken(LTK_UNARYOP, iPrintPos, UOP_BINVERT);
+        AddParserToken(LTK_UNARYOP, iPrintPos, _strUnaryBInvert);
         break;
 
       case '$':
-        AddParserToken(LTK_UNARYOP, iPrintPos, UOP_STRINGIFY);
+        AddParserToken(LTK_UNARYOP, iPrintPos, _strUnaryStringify);
         break;
 
       // bitwise operators
@@ -295,7 +304,7 @@ void CLdsScriptEngine::ParseScript(string strScript) {
           _iPos++;
           AddParserToken(LTK_OPERATOR, iPrintPos, LOP_NEQ);
         } else {
-          AddParserToken(LTK_UNARYOP, iPrintPos, UOP_INVERT);
+          AddParserToken(LTK_UNARYOP, iPrintPos, _strUnaryInvert);
         }
         break;
 
@@ -567,6 +576,10 @@ void CLdsScriptEngine::ParseScript(string strScript) {
           // custom constants
           } else if (_mapLdsConstants.FindKeyIndex(strName) != -1) {
             AddParserToken(LTK_VAL, iPrintPos, _mapLdsConstants[strName]);
+
+          // custom unary operators
+          } else if (_mapLdsUnaryOps.FindKeyIndex(strName) != -1) {
+            AddParserToken(LTK_UNARYOP, iPrintPos, strName);
 
           } else {
             AddParserToken(LTK_ID, iPrintPos, strName);

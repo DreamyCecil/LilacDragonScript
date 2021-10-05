@@ -127,133 +127,18 @@ class LDS_API CBuildNode : public CLdsToken {
     };
 
     // Copy from another node
-    CBuildNode &operator=(const CBuildNode &bnOther) {
-      if (this == &bnOther) {
-        return *this;
-      }
-      
-      // delete old pointers
-      RemoveReferences(-1);
-
-      // copy parameters
-      lt_eType = bnOther.lt_eType;
-      lt_iPos = bnOther.lt_iPos;
-      lt_iArg = bnOther.lt_iArg;
-      lt_valValue = bnOther.lt_valValue;
-
-      // copy referenced nodes
-      CopyNodes(bnOther.bn_abnNodes);
-
-      return *this;
-    };
+    CBuildNode &operator=(const CBuildNode &bnOther);
 
     // Add new node reference
-    void AddReference(CBuildNode *pbn) {
-      if (pbn != NULL) {
-        bn_abnNodes.Add(new CBuildNode(*pbn));
-      }
-    };
-
+    void AddReference(CBuildNode *pbn);
     // Remove node references
-    void RemoveReferences(int iPos) {
-      // remove one node
-      if (iPos != -1) {
-        delete bn_abnNodes[iPos];
-        bn_abnNodes.Delete(iPos);
-        return;
-      }
-
-      // remove all nodes
-      int ctNodes = bn_abnNodes.Count();
-
-      while (ctNodes-- > 0) {
-        delete bn_abnNodes[0];
-        bn_abnNodes.Delete(0);
-      }
-    };
+    void RemoveReferences(int iPos);
 
     // Copy nodes from some dynamic list
-    int CopyNodes(const CDynamicNodeList &abnNodes) {
-      int ctNodes = abnNodes.Count();
-
-      for (int iNode = 0; iNode < ctNodes; iNode++) {
-        AddReference(abnNodes[iNode]);
-      }
-
-      return ctNodes;
-    };
-    
+    int CopyNodes(const CDynamicNodeList &abnNodes);
     // Copy nodes from some list
-    int CopyNodes(CNodeList &abnNodes) {
-      int ctNodes = abnNodes.Count();
-
-      for (int iNode = 0; iNode < ctNodes; iNode++) {
-        AddReference(&abnNodes[iNode]);
-      }
-
-      return ctNodes;
-    };
+    int CopyNodes(CNodeList &abnNodes);
 
     // Print out the node
-    string Print(string strTab) {
-      // open this node block
-      string str = strTab + _astrBuildNodes[lt_eType];
-      str += " =={\n";
-
-      string strNodeTab = strTab + ". ";
-
-      // print node value
-      string strValue = lt_valValue->Print();
-
-      // special values
-      switch (lt_eType) {
-        case EBN_BINARY_OP:
-        case EBN_ASSIGN_OP:
-          strValue = _astrBinaryOps[lt_valValue->GetIndex()];
-          break;
-
-        case EBN_UNARY_OP:
-          strValue = _astrUnaryOps[lt_valValue->GetIndex()];
-          break;
-      }
-
-      // surround strings with quotes
-      if (lt_valValue->GetType() == EVT_STRING) {
-        strValue = "\"" + strValue + "\"";
-      }
-
-      str += LdsPrintF("%sValue : %s\n", strNodeTab.c_str(), strValue.c_str());
-      
-      // print node argument
-      string strArg = _astrBuildNodeArguments[lt_eType];
-
-      if (strArg != "") {
-        str += LdsPrintF("%s%s : %d\n", strNodeTab.c_str(), strArg.c_str(), lt_iArg);
-      }
-
-      // open nodes block
-      if (bn_abnNodes.Count() > 0) {
-        str += '\n';
-        str += strNodeTab + "NODES -{\n";
-      }
-
-      // print each sub node
-      for (int iNode = 0; iNode < bn_abnNodes.Count(); iNode++) {
-        if (iNode != 0) {
-          str += '\n';
-        }
-
-        str += bn_abnNodes[iNode]->Print(strNodeTab + ". ");
-      }
-
-      // close nodes block
-      if (bn_abnNodes.Count() > 0) {
-        str += strNodeTab + "}-\n";
-      }
-      
-      // close this node block
-      str += strTab + "}==\n";
-
-      return str;
-    };
+    string Print(string strTab);
 };

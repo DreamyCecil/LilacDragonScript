@@ -42,37 +42,35 @@ string CLdsFloatType::Print(void) {
 CLdsValueRef CLdsFloatType::UnaryOp(CLdsValueRef &valRef, const CLdsToken &tkn) {
   // actual value and the operation
   CLdsValue val = valRef.vr_val;
-  int iOperation = tkn->GetIndex();
+  string strOperator = tkn->GetString();
 
-  switch (iOperation) {
-    case UOP_NEGATE:
-      val = -val->GetNumber();
-      break;
+  IF_UN("-") {
+    val = -val->GetNumber();
 
-    case UOP_INVERT: {
-      bool bInvert = (val->GetNumber() > 0.5);
-      val = (int)!bInvert;
-    } break;
+  } ELSE_UN("!") {
+    bool bInvert = (val->GetNumber() > 0.5);
+    val = (int)!bInvert;
     
-    // invert bits of the double
-    case UOP_BINVERT: {
-      double dInvert = val->GetNumber();
+  // invert bits of the double
+  } ELSE_UN("~") {
+    double dInvert = val->GetNumber();
 
-      LONG64 llInvert = ~(reinterpret_cast<LONG64 &>(dInvert));
-      dInvert = reinterpret_cast<double &>(llInvert);
+    LONG64 llInvert = ~(reinterpret_cast<LONG64 &>(dInvert));
+    dInvert = reinterpret_cast<double &>(llInvert);
 
-      val = dInvert;
-    } break;
+    val = dInvert;
     
-    // turn char index into a char string
-    case UOP_STRINGIFY: {
-      int iChar = val->GetIndex();
+  // turn char index into a char string
+  } ELSE_UN("$") {
+    int iChar = val->GetIndex();
 
-      char strChar[2];
-      SPRINTF_FUNC(strChar, "%c", iChar);
+    char strChar[2];
+    SPRINTF_FUNC(strChar, "%c", iChar);
 
-      val = string(strChar);
-    } break;
+    val = string(strChar);
+
+  } else {
+    LdsUnaryError(val, tkn);
   }
 
   return CLdsValueRef(val);

@@ -239,6 +239,9 @@
     <ClCompile Include="Execution\LdsProgram.cpp">
       <Filter>Source Files\Execution</Filter>
     </ClCompile>
+    <ClCompile Include="Types\LdsBuildNode.cpp">
+      <Filter>Source Files\Types</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="DreamyStructures\DataArray.inl">

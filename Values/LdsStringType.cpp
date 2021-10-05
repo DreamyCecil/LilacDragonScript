@@ -44,21 +44,21 @@ string CLdsStringType::Print(void) {
 CLdsValueRef CLdsStringType::UnaryOp(CLdsValueRef &valRef, const CLdsToken &tkn) {
   // actual value and the operation
   CLdsValue val = valRef.vr_val;
-  int iOperation = tkn->GetIndex();
+  string strOperator = tkn->GetString();
 
-  switch (iOperation) {
-    // string inversion
-    case UOP_INVERT: {
-      string strString = val->GetString();
-      std::reverse(strString.begin(), strString.end());
+  // string inversion
+  IF_UN("!") {
+    string strString = val->GetString();
+    std::reverse(strString.begin(), strString.end());
 
-      val = strString;
-    } break;
+    val = strString;
 
-    // it's already a string
-    case UOP_STRINGIFY: break;
+  // it's already a string
+  } ELSE_UN("$") {
+    (void)0;
 
-    default: LdsUnaryError(val, tkn);
+  } else {
+    LdsUnaryError(val, tkn);
   }
 
   return CLdsValueRef(val);

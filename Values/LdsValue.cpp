@@ -23,7 +23,7 @@ SOFTWARE. */
 // Unary operation error
 void LdsUnaryError(const CLdsValue &val, const CLdsToken &tkn) {
   LdsThrow(LEX_UNARY, "Cannot perform a unary operation '%s' on %s at %s",
-           _astrUnaryOps[tkn->GetIndex()], val->TypeName().c_str(), tkn.PrintPos().c_str());
+           tkn->GetString().c_str(), val->TypeName().c_str(), tkn.PrintPos().c_str());
 };
 
 // Binary operation error

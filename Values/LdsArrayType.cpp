@@ -82,32 +82,30 @@ string CLdsArrayType::Print(void) {
 CLdsValueRef CLdsArrayType::UnaryOp(CLdsValueRef &valRef, const CLdsToken &tkn) {
   // actual value and the operation
   CLdsValue val = valRef.vr_val;
-  int iOperation = tkn->GetIndex();
+  string strOperator = tkn->GetString();
 
-  switch (iOperation) {
-    // reverse order of array values
-    case UOP_INVERT: {
-      CLdsVars aArrayCopy = *val->GetVars();
-      const int ctArray = aArrayCopy.Count() - 1;
+  // reverse order of array values
+  IF_UN("!") {
+    CLdsVars aArrayCopy = *val->GetVars();
+    const int ctArray = aArrayCopy.Count() - 1;
 
-      for (int i = 0; i <= ctArray; i++) {
-        (*val->GetVars())[i] = aArrayCopy[ctArray - i];
-      }
-    } break;
-    
-    // concatenate every array entry into a string
-    case UOP_STRINGIFY: {
-      CLdsVars &aArrayValues = *val->GetVars();
-      string strArray = "";
+    for (int i = 0; i <= ctArray; i++) {
+      (*val->GetVars())[i] = aArrayCopy[ctArray - i];
+    }
 
-      for (int i = 0; i < aArrayValues.Count(); i++) {
-        strArray += aArrayValues[i].var_valValue->Print();
-      }
+  // concatenate every array entry into a string
+  } ELSE_UN("$") {
+    CLdsVars &aArrayValues = *val->GetVars();
+    string strArray = "";
 
-      val = strArray;
-    } break;
+    for (int i = 0; i < aArrayValues.Count(); i++) {
+      strArray += aArrayValues[i].var_valValue->Print();
+    }
 
-    default: LdsUnaryError(val, tkn);
+    val = strArray;
+
+  } else {
+    LdsUnaryError(val, tkn);
   }
 
   return CLdsValueRef(val);

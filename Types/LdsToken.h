@@ -143,19 +143,10 @@ static const struct SLdsBinaryOps {
 } _astrBinaryOps;
 
 // Unary operations
-enum EUnaryOp {
-  UOP_NEGATE,    // - negation
-  UOP_INVERT,    // ! inversion
-  UOP_BINVERT,   // ~ bitwise inversion
-  UOP_STRINGIFY, // $ stringify value
-
-  UOP_LAST,
-};
-
-// Unary operation symbols
-static const char *_astrUnaryOps[UOP_LAST] = {
-  "-", "!", "~", "$",
-};
+static const string _strUnaryNegate    = "-";
+static const string _strUnaryInvert    = "!";
+static const string _strUnaryBInvert   = "~";
+static const string _strUnaryStringify = "$";
 
 // Script token template
 class LDS_API CLdsToken {
