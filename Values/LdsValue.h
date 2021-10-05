@@ -59,8 +59,8 @@ class LDS_API ILdsValueBase {
     virtual void Clear(void) = 0;
 
     // Value I/O
-    virtual void Write(class CLdsScriptEngine *pEngine, void *pStream) = 0;
-    virtual void Read(class CLdsScriptEngine *pEngine, void *pStream, CLdsValue &val) = 0;
+    virtual void Write(LdsEnginePtr pEngine, void *pStream) = 0;
+    virtual void Read(LdsEnginePtr pEngine, void *pStream, CLdsValue &val) = 0;
   
   public:
     // Type name

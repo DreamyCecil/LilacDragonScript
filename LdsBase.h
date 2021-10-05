@@ -52,6 +52,9 @@ typedef std::string string;
   #include "DreamyStructures/DataStructures.h"
 #endif
 
+// Engine pointer
+typedef class CLdsScriptEngine *LdsEnginePtr;
+
 // Pre-declare types
 class ILdsValueBase;
 class CLdsValue;

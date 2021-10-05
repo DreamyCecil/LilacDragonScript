@@ -119,9 +119,18 @@ void Exec_Val(void) {
 // Unary operations
 void Exec_Unary(void) {
   CLdsValueRef valRef = _pavalStack->Pop();
+  string strOperation = (*_ca)->GetString();
   
-  // value to return
-  valRef = valRef.vr_val->UnaryOp(valRef, *_ca);
+  // execute custom unary operator if it exists
+  int iCustom = _pldsCurrent->_mapLdsUnaryOps.FindKeyIndex(strOperation);
+
+  if (iCustom != -1) {
+    valRef = _pldsCurrent->_mapLdsUnaryOps.GetValue(iCustom)(&valRef.vr_val);
+
+  } else {
+    valRef = valRef.vr_val->UnaryOp(valRef, *_ca);
+  }
+
   _pavalStack->Push(valRef);
 };
 

@@ -19,6 +19,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
 #include "StdH.h"
+#include "LdsObjectType.h"
 
 // Dummy object callback function
 static void DummyObjectCallback(CLdsObjectType *pvalObject, const int &iVariable) {
@@ -42,7 +43,7 @@ void CLdsObjectType::Clear(void) {
 };
 
 // Write value into the stream
-void CLdsObjectType::Write(class CLdsScriptEngine *pEngine, void *pStream) {
+void CLdsObjectType::Write(LdsEnginePtr pEngine, void *pStream) {
   const int ctProps = aProps.Count();
 
   // write object ID and if it's static
@@ -60,7 +61,7 @@ void CLdsObjectType::Write(class CLdsScriptEngine *pEngine, void *pStream) {
 };
 
 // Read value from the stream
-void CLdsObjectType::Read(class CLdsScriptEngine *pEngine, void *pStream, CLdsValue &val) {
+void CLdsObjectType::Read(LdsEnginePtr pEngine, void *pStream, CLdsValue &val) {
   // read object ID and if it's static
   int iReadID = -1;
   char bReadStatic = false;

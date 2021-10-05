@@ -100,6 +100,24 @@ LDS_FUNC(LDS_Data) {
   return valArray;
 };
 
+// Unary operation for getting value type name
+LDS_FUNC(LDS_UnaryValueType) {
+  return LDS_NEXT_ARG->TypeName();
+};
+
+// Unary operation for adding all array entries together
+LDS_FUNC(LDS_UnaryArrayAdd) {
+  CLdsVars &aArray = LDS_NEXT_LIST(0);
+
+  double dResult = 0.0;
+  
+  for (int i = 0; i < aArray.Count(); i++) {
+    dResult += aArray[i]->GetNumber();
+  }
+
+  return dResult;
+};
+
 // Initial LDS setup
 void SetupLDS(void) {
   // hook the error output function
@@ -123,6 +141,13 @@ void SetupLDS(void) {
   aVars.Add() = SLdsVar("strHello", string("Hello, world!"));
   
   _ldsEngine.SetCustomVariables(aVars);
+
+  // custom unary operations
+  CLdsFuncPtrMap mapUnary;
+  mapUnary["type"] = &LDS_UnaryValueType;
+  mapUnary["array_add"] = &LDS_UnaryArrayAdd;
+
+  _ldsEngine.SetUnaryOperators(mapUnary);
 };
 
 

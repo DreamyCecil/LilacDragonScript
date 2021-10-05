@@ -19,14 +19,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
 #include "StdH.h"
+#include "LdsFloatType.h"
 
 // Write value into the stream
-void CLdsFloatType::Write(class CLdsScriptEngine *pEngine, void *pStream) {
+void CLdsFloatType::Write(LdsEnginePtr pEngine, void *pStream) {
   pEngine->_pLdsWrite(pStream, &dValue, sizeof(double));
 };
 
 // Read value from the stream
-void CLdsFloatType::Read(class CLdsScriptEngine *pEngine, void *pStream, CLdsValue &val) {
+void CLdsFloatType::Read(LdsEnginePtr pEngine, void *pStream, CLdsValue &val) {
   double d = 0.0;
   pEngine->_pLdsRead(pStream, &d, sizeof(double));
 

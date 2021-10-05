@@ -19,9 +19,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
 #include "StdH.h"
+#include "LdsArrayType.h"
 
 // Write value into the stream
-void CLdsArrayType::Write(class CLdsScriptEngine *pEngine, void *pStream) {
+void CLdsArrayType::Write(LdsEnginePtr pEngine, void *pStream) {
   const int ctArray = aArray.Count();
 
   // write array count
@@ -34,7 +35,7 @@ void CLdsArrayType::Write(class CLdsScriptEngine *pEngine, void *pStream) {
 };
 
 // Read value from the stream
-void CLdsArrayType::Read(class CLdsScriptEngine *pEngine, void *pStream, CLdsValue &val) {
+void CLdsArrayType::Read(LdsEnginePtr pEngine, void *pStream, CLdsValue &val) {
   // read array count
   int ctArray = 0;
   pEngine->_pLdsRead(pStream, &ctArray, sizeof(int));

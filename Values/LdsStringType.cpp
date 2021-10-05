@@ -19,16 +19,19 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
 #include "StdH.h"
+#include "LdsStringType.h"
 
 #include <algorithm>
 
+extern CLdsScriptEngine *_pldsCurrent;
+
 // Write value into the stream
-void CLdsStringType::Write(class CLdsScriptEngine *pEngine, void *pStream) {
+void CLdsStringType::Write(LdsEnginePtr pEngine, void *pStream) {
   pEngine->LdsWriteString(pStream, strValue);
 };
 
 // Read value from the stream
-void CLdsStringType::Read(class CLdsScriptEngine *pEngine, void *pStream, CLdsValue &val) {
+void CLdsStringType::Read(LdsEnginePtr pEngine, void *pStream, CLdsValue &val) {
   string str = "";
   pEngine->LdsReadString(pStream, str);
 

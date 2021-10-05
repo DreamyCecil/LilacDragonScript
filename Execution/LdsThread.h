@@ -37,7 +37,7 @@ enum EThreadStatus {
 // Script thread
 class LDS_API CLdsThread {
   public:
-    class CLdsScriptEngine *sth_pldsEngine; // engine this thread belongs to
+    LdsEnginePtr sth_pldsEngine; // engine this thread belongs to
 
     // Thread flags
     enum ELdsThreadFlags {

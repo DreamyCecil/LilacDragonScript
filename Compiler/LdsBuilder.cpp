@@ -795,7 +795,16 @@ void CLdsScriptEngine::ExpressionBuilder(const LdsFlags &ubFlags) {
           CLdsToken tknOp(LTK_OPERATOR, et.lt_iPos, strOperation, -1);
 
           CLdsValueRef valRef(bnUnaryExp.lt_valValue);
-          valRef = valRef.vr_val->UnaryOp(valRef, tknOp);
+
+          // execute custom unary operator if it exists
+          int iCustomUnary = _mapLdsUnaryOps.FindKeyIndex(strOperation);
+
+          if (iCustomUnary != -1) {
+            valRef = _mapLdsUnaryOps.GetValue(iCustomUnary)(&valRef.vr_val);
+
+          } else {
+            valRef = valRef.vr_val->UnaryOp(valRef, tknOp);
+          }
 
           // add pure value
           _bnNode = CBuildNode(EBN_RAW_VAL, et.lt_iPos, valRef.vr_val, -1);
