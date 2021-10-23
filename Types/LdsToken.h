@@ -103,42 +103,46 @@ enum ELdsOperator {
   LOP_MAX = 0x60, // maximum priority
   
   LOP_ACCESS = 0x61, // array/object accessor
+
+  LOP_COUNT,
 };
 
 // Binary operation symbols
 static const struct SLdsBinaryOps {
-  DSMap<int, string> mapOperations;
+  DSArray<string> astrOperations;
 
   // Constructor
   SLdsBinaryOps(void) {
-    mapOperations.Add(LOP_SET,    "=");
-    mapOperations.Add(LOP_MUL,    "*");
-    mapOperations.Add(LOP_DIV,    "/");
-    mapOperations.Add(LOP_FMOD,   "%");
-    mapOperations.Add(LOP_IDIV,   "i");
-    mapOperations.Add(LOP_ADD,    "+");
-    mapOperations.Add(LOP_SUB,    "-");
-    mapOperations.Add(LOP_SH_L,   "<<");
-    mapOperations.Add(LOP_SH_R,   ">>");
-    mapOperations.Add(LOP_B_AND,  "&");
-    mapOperations.Add(LOP_B_XOR,  "^");
-    mapOperations.Add(LOP_B_OR,   "|");
-    mapOperations.Add(LOP_EQ,     "==");
-    mapOperations.Add(LOP_NEQ,    "!=");
-    mapOperations.Add(LOP_LT,     "<");
-    mapOperations.Add(LOP_LOE,    "<=");
-    mapOperations.Add(LOP_GT,     ">");
-    mapOperations.Add(LOP_GOE,    ">=");
-    mapOperations.Add(LOP_AND,    "&&");
-    mapOperations.Add(LOP_XOR,    "^^");
-    mapOperations.Add(LOP_OR,     "||");
-    mapOperations.Add(LOP_MAX,    "<max>");
-    mapOperations.Add(LOP_ACCESS, "[]");
+    astrOperations.New(LOP_COUNT);
+
+    astrOperations[LOP_SET   ] = "=";
+    astrOperations[LOP_MUL   ] = "*";
+    astrOperations[LOP_DIV   ] = "/";
+    astrOperations[LOP_FMOD  ] = "%";
+    astrOperations[LOP_IDIV  ] = "i";
+    astrOperations[LOP_ADD   ] = "+";
+    astrOperations[LOP_SUB   ] = "-";
+    astrOperations[LOP_SH_L  ] = "<<";
+    astrOperations[LOP_SH_R  ] = ">>";
+    astrOperations[LOP_B_AND ] = "&";
+    astrOperations[LOP_B_XOR ] = "^";
+    astrOperations[LOP_B_OR  ] = "|";
+    astrOperations[LOP_EQ    ] = "==";
+    astrOperations[LOP_NEQ   ] = "!=";
+    astrOperations[LOP_LT    ] = "<";
+    astrOperations[LOP_LOE   ] = "<=";
+    astrOperations[LOP_GT    ] = ">";
+    astrOperations[LOP_GOE   ] = ">=";
+    astrOperations[LOP_AND   ] = "&&";
+    astrOperations[LOP_XOR   ] = "^^";
+    astrOperations[LOP_OR    ] = "||";
+    astrOperations[LOP_MAX   ] = "<max>";
+    astrOperations[LOP_ACCESS] = "[]";
   };
 
   // Get operation name
   const char *operator[](const int &iOperation) const {
-    return mapOperations[iOperation].c_str();
+    return astrOperations[iOperation].c_str();
   };
 } _astrBinaryOps;
 
