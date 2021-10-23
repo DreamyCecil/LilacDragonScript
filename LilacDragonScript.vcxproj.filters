@@ -117,9 +117,6 @@
     <ClInclude Include="DreamyStructures\DataTemplates.h">
       <Filter>Header Files\Dreamy Structures</Filter>
     </ClInclude>
-    <ClInclude Include="DreamyStructures\DataLinkedList.h">
-      <Filter>Header Files\Dreamy Structures</Filter>
-    </ClInclude>
     <ClInclude Include="StdH.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -254,9 +251,6 @@
       <Filter>Header Files\Dreamy Structures</Filter>
     </None>
     <None Include="DreamyStructures\DataStack.inl">
-      <Filter>Header Files\Dreamy Structures</Filter>
-    </None>
-    <None Include="DreamyStructures\DataLinkedList.inl">
       <Filter>Header Files\Dreamy Structures</Filter>
     </None>
   </ItemGroup>
