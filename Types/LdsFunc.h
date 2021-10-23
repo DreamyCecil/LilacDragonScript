@@ -45,7 +45,7 @@ struct LDS_API SLdsInlineFunc {
 
   // Constructors
   SLdsInlineFunc(void) {};
-  SLdsInlineFunc(CLdsInlineArgs &astrArgs, const CLdsProgram &pg) {
+  SLdsInlineFunc(const CLdsInlineArgs &astrArgs, const CLdsProgram &pg) {
     in_astrArgs.CopyArray(astrArgs);
     in_pgFunc = pg;
   };

@@ -149,35 +149,35 @@ inline LdsReturn LdsClamp(LDS_ARGS) {
 
 // Math functions
 inline void SetMathFunctions(CLdsFuncMap &map) {
-  map["atan2"] = SLdsFunc(2, &LdsATan2);
+  map.Add("atan2") = SLdsFunc(2, &LdsATan2);
   
-  map["root"] = SLdsFunc(2, &LdsRoot);
-  map["pow"] = SLdsFunc(2, &LdsPow);
+  map.Add("root") = SLdsFunc(2, &LdsRoot);
+  map.Add("pow") = SLdsFunc(2, &LdsPow);
   
-  map["min"] = SLdsFunc(2, &LdsMin);
-  map["max"] = SLdsFunc(2, &LdsMax);
-  map["clamp"] = SLdsFunc(3, &LdsClamp);
+  map.Add("min") = SLdsFunc(2, &LdsMin);
+  map.Add("max") = SLdsFunc(2, &LdsMax);
+  map.Add("clamp") = SLdsFunc(3, &LdsClamp);
 };
 
 // Math operators
 inline void SetMathOperators(CLdsFuncPtrMap &map) {
-  map["sin"] = &LdsSin;
-  map["cos"] = &LdsCos;
-  map["tan"] = &LdsTan;
-  map["asin"] = &LdsASin;
-  map["acos"] = &LdsACos;
-  map["atan"] = &LdsATan;
+  map.Add("sin") = &LdsSin;
+  map.Add("cos") = &LdsCos;
+  map.Add("tan") = &LdsTan;
+  map.Add("asin") = &LdsASin;
+  map.Add("acos") = &LdsACos;
+  map.Add("atan") = &LdsATan;
   
-  map["sqrt"] = &LdsSqrt;
+  map.Add("sqrt") = &LdsSqrt;
   
-  map["exp"] = &LdsExp;
-  map["log"] = &LdsLog;
-  map["log2"] = &LdsLog2;
-  map["log10"] = &LdsLog10;
+  map.Add("exp") = &LdsExp;
+  map.Add("log") = &LdsLog;
+  map.Add("log2") = &LdsLog2;
+  map.Add("log10") = &LdsLog10;
   
-  map["ceil"] = &LdsCeil;
-  map["round"] = &LdsRound;
-  map["floor"] = &LdsFloor;
+  map.Add("ceil") = &LdsCeil;
+  map.Add("round") = &LdsRound;
+  map.Add("floor") = &LdsFloor;
   
-  map["abs"] = &LdsAbs;
+  map.Add("abs") = &LdsAbs;
 };

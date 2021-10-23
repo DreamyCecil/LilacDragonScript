@@ -66,10 +66,10 @@ void CLdsScriptEngine::SetDefaultFunctions(void) {
   */
   
   // set default functions
-  _mapLdsDefFunc["DebugOut"] = SLdsFunc(1, &LDS_DebugOut);
-  _mapLdsDefFunc["PrintHex"] = SLdsFunc(1, &LDS_PrintHex);
-  _mapLdsDefFunc["Hash"] = SLdsFunc(1, &LDS_HashString);
-  _mapLdsDefFunc["Wait"] = SLdsFunc(1, &LDS_Wait);
+  _mapLdsDefFunc.Add("DebugOut") = SLdsFunc(1, &LDS_DebugOut);
+  _mapLdsDefFunc.Add("PrintHex") = SLdsFunc(1, &LDS_PrintHex);
+  _mapLdsDefFunc.Add("Hash") = SLdsFunc(1, &LDS_HashString);
+  _mapLdsDefFunc.Add("Wait") = SLdsFunc(1, &LDS_Wait);
   
   // set math functions
   SetMathFunctions(_mapLdsDefFunc);

@@ -204,7 +204,7 @@ EThreadStatus CLdsThread::Resume(void) {
           SLdsInlineFunc &in = ca.ca_inFunc;
           string strFunc = ca->GetString();
           
-          sth_mapInlineFunc[strFunc] = in;
+          sth_mapInlineFunc.Add(strFunc) = in;
         } break;
         
         // Define a local variable

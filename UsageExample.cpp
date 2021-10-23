@@ -128,10 +128,10 @@ void SetupLDS(void) {
 
   // custom functions
   CLdsFuncMap mapFunc;
-  mapFunc["Random"] = SLdsFunc(0, &LDS_Random);
-  mapFunc["Out"] = SLdsFunc(1, &LDS_ConsolePrint);
-  mapFunc["Sleep"] = SLdsFunc(1, &LDS_Sleep);
-  mapFunc["GetData"] = SLdsFunc(1, &LDS_Data);
+  mapFunc.Add("Random") = SLdsFunc(0, &LDS_Random);
+  mapFunc.Add("Out") = SLdsFunc(1, &LDS_ConsolePrint);
+  mapFunc.Add("Sleep") = SLdsFunc(1, &LDS_Sleep);
+  mapFunc.Add("GetData") = SLdsFunc(1, &LDS_Data);
 
   _ldsEngine.SetCustomFunctions(mapFunc);
 
@@ -144,8 +144,8 @@ void SetupLDS(void) {
 
   // custom unary operations
   CLdsFuncPtrMap mapUnary;
-  mapUnary["type"] = &LDS_UnaryValueType;
-  mapUnary["array_add"] = &LDS_UnaryArrayAdd;
+  mapUnary.Add("type") = &LDS_UnaryValueType;
+  mapUnary.Add("array_add") = &LDS_UnaryArrayAdd;
 
   _ldsEngine.SetUnaryOperators(mapUnary);
 };
@@ -276,7 +276,7 @@ int main() {
 
     // user input
     string strInput;
-    std::getline(std::cin, strInput);
+    std::cin >> strInput;
 
     // retrive action number
     char *chr;
@@ -295,7 +295,7 @@ int main() {
       // test one script
       case 2:
         printf("Enter script name: ");
-        std::getline(std::cin, strInput);
+        std::cin >> strInput;
 
         printf("\n");
 

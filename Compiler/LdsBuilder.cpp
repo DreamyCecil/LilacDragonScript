@@ -517,7 +517,7 @@ bool CLdsScriptEngine::DefinitionBuilder(void) {
       }
       
       // add a function reference with no actions
-      _mapInlineFunc[strFunc] = astrArgs;
+      _mapInlineFunc.Add(strFunc) = astrArgs;
       
       // build function body
       StatementBuilder();

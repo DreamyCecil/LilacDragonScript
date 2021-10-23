@@ -111,29 +111,29 @@ static const struct SLdsBinaryOps {
 
   // Constructor
   SLdsBinaryOps(void) {
-    mapOperations[LOP_SET]    = "=";
-    mapOperations[LOP_MUL]    = "*";
-    mapOperations[LOP_DIV]    = "/";
-    mapOperations[LOP_FMOD]   = "%";
-    mapOperations[LOP_IDIV]   = "i";
-    mapOperations[LOP_ADD]    = "+";
-    mapOperations[LOP_SUB]    = "-";
-    mapOperations[LOP_SH_L]   = "<<";
-    mapOperations[LOP_SH_R]   = ">>";
-    mapOperations[LOP_B_AND]  = "&";
-    mapOperations[LOP_B_XOR]  = "^";
-    mapOperations[LOP_B_OR]   = "|";
-    mapOperations[LOP_EQ]     = "==";
-    mapOperations[LOP_NEQ]    = "!=";
-    mapOperations[LOP_LT]     = "<";
-    mapOperations[LOP_LOE]    = "<=";
-    mapOperations[LOP_GT]     = ">";
-    mapOperations[LOP_GOE]    = ">=";
-    mapOperations[LOP_AND]    = "&&";
-    mapOperations[LOP_XOR]    = "^^";
-    mapOperations[LOP_OR]     = "||";
-    mapOperations[LOP_MAX]    = "<max>";
-    mapOperations[LOP_ACCESS] = "[]";
+    mapOperations.Add(LOP_SET,    "=");
+    mapOperations.Add(LOP_MUL,    "*");
+    mapOperations.Add(LOP_DIV,    "/");
+    mapOperations.Add(LOP_FMOD,   "%");
+    mapOperations.Add(LOP_IDIV,   "i");
+    mapOperations.Add(LOP_ADD,    "+");
+    mapOperations.Add(LOP_SUB,    "-");
+    mapOperations.Add(LOP_SH_L,   "<<");
+    mapOperations.Add(LOP_SH_R,   ">>");
+    mapOperations.Add(LOP_B_AND,  "&");
+    mapOperations.Add(LOP_B_XOR,  "^");
+    mapOperations.Add(LOP_B_OR,   "|");
+    mapOperations.Add(LOP_EQ,     "==");
+    mapOperations.Add(LOP_NEQ,    "!=");
+    mapOperations.Add(LOP_LT,     "<");
+    mapOperations.Add(LOP_LOE,    "<=");
+    mapOperations.Add(LOP_GT,     ">");
+    mapOperations.Add(LOP_GOE,    ">=");
+    mapOperations.Add(LOP_AND,    "&&");
+    mapOperations.Add(LOP_XOR,    "^^");
+    mapOperations.Add(LOP_OR,     "||");
+    mapOperations.Add(LOP_MAX,    "<max>");
+    mapOperations.Add(LOP_ACCESS, "[]");
   };
 
   // Get operation name
