@@ -128,22 +128,30 @@ LdsReturn CLdsScriptEngine::CallFunction(CCompAction *pcaAction, CLdsArray &aArg
   // call the function
   LdsReturn valValue = _mapLdsFunctions[strFunc].ef_pFunc(pvalFuncArgs);
 
+  _pcaFunctionCall = NULL;
+
   delete[] pvalFuncArgs;
   return valValue;
 };
 
 // External function error
 void LdsError(const char *strFormat, ...) {
-  // function name and place
-  string strFunc = (*_pcaFunctionCall)->GetString();
-  string strPos = _pcaFunctionCall->PrintPos();
-
   // format the error
   va_list arg;
   va_start(arg, strFormat);
 
   string strError = LdsVPrintF(strFormat, arg);
   va_end(arg);
+
+  // generic error if called function hasn't been set
+  if (_pcaFunctionCall == NULL) {
+    LdsThrow(LEX_CALL, strError.c_str());
+    return;
+  }
+
+  // function name and place
+  string strFunc = (*_pcaFunctionCall)->GetString();
+  string strPos = _pcaFunctionCall->PrintPos();
 
   // display function error
   LdsThrow(LEX_CALL, "%s() at %s: %s", strFunc.c_str(), strPos.c_str(), strError.c_str());
