@@ -75,10 +75,6 @@ CLdsValueRef CLdsStringType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRe
 
   int iOperation = tkn->GetIndex();
 
-  // types
-  const string strType1 = val1->TypeName();
-  const string strType2 = val2->TypeName();
-
   switch (iOperation) {
     // append to the string
     case LOP_ADD: {

@@ -120,10 +120,6 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
 
   int iOperation = tkn->GetIndex();
 
-  // types
-  const string strType1 = val1->TypeName();
-  const string strType2 = val2->TypeName();
-
   SLdsVar *pvarArrayAccess = NULL;
     
   switch (iOperation) {
@@ -193,8 +189,17 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
 
     // accessor
     case LOP_ACCESS: {
-      if (tkn.lt_iArg >= 1) {
-        LdsThrow(LEX_ACCESS, "Cannot use member accessor on an array at %s", tkn.PrintPos().c_str());
+      if (val2->GetType() == EVT_STRING || tkn.lt_iArg >= 1) {
+        // allow certain member accessors as special methods
+        const string strMethod = val2->GetString();
+
+        if (strMethod == "count") {
+          val1 = val1->GetVars()->Count();
+          break;
+
+        } else {
+          LdsThrow(LEX_ACCESS, "Cannot use member accessor on an array at %s", tkn.PrintPos().c_str());
+        }
       }
 
       if (val2->GetType() > EVT_FLOAT) {
