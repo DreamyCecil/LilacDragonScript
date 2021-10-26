@@ -18,28 +18,42 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#pragma once
+#include "StdH.h"
+#include "LdsCommon.h"
 
-#include "../LdsBase.h"
+// Throw formatted exception
+void LdsThrow(const ELdsError &eError, const char *strFormat, ...) {
+  va_list arg;
+  va_start(arg, strFormat);
 
-// Secure string functions
-#if defined(_MSC_VER) && _MSC_VER >= 1700
-  #define SPRINTF_FUNC sprintf_s
-  #define SSCANF_FUNC  sscanf_s
-#else
-  #define SPRINTF_FUNC sprintf
-  #define SSCANF_FUNC  sscanf
-#endif
+  string strError = LdsVPrintF(strFormat, arg);
+  va_end(arg);
 
-// XOR check
-#define XOR_CHECK(_Cond1, _Cond2) ((int(_Cond1) ^ int(_Cond2)) != 0)
+  // pair error message with the error code
+  throw SLdsError(eError, strError);
+};
 
-// Standard script loading
-LDS_API bool LdsLoadScriptFile(const char *strFile, string &strScript);
+// Calculate simple hash value out of some string
+LdsHash GetHash(const string &str) {
+  char *strData = (char *)str.c_str();
+  LdsHash iHash = 0;
 
-// Write data into a file
-LDS_API void LdsWriteFile(void *pStream, const void *pData, const LdsSize &iSize);
-// Read data from a file
-LDS_API void LdsReadFile(void *pStream, void *pData, const LdsSize &iSize);
-// Get current position in a file
-LDS_API int LdsFileTell(void *pStream);
+  for (char *pChar = strData; *pChar != '\0'; pChar++) {
+    iHash = 31 * iHash + *pChar;
+  }
+
+  return iHash;
+};
+
+// General reporting function
+extern CLdsPrintFunc LDS_pLogFunction = (CLdsPrintFunc)printf;
+
+void LdsLog(const char *strFormat, ...) {
+  va_list arg;
+  va_start(arg, strFormat);
+
+  string strLog = LdsVPrintF(strFormat, arg);
+  va_end(arg);
+
+  LDS_pLogFunction(strLog.c_str());
+};

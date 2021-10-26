@@ -95,6 +95,10 @@ typedef __int64 LONG64;
 typedef void (*CLdsWriteFunc)(void *pStream, const void *pData, const LdsSize &iSize);
 typedef void (*CLdsReadFunc)(void *pStream, void *pData, const LdsSize &iSize);
 
+// Printing function type
+typedef void (*CLdsPrintFunc)(const char *);
+
 // General
 #include "Base/LdsCompatibility.h"
 #include "Base/LdsFormatting.h"
+#include "Base/LdsCommon.h"

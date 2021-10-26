@@ -21,6 +21,9 @@ SOFTWARE. */
 #include "StdH.h"
 #include "LdsFormatting.h"
 
+// Don't notify about '_vsnprintf'
+#pragma warning(disable: 4996)
+
 // Resize raw string
 void LdsResizeString(char **pMem, int ctSize) {
   char *pNew = new char[ctSize];

@@ -159,6 +159,9 @@
     <ClInclude Include="Execution\LdsProgram.h">
       <Filter>Header Files\Execution</Filter>
     </ClInclude>
+    <ClInclude Include="Base\LdsCommon.h">
+      <Filter>Header Files\Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Base\LdsCompatibility.cpp">
@@ -238,6 +241,9 @@
     </ClCompile>
     <ClCompile Include="Types\LdsBuildNode.cpp">
       <Filter>Source Files\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Base\LdsCommon.cpp">
+      <Filter>Source Files\Base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

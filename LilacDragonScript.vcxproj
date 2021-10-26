@@ -119,6 +119,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Base\LdsCommon.h" />
     <ClInclude Include="Base\LdsCompatibility.h" />
     <ClInclude Include="Base\LdsFormatting.h" />
     <ClInclude Include="DreamyStructures\DataArray.h" />
@@ -156,6 +157,7 @@
     <ClInclude Include="Values\LdsValueTypes.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Base\LdsCommon.cpp" />
     <ClCompile Include="Base\LdsCompatibility.cpp" />
     <ClCompile Include="Base\LdsFormatting.cpp" />
     <ClCompile Include="Compiler\LdsBuilder.cpp" />

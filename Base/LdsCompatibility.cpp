@@ -23,30 +23,6 @@ SOFTWARE. */
 
 #include <fstream>
 
-// Calculate simple hash value out of some string
-LdsHash GetHash(const string &str) {
-  char *strData = (char *)str.c_str();
-  LdsHash iHash = 0;
-
-  for (char *pChar = strData; *pChar != '\0'; pChar++) {
-    iHash = 31 * iHash + *pChar;
-  }
-
-  return iHash;
-};
-
-// Throw formatted exception
-void LdsThrow(const ELdsError &eError, const char *strFormat, ...) {
-  va_list arg;
-  va_start(arg, strFormat);
-
-  string strError = LdsVPrintF(strFormat, arg);
-  va_end(arg);
-
-  // pair error message with the error code
-  throw SLdsError(eError, strError);
-};
-
 // Standard script loading
 bool LdsLoadScriptFile(const char *strFile, string &strScript) {
   std::ifstream strm;
@@ -101,7 +77,7 @@ void CLdsScriptEngine::AddValueType(const ILdsValueBase &val) {
 void CLdsScriptEngine::LdsOutputFunctions(void *pPrint, void *pError) {
   // reset to standard printing function
   if (pPrint == NULL) {
-    pPrint = printf;
+    pPrint = LDS_pLogFunction;
   }
   _pLdsPrintFunction = (void (*)(const char *))pPrint;
 
