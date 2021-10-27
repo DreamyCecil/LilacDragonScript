@@ -151,9 +151,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Base\LdsBase.h" />
     <ClInclude Include="Base\LdsCommon.h" />
     <ClInclude Include="Base\LdsCompatibility.h" />
     <ClInclude Include="Base\LdsFormatting.h" />
+    <ClInclude Include="Base\LdsScriptEngine.h" />
+    <ClInclude Include="Base\LdsTypes.h" />
     <ClInclude Include="DreamyStructures\DataArray.h" />
     <ClInclude Include="DreamyStructures\DataList.h" />
     <ClInclude Include="DreamyStructures\DataMap.h" />
@@ -169,10 +172,7 @@
     <ClInclude Include="Functions\LdsDefFunctions.h" />
     <ClInclude Include="Functions\LdsFunctions.h" />
     <ClInclude Include="Functions\LdsMath.h" />
-    <ClInclude Include="LdsBase.h" />
     <ClInclude Include="LilacDragonScript.h" />
-    <ClInclude Include="LdsScriptEngine.h" />
-    <ClInclude Include="LdsTypes.h" />
     <ClInclude Include="StdH.h" />
     <ClInclude Include="Types\LdsAction.h" />
     <ClInclude Include="Types\LdsBuildNode.h" />
@@ -192,6 +192,7 @@
     <ClCompile Include="Base\LdsCommon.cpp" />
     <ClCompile Include="Base\LdsCompatibility.cpp" />
     <ClCompile Include="Base\LdsFormatting.cpp" />
+    <ClCompile Include="Base\LdsIO.cpp" />
     <ClCompile Include="Compiler\LdsBuilder.cpp" />
     <ClCompile Include="Compiler\LdsCompiler.cpp" />
     <ClCompile Include="Compiler\LdsParser.cpp" />
@@ -203,7 +204,6 @@
     <ClCompile Include="Execution\LdsThread.cpp" />
     <ClCompile Include="Functions\LdsDefFunctions.cpp" />
     <ClCompile Include="Functions\LdsFunctions.cpp" />
-    <ClCompile Include="LdsIO.cpp" />
     <ClCompile Include="StdH.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">Create</PrecompiledHeader>

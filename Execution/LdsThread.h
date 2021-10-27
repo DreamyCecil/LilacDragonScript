@@ -20,7 +20,7 @@ SOFTWARE. */
 
 #pragma once
 
-#include "../LdsTypes.h"
+#include "../Base/LdsTypes.h"
 #include "LdsInlineCall.h"
 
 // Current action position

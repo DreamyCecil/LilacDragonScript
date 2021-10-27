@@ -49,7 +49,7 @@ CLdsValueRef::CLdsValueRef(const CLdsValue &val) :
   vr_val(val), vr_pvar(NULL), vr_pvarAccess(NULL), vr_ubFlags(0) {};
 
 CLdsValueRef::CLdsValueRef(const CLdsValue &val, SLdsVar *pvar, SLdsVar *pvarAccess, const LdsFlags &ubFlags) :
-  vr_val(val), vr_pvar(pvar), vr_pvarAccess(pvarAccess), vr_ubFlags(ubFlags) {}
+  vr_val(val), vr_pvar(pvar), vr_pvarAccess(pvarAccess), vr_ubFlags(ubFlags) {};
 
 // Assignment
 CLdsValueRef &CLdsValueRef::operator=(const CLdsValueRef &vrOther) {

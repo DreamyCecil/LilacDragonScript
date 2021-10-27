@@ -20,7 +20,7 @@ SOFTWARE. */
 
 #pragma once
 
-#include "../LdsBase.h"
+#include "LdsBase.h"
 #include <stdarg.h>
 
 // Format a string

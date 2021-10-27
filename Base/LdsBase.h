@@ -99,6 +99,6 @@ typedef void (*CLdsReadFunc)(void *pStream, void *pData, const LdsSize &iSize);
 typedef void (*CLdsPrintFunc)(const char *);
 
 // General
-#include "Base/LdsCompatibility.h"
-#include "Base/LdsFormatting.h"
-#include "Base/LdsCommon.h"
+#include "LdsCompatibility.h"
+#include "LdsFormatting.h"
+#include "LdsCommon.h"

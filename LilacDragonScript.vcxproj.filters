@@ -54,15 +54,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="LdsBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LdsScriptEngine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LdsTypes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Base\LdsCompatibility.h">
       <Filter>Header Files\Base</Filter>
     </ClInclude>
@@ -162,6 +153,15 @@
     <ClInclude Include="Base\LdsCommon.h">
       <Filter>Header Files\Base</Filter>
     </ClInclude>
+    <ClInclude Include="Base\LdsScriptEngine.h">
+      <Filter>Header Files\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\LdsTypes.h">
+      <Filter>Header Files\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\LdsBase.h">
+      <Filter>Header Files\Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Base\LdsCompatibility.cpp">
@@ -198,9 +198,6 @@
       <Filter>Source Files\Execution</Filter>
     </ClCompile>
     <ClCompile Include="UsageExample.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LdsIO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Types\LdsValueRef.cpp">
@@ -243,6 +240,9 @@
       <Filter>Source Files\Types</Filter>
     </ClCompile>
     <ClCompile Include="Base\LdsCommon.cpp">
+      <Filter>Source Files\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Base\LdsIO.cpp">
       <Filter>Source Files\Base</Filter>
     </ClCompile>
   </ItemGroup>

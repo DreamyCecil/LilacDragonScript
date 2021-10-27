@@ -20,7 +20,7 @@ SOFTWARE. */
 
 #pragma once
 
-#include "../LdsBase.h"
+#include "LdsBase.h"
 
 // Secure string functions
 #if defined(_MSC_VER) && _MSC_VER >= 1700

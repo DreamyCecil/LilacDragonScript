@@ -20,7 +20,7 @@ SOFTWARE. */
 
 #pragma once
 
-#include "../LdsTypes.h"
+#include "../Base/LdsTypes.h"
 
 struct LDS_API SLdsHandler {
   class CLdsThread *psthThread;

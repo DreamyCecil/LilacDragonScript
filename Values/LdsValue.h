@@ -20,7 +20,7 @@ SOFTWARE. */
 
 #pragma once
 
-#include "../LdsBase.h"
+#include "../Base/LdsBase.h"
 
 // Script value type
 enum ELdsValueType {

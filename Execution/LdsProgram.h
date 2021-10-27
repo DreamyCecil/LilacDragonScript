@@ -20,7 +20,7 @@ SOFTWARE. */
 
 #pragma once
 
-#include "../LdsTypes.h"
+#include "../Base/LdsTypes.h"
 
 // Compiled script program
 class LDS_API CLdsProgram {
