@@ -34,6 +34,9 @@ class LDS_API CLdsIntType : public ILdsValueBase {
     // Int constructor
     CLdsIntType(const int &i) : iValue(i) {};
 
+    // Assignment (illegal)
+    CLdsIntType &operator=(const CLdsIntType &valOther);
+
     // Create new instance of this value
     virtual ILdsValueBase *MakeCopy(void) const {
       return new CLdsIntType(iValue);

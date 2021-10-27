@@ -28,12 +28,7 @@ CLdsVars::CLdsVars(const CLdsVars &aOther) {
 
 // Assignment
 CLdsVars &CLdsVars::operator=(const CLdsVars &aOther) {
-  if (this == &aOther) {
-    return *this;
-  }
-
-  aVars = aOther.aVars;
-
+  aVars.CopyArray(aOther.aVars);
   return *this;
 };
 
@@ -121,10 +116,6 @@ void SLdsVar::SetConst(void) {
   
 // Assignment
 SLdsVar &SLdsVar::operator=(const SLdsVar &varOther) {
-  if (this == &varOther) {
-    return *this;
-  }
-
   var_strName = varOther.var_strName;
   var_valValue = varOther.var_valValue;
   var_bConst = varOther.var_bConst;

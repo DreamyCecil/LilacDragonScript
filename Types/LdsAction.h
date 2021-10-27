@@ -79,4 +79,12 @@ class LDS_API CCompAction : public CLdsToken {
       
     CCompAction(const int &iType, const int &iLine, const CLdsValue &val, const int &iArg) :
       CLdsToken(iType, iLine, val, iArg) {};
+
+    // Assignment
+    CCompAction &operator=(const CCompAction &caOther) {
+      CLdsToken::operator=(caOther);
+
+      ca_inFunc = caOther.ca_inFunc;
+      return *this;
+    };
 };

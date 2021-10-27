@@ -130,9 +130,9 @@ class LDS_API CLdsValue {
     CLdsValue &operator=(const CLdsValue &valOther);
     
     // Assignment by value
-    CLdsValue &operator=(const int &i);
-    CLdsValue &operator=(const double &d);
-    CLdsValue &operator=(const string &str);
+    void FromInt(const int &i);
+    void FromFloat(const double &d);
+    void FromString(const string &str);
   
     // Type assertion (for function arguments)
     CLdsValue &Assert(const ILdsValueBase &valDesired);

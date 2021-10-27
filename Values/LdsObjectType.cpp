@@ -81,7 +81,7 @@ void CLdsObjectType::Read(LdsEnginePtr pEngine, void *pStream, CLdsValue &val) {
   }
 
   // create an object
-  val = CLdsObjectType(iID, aVars, (bStatic != 0));
+  val = CLdsObjectType(iID, aVars, bStatic);
 };
       
 // Print the value

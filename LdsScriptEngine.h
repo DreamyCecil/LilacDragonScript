@@ -310,6 +310,9 @@ class LDS_API CLdsScriptEngine {
 
       _athhThreadHandlers.Clear();
     };
+
+    // Assignment (illegal)
+    CLdsScriptEngine &operator=(const CLdsScriptEngine &ldsOther);
     
     // Thread handling
     void HandleThreads(const LONG64 &llCurrentTick);

@@ -49,4 +49,13 @@ struct LDS_API SLdsInlineFunc {
     in_astrArgs.CopyArray(astrArgs);
     in_pgFunc = pg;
   };
+
+  // Assignment
+  SLdsInlineFunc &operator=(const SLdsInlineFunc &inOther) {
+    in_astrArgs.CopyArray(inOther.in_astrArgs);
+    in_pgFunc = inOther.in_pgFunc;
+    in_mapInlineFunc.CopyMap(inOther.in_mapInlineFunc);
+
+    return *this;
+  };
 };

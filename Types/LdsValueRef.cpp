@@ -43,13 +43,26 @@ SLdsRefIndex::SLdsRefIndex(const int &iIndex) : bIndex(true)
 
 // Constructors
 CLdsValueRef::CLdsValueRef(void) :
-  vr_val(CLdsIntType()), vr_pvar(NULL), vr_pvarAccess(NULL), vr_ubFlags(0) {};
+  vr_val(0), vr_pvar(NULL), vr_pvarAccess(NULL), vr_ubFlags(0) {};
 
 CLdsValueRef::CLdsValueRef(const CLdsValue &val) :
   vr_val(val), vr_pvar(NULL), vr_pvarAccess(NULL), vr_ubFlags(0) {};
 
 CLdsValueRef::CLdsValueRef(const CLdsValue &val, SLdsVar *pvar, SLdsVar *pvarAccess, const LdsFlags &ubFlags) :
-  vr_val(val), vr_pvar(pvar), vr_pvarAccess(pvarAccess), vr_ubFlags(ubFlags) {};
+  vr_val(val), vr_pvar(pvar), vr_pvarAccess(pvarAccess), vr_ubFlags(ubFlags) {}
+
+// Assignment
+CLdsValueRef &CLdsValueRef::operator=(const CLdsValueRef &vrOther) {
+  // copy the value properly
+  vr_val = vrOther.vr_val;
+
+  vr_pvar = vrOther.vr_pvar;
+  vr_pvarAccess = vrOther.vr_pvarAccess;
+  vr_ariIndices = vrOther.vr_ariIndices;
+  vr_ubFlags = vrOther.vr_ubFlags;
+
+  return *this;
+};
 
 // Get variable by index
 SLdsVar *CLdsValueRef::AccessVariable(const int &iIndex) {

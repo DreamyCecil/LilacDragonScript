@@ -43,6 +43,9 @@ class LDS_API CLdsArrayType : public ILdsValueBase {
     // Array copy constructor
     CLdsArrayType(const CLdsVars &a) : aArray(a) {};
 
+    // Assignment (illegal)
+    CLdsArrayType &operator=(const CLdsArrayType &valOther);
+
     // Create new instance of this value
     virtual ILdsValueBase *MakeCopy(void) const {
       return new CLdsArrayType(aArray);

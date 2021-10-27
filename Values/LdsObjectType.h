@@ -41,6 +41,9 @@ class LDS_API CLdsObjectType : public ILdsValueBase {
     // Object constructor
     CLdsObjectType(const int &iSetID, const CLdsVars &aFields, const bool &bSetStatic);
 
+    // Assignment (illegal)
+    CLdsObjectType &operator=(const CLdsObjectType &valOther);
+
     // Create new instance of this value
     virtual ILdsValueBase *MakeCopy(void) const {
       return new CLdsObjectType(iID, aProps, bStatic);

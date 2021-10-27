@@ -36,6 +36,9 @@ class LDS_API CLdsQuickRun {
     // Destructor
     ~CLdsQuickRun(void);
 
+    // Assignment (illegal)
+    CLdsQuickRun &operator=(const CLdsQuickRun &qrOther);
+
     // Get thread status
     inline EThreadStatus &GetStatus(void) {
       return qr_eStatus;

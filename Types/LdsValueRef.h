@@ -63,6 +63,9 @@ class LDS_API CLdsValueRef {
     CLdsValueRef(const CLdsValue &val);
     CLdsValueRef(const CLdsValue &val, SLdsVar *pvar, SLdsVar *pvarAccess, const LdsFlags &ubFlags);
 
+    // Assignment
+    CLdsValueRef &operator=(const CLdsValueRef &vrOther);
+
     // Get variable by index
     SLdsVar *AccessVariable(const int &iIndex);
     // Get variable by name

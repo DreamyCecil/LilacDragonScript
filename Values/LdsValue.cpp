@@ -122,10 +122,6 @@ CLdsVars &CLdsValue::AssertList(const int &ctMinVars) {
 
 // Assignment
 CLdsValue &CLdsValue::operator=(const CLdsValue &valOther) {
-  if (this == &valOther) {
-    return *this;
-  }
-
   // replace the value
   DeleteValue();
   val_pBase = valOther->MakeCopy();
@@ -134,25 +130,19 @@ CLdsValue &CLdsValue::operator=(const CLdsValue &valOther) {
 };
 
 // Assignment by value
-CLdsValue &CLdsValue::operator=(const int &i) {
+void CLdsValue::FromInt(const int &i) {
   DeleteValue();
   val_pBase = new CLdsIntType(i);
-
-  return *this;
 };
 
-CLdsValue &CLdsValue::operator=(const double &d) {
+void CLdsValue::FromFloat(const double &d) {
   DeleteValue();
   val_pBase = new CLdsFloatType(d);
-
-  return *this;
 };
 
-CLdsValue &CLdsValue::operator=(const string &str) {
+void CLdsValue::FromString(const string &str) {
   DeleteValue();
   val_pBase = new CLdsStringType(str);
-
-  return *this;
 };
   
 bool CLdsValue::operator==(const CLdsValue &valOther) const {

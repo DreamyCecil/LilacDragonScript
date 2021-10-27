@@ -84,7 +84,7 @@ void Exec_Val(void) {
         aVars[iPopVal] = _pavalStack->Pop().vr_val;
       }
       
-      _pavalStack->Push(CLdsValueRef(valArray));
+      _pavalStack->Push() = CLdsValueRef(valArray);
       
     // object
     } else {
@@ -107,12 +107,12 @@ void Exec_Val(void) {
       }
       
       // fill the object
-      _pavalStack->Push(CLdsValueRef(CLdsObjectType(-1, aFields, bStatic)));
+      _pavalStack->Push() = CLdsValueRef(CLdsObjectType(-1, aFields, bStatic));
     }
 
   // value
   } else {
-    _pavalStack->Push(CLdsValueRef(_ca->lt_valValue));
+    _pavalStack->Push() = CLdsValueRef(_ca->lt_valValue);
   }
 };
 
@@ -131,7 +131,7 @@ void Exec_Unary(void) {
     valRef = valRef.vr_val->UnaryOp(valRef, *_ca);
   }
 
-  _pavalStack->Push(valRef);
+  _pavalStack->Push() = valRef;
 };
 
 // Binary operations
@@ -141,8 +141,7 @@ void Exec_Binary(void) {
   CLdsValueRef valRef1 = _pavalStack->Pop();
   
   // value to return
-  valRef1 = valRef1.vr_val->BinaryOp(valRef1, valRef2, *_ca);
-  _pavalStack->Push(valRef1);
+  _pavalStack->Push() = valRef1.vr_val->BinaryOp(valRef1, valRef2, *_ca);
 };
 
 // Get variable value
@@ -157,7 +156,7 @@ void Exec_Get(void) {
   }
 
   CLdsValue *pvalRef = &pvar->var_valValue;
-  _pavalStack->Push(CLdsValueRef(*pvalRef, pvar, NULL, CLdsValueRef::VRF_GLOBAL));
+  _pavalStack->Push() = CLdsValueRef(*pvalRef, pvar, NULL, CLdsValueRef::VRF_GLOBAL);
 };
 
 // Set variable value
@@ -186,7 +185,7 @@ void Exec_GetLocal(void) {
   SLdsVar *pvar = GetLocalVar();
   CLdsValue *pvalLocal = &pvar->var_valValue;
 
-  _pavalStack->Push(CLdsValueRef(*pvalLocal, pvar, NULL, 0));
+  _pavalStack->Push() = CLdsValueRef(*pvalLocal, pvar, NULL, 0);
 };
 
 // Set local variable value
@@ -232,8 +231,6 @@ void Exec_Call(void) {
   // make a list of arguments
   CLdsArray aArgs = MakeValueList(*_pavalStack, _ca->lt_iArg);
 
-  // call the function
-  CLdsValueRef valValue = _pldsCurrent->CallFunction(_ca, aArgs);
-  
-  _pavalStack->Push(valValue);
+  // call the function and push the return value
+  _pavalStack->Push() = _pldsCurrent->CallFunction(_ca, aArgs);
 };

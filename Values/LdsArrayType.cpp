@@ -133,7 +133,7 @@ CLdsValueRef CLdsArrayType::BinaryOp(CLdsValueRef &valRef1, CLdsValueRef &valRef
       int ctAdd = val2->GetIndex();
 
       while (--ctAdd >= 0) {
-        val1->GetVars()->Add() = SLdsVar(CLdsIntType());
+        val1->GetVars()->Add();
       }
     } break;
 

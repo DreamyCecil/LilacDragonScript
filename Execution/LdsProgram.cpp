@@ -28,11 +28,6 @@ void CLdsProgram::Clear(void) {
 
 // Assignment
 CLdsProgram &CLdsProgram::operator=(const CLdsProgram &pgOther) {
-  if (this == &pgOther) {
-    return *this;
-  }
-
   acaProgram.CopyArray(pgOther.acaProgram);
-
   return *this;
 };

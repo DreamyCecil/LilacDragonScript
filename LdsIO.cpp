@@ -692,7 +692,7 @@ void CLdsScriptEngine::LdsReadThread(void *pStream, CLdsThread &sth, bool bHandl
     CLdsValueRef vr;
     LdsReadValueRef(pStream, sth, vr);
 
-    sth.sth_avalStack.Push(vr);
+    sth.sth_avalStack.Push() = vr;
   }
 
   // read jump stack count
@@ -742,14 +742,14 @@ void CLdsScriptEngine::LdsReadThread(void *pStream, CLdsThread &sth, bool bHandl
       CLdsValueRef vr;
       LdsReadValueRef(pStream, sth, vr);
 
-      icCall.avalStack.Push(vr);
+      icCall.avalStack.Push() = vr;
     }
 
     // read program to return
     LdsReadProgram(pStream, icCall.pgReturn);
 
     // add inline call
-    sth.sth_aicCalls.Push(icCall);
+    sth.sth_aicCalls.Push() = icCall;
   }
 
   // read thread program

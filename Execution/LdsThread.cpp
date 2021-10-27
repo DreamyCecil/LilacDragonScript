@@ -298,10 +298,16 @@ EThreadStatus CLdsThread::Resume(void) {
       
         // Finish execution
         case LCA_RETURN: iPos = iLen; break;
+
         // Discard the last entry
         case LCA_DISCARD: _pavalStack->Pop(); break;
+
         // Duplicate the last entry
-        case LCA_DUP: _pavalStack->Push(_pavalStack->Top()); break;
+        case LCA_DUP: {
+          // get the reference first in case Push() is done before Top()
+          CLdsValueRef &valTop = _pavalStack->Top();
+          _pavalStack->Push() = valTop;
+        } break;
       
         default: LdsThrow(LEX_ACTION, "Can't run action %s at %s", strAction, ca.PrintPos().c_str());
       }
@@ -316,7 +322,7 @@ EThreadStatus CLdsThread::Resume(void) {
         iLen = aca.Count();
         
         // add result to the previous stack
-        _pavalStack->Push(valRefResult);
+        _pavalStack->Push() = valRefResult;
       }
 
       // count one executed action
@@ -330,7 +336,7 @@ EThreadStatus CLdsThread::Resume(void) {
   } catch (char *strError) {
     sth_eStatus = ETS_ERROR;
     sth_eError = LEX_THREAD;
-    sth_valResult = strError;
+    sth_valResult.FromString(strError);
 
   // LDS-specific error
   } catch (SLdsError leError) {
@@ -343,7 +349,7 @@ EThreadStatus CLdsThread::Resume(void) {
     if (eStatus != ETS_PAUSE) {
       sth_eStatus = ETS_ERROR;
       sth_eError = LEX_THREAD;
-      sth_valResult = CLdsStringType(string("The thread got destroyed at ") + LdsPrintPos(iPausePos));
+      sth_valResult.FromString(string("The thread got destroyed at ") + LdsPrintPos(iPausePos));
     }
   }
 

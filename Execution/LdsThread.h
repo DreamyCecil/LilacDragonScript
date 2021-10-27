@@ -66,9 +66,14 @@ class LDS_API CLdsThread {
     void (*sth_pPreRun)(CLdsThread *psth); // function call before running the thread
     void (*sth_pResult)(CLdsThread *psth); // function call in the end of the run
 
-    // Constructor & destructor
+    // Constructor
     CLdsThread(const CLdsProgram &pg, CLdsScriptEngine *plds);
+
+    // Destructor
     ~CLdsThread(void);
+
+    // Assignment (illegal)
+    CLdsThread &operator=(const CLdsThread &sthOther);
 
     // Clear the thread
     void Clear(void);

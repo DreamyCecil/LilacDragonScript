@@ -172,6 +172,16 @@ class LDS_API CLdsToken {
     CLdsToken(const int &iType, const int &iLine, const CLdsValue &val, const int &iArg) :
       lt_eType(iType), lt_iPos(iLine), lt_valValue(val), lt_iArg(iArg) {};
 
+    // Assignment
+    CLdsToken &operator=(const CLdsToken &ltOther) {
+      lt_eType = ltOther.lt_eType;
+      lt_iPos = ltOther.lt_iPos;
+      lt_iArg = ltOther.lt_iArg;
+      lt_valValue = ltOther.lt_valValue;
+
+      return *this;
+    };
+
     // Token position
     string PrintPos(void) const {
       return LdsPrintPos(lt_iPos);
