@@ -172,6 +172,9 @@ class LDS_API CLdsToken {
     CLdsToken(const int &iType, const int &iLine, const CLdsValue &val, const int &iArg) :
       lt_eType(iType), lt_iPos(iLine), lt_valValue(val), lt_iArg(iArg) {};
 
+    // Destructor
+    virtual ~CLdsToken(void) {};
+
     // Assignment
     CLdsToken &operator=(const CLdsToken &ltOther) {
       lt_eType = ltOther.lt_eType;

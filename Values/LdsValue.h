@@ -49,6 +49,9 @@ class LDS_API ILdsValueBase {
     // Constructor
     ILdsValueBase(void) {};
 
+    // Destructor
+    virtual ~ILdsValueBase(void) {};
+
     // Create new instance of this value
     virtual ILdsValueBase *MakeCopy(void) const = 0;
 
